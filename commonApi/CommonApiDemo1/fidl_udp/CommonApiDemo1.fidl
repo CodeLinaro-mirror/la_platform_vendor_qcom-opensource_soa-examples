@@ -1,0 +1,93 @@
+/*====================================================================
+
+  @file  CommonApiDemo1.fidl
+  @brief CommonApiDemo1 fidl defintion via UDP comm
+
+  @details CommonApiDemo1 interface definition.
+  
+  @Auther  Gourab Dalal
+
+  @copyright
+  Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+  SPDX-License-Identifier: BSD-3-Clause-Clear
+
+=======================================================================*/
+/*======================================================================
+ EDIT HISTORY
+ This section contains comments describing changes made to the module.
+ Notice that changes are listed in reverse chronological order.
+ ISO format for dates.
+ $Header$$DateTime$$Author$
+ when            who                      what, where, why
+ ----------   ---------   ----------------------------------------------
+ 2022-12-01     gdalal    File Created.
+=======================================================================*/
+
+package commonapi.demo
+
+interface DemoApp1 {
+    version { major 0 minor 1 }
+
+    method DemoMethod1 {
+        in {
+            String name
+        }
+        out {
+            String message
+        }
+    }
+    
+    method DemoMethodErr1 {
+        in {
+            String name
+        }
+        out {
+            String message
+        }
+        error stdErrorTypeEnum
+    }
+    
+    method DemoMethodTp1 {
+        in {
+            String name
+            Int32 [] data
+        }
+        out {
+            String message
+        }
+    }
+    
+   broadcast DemoStatus1 {
+        out {
+            Int32 uiValue
+        }
+    }
+    
+    broadcast DemoStatus2 {
+        out {
+        }
+    }
+    
+    attribute Int32 uiDemoAttr1
+    attribute CommonTypes.a1Struct a1Demo
+    
+    enumeration stdErrorTypeEnum {
+        NO_FAULT
+        FAULT_OCCURED
+    }
+}
+    
+typeCollection CommonTypes {
+    version { major 0 minor 1 }
+    
+    struct a1Struct {
+        String s
+        a2Struct a2
+    }
+
+    struct a2Struct {
+        Int32 a
+        Boolean b
+        Double d
+    }
+}
