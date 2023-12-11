@@ -1,0 +1,89 @@
+gen_someip_srcs = [
+    "src-gen/someip/v0/commonapi/demo/*.cpp"
+]
+
+
+cc_defaults {
+    name: "DemoApp1_defaults",
+    vendor: true,
+
+    cppflags: [
+        "-std=c++14",
+        "-fexceptions",
+        "-Wno-attributes",
+        "-Wno-unused-variable",
+        "-Wno-unused-parameter",
+        "-Wno-overloaded-virtual"
+    ],
+
+    shared_libs: [
+        "libvsomeip3",
+        "libvsomeip3-cfg",
+        "libvsomeip3-e2e",
+        "libvsomeip3-sd",
+//      "libvsomeip_cfg",
+//      "libvsomeip_e2e",
+//      "libvsomeip_sd",
+        "libCommonAPI-SomeIP",
+        "libCommonAPI",
+        "liblog",
+    ],
+
+    include_dirs: [
+        "external/capicxx-core-runtime/include",
+        "external/capicxx-someip-runtime/include",
+        "external/vsomeip/interface",
+    ],
+    rtti: true,
+}
+
+cc_library_shared {
+    name: "libDemoApp1-someip",
+    vendor: true,
+    srcs: gen_someip_srcs,
+    defaults: [
+        "DemoApp1_defaults"
+    ],
+    local_include_dirs: [
+       "src-gen/someip",
+       "src-gen/core",
+    ],
+}
+
+cc_binary {
+    name: "DemoApp1Service",
+    defaults: ["DemoApp1_defaults"],
+
+    srcs: [
+        "src/commonapi/demo/DemoApp1Service.cpp",
+        "src/commonapi/demo/DemoApp1ServiceEventImpl.cpp",
+        "src/commonapi/demo/DemoApp1ServiceImpl.cpp",
+        "src/commonapi/demo/DemoApp1StubImpl.cpp"
+    ],
+    local_include_dirs: [
+       "inc",
+       "src-gen/someip",
+       "src-gen/core",
+    ],
+    shared_libs: [
+       "libDemoApp1-someip",
+    ],
+}
+
+cc_binary {
+    name: "DemoApp1Client",
+    defaults: ["DemoApp1_defaults"],
+
+    srcs: [
+        "src/commonapi/demo/DemoApp1Client.cpp",
+        "src/commonapi/demo/DemoApp1ProxyImpl.cpp"
+    ],
+    local_include_dirs: [
+       "inc",
+       "src-gen/someip",
+       "src-gen/core",
+    ],
+    shared_libs: [
+       "libDemoApp1-someip",
+    ],
+}

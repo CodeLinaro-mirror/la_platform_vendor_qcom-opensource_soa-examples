@@ -1,0 +1,127 @@
+/*====================================================================
+
+  @file  CommonApiDemo1.fdepl
+  @brief CommonApiDemo1 fdepl defintion via UDP comm
+
+  @details CommonApiDemo1 depl interface definition.
+  
+  @Auther  Gourab Dalal
+
+  @copyright
+  Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+  SPDX-License-Identifier: BSD-3-Clause-Clear
+
+=======================================================================*/
+/*======================================================================
+ EDIT HISTORY
+ This section contains comments describing changes made to the module.
+ Notice that changes are listed in reverse chronological order.
+ ISO format for dates.
+ $Header$$DateTime$$Author$
+ when            who                      what, where, why
+ ----------   ---------   ----------------------------------------------
+ 2022-12-01     gdalal    File Created.
+=======================================================================*/
+ 
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-4-SOMEIP_deployment_spec.fdepl"
+import "CommonApiDemo1.fidl"
+
+define org.genivi.commonapi.someip.deployment for interface commonapi.demo.DemoApp1 {
+    SomeIpServiceID = 4660
+    SomeIpEventGroups = { 7000, 7001, 7002, 7003 }
+
+    method DemoMethod1 {
+        SomeIpMethodID = 30000
+        SomeIpReliable = false
+        
+        in {
+            name {
+                SomeIpStringEncoding = utf16le
+            }
+        }
+        out {
+            message {
+                SomeIpStringEncoding = utf16le
+            }
+        }
+    }
+    
+    method DemoMethodErr1 {
+        SomeIpMethodID = 30001
+        SomeIpReliable = false
+        
+        in {
+            name {
+                SomeIpStringEncoding = utf16le
+            }
+        }
+        out {
+            message {
+                SomeIpStringEncoding = utf16le
+            }
+        }
+    }
+    
+    method DemoMethodTp1 {
+        SomeIpMethodID = 30002
+        SomeIpReliable = false
+        SomeIpTp = true
+        
+        in {
+            name {
+                SomeIpStringEncoding = utf16le
+            }
+        }
+    }
+    
+    broadcast DemoStatus1 {
+        SomeIpEventID = 33010        
+        SomeIpEventGroups = { 7000 }
+        out {
+        }
+    }
+    
+    broadcast DemoStatus2 {
+        SomeIpEventID = 33011        
+        SomeIpEventGroups = { 7001 }
+        out {
+        }
+    }
+    
+    attribute uiDemoAttr1 {
+        SomeIpGetterID = 3003
+        SomeIpSetterID = 3004
+        SomeIpNotifierID = 33012
+        SomeIpNotifierEventGroups = { 7002 }
+
+        SomeIpAttributeReliable = false
+    }
+    
+    attribute a1Demo {
+        SomeIpGetterID = 3005
+        SomeIpSetterID = 3006
+        SomeIpNotifierID = 33013
+        SomeIpNotifierEventGroups = { 7003 }
+
+        SomeIpAttributeReliable = false
+    }
+    
+    enumeration stdErrorTypeEnum {
+        NO_FAULT {
+        }
+        FAULT_OCCURED {
+        }
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for provider as Service {
+    instance commonapi.demo.DemoApp1 {
+        InstanceId = "commonapi.demo.DemoApp1"
+        
+        SomeIpInstanceID = 22136
+    
+        SomeIpUnicastAddress = "192.168.1.1"
+        SomeIpReliableUnicastPort = 30499
+        SomeIpUnreliableUnicastPort = 30499
+    }
+}
