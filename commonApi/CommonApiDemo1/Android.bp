@@ -1,3 +1,39 @@
+prebuilt_etc {
+    name: "commonapi4someip_config.ini",
+    vendor: true,
+    src: "config/commonapi4someip_config.ini",
+}
+
+prebuilt_etc {
+    name: "commonapi4someip_config_tp.ini",
+    vendor: true,
+    src: "config/commonapi4someip_config_tp.ini",
+}
+
+prebuilt_etc {
+    name: "vsomeip_demoapp1_udp_no_tp_client.json",
+    vendor: true,
+    src: "config/vsomeip_demoapp1_udp_no_tp_client.json",
+}
+
+prebuilt_etc {
+    name: "vsomeip_demoapp1_udp_no_tp_server.json",
+    vendor: true,
+    src: "config/vsomeip_demoapp1_udp_no_tp_server.json",
+}
+
+prebuilt_etc {
+    name: "vsomeip_demoapp1_udp_tp_client.json",
+    vendor: true,
+    src: "config/vsomeip_demoapp1_udp_tp_client.json",
+}
+
+prebuilt_etc {
+    name: "vsomeip_demoapp1_udp_tp_server.json",
+    vendor: true,
+    src: "config/vsomeip_demoapp1_udp_tp_server.json",
+}
+
 gen_someip_srcs = [
     "src-gen/someip/v0/commonapi/demo/*.cpp"
 ]
