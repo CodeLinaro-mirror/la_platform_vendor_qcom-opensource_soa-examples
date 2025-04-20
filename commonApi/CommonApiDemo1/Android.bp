@@ -49,7 +49,9 @@ cc_defaults {
         "-Wno-attributes",
         "-Wno-unused-variable",
         "-Wno-unused-parameter",
-        "-Wno-overloaded-virtual"
+        "-Wno-overloaded-virtual",
+        "-Wno-missing-template-arg-list-after-template-kw",
+        "-Wno-unknown-warning-option"
     ],
 
     shared_libs: [
