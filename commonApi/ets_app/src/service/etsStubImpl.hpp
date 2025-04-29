@@ -61,8 +61,9 @@ class etsStubImpl: public ETSStubDefault {
         void triggerEventUINT8Array(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT8Array_ReqArg1, uint32_t _triggerEventUINT8Array_ReqArg2, uint32_t _triggerEventUINT8Array_ReqArg3) override;    
         void triggerEventUINT8E2E(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT8E2E_ReqArg1, uint32_t _triggerEventUINT8E2E_ReqArg2, uint32_t _triggerEventUINT8E2E_ReqArg3) override;    
         void triggerEventUINT8Multicast(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT8Multicast_ReqArg1, uint32_t _triggerEventUINT8Multicast_ReqArg2, uint32_t _triggerEventUINT8Multicast_ReqArg3) override;
-        void echoUINT8E2E(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _echoUINT8E2E_ReqArg1, uint32_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, echoUINT8E2EReply_t _reply) override;
-        void echoUINT8ArrayLengthTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array) override;
+        void echoUINT8E2E(const std::shared_ptr<CommonAPI::ClientId> _client, uint16_t _echoUINT8E2E_ReqArg1, uint16_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, echoUINT8E2EReply_t _reply) override;
+        void echoUINT8ArrayLengthTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array_ReqArg1, echoUINT8ArrayLengthTPReply_t _reply) override;
+        void triggerEventUINT8ArrayTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1) override;
         void triggerEventUINT32Periodic(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) override;
         void triggerEventUINT32UpdateOnChange(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) override;
 };

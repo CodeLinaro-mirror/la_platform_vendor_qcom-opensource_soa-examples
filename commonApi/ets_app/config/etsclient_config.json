@@ -32,7 +32,7 @@
             "unreliable": "30515",
             "unicast": "192.168.114.2",
             "someip-tp": {
-                "client-to-service": ["112"]
+                "client-to-service": ["112", "77"]
             },
             "events" :
             [
