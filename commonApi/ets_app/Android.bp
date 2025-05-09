@@ -90,15 +90,15 @@ cc_binary {
 }
 
 prebuilt_etc {
-    name: "etsservice_config.json",
+    name: "ets_someip_server.json",
     sub_dir: "someip",
-    src: "config/etsservice_config.json",
+    src: "config/ets_someip_server.json",
     vendor: true,
 }
 
 prebuilt_etc {
-    name: "etsclient_config.json",
+    name: "ets_someip_client.json",
     sub_dir: "someip",
-    src: "config/etsclient_config.json",
+    src: "config/ets_someip_client.json",
     vendor: true,
 }
