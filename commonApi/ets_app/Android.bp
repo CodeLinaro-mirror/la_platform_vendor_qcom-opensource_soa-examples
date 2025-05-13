@@ -1,0 +1,104 @@
+cc_defaults {
+    name: "someip_etsapp_defaults",
+    host_supported: false,
+    shared_libs: [
+        "libutils",
+        "libboost_system",
+        "libboost_thread",
+        "libboost_filesystem",
+        "libvsomeip3",
+        "libvsomeip_cfg",
+        "libvsomeip_sd",
+        "libvsomeip_e2e",
+        "liblog",
+        "libbase",
+        "libCommonAPI-SomeIP",
+        "libCommonAPI",
+    ],
+    cppflags: [
+        "-std=c++14",
+        "-fexceptions",
+        "-Wignored-attributes",
+        "-Wno-non-virtual-dtor",
+        "-Wno-unused-const-variable",
+        "-Wno-unused-parameter",
+        "-Wno-unused-private-field",
+        "-Wno-unused-lambda-capture",
+        "-Wno-unused-variable",
+        "-Wno-unused-local-typedef",
+        "-Wno-sign-compare",
+        "-Wno-format",
+        "-Wno-header-guard",
+        "-Wno-overloaded-virtual",
+        "-Wno-implicit-fallthrough",
+        "-Wno-error",
+        "-Wno-shorten-64-to-32",
+        "-DVSOMEIP_BOOST_VERSION=107100",
+    ],
+    include_dirs: [
+        "external/capicxx-core-runtime/include",
+        "external/capicxx-someip-runtime/include",
+        "external/vsomeip/interface",
+        "external/vsomeip/implementation/helper",
+    ],
+    local_include_dirs: [
+       "src-gen/someip",
+       "src-gen/core",
+    ],
+    ldflags: [
+        "-Wl,-wrap,socket",
+        "-Wl,-wrap,accept",
+        "-Wl,-wrap,open"
+    ],
+    rtti: true,
+    vendor: true,
+}
+
+cc_library_shared {
+    name: "libETS-someip",
+    vendor: true,
+    srcs: [
+        "src-gen/someip/v1/someip/testability/*.cpp"
+    ],
+    defaults: [
+        "someip_etsapp_defaults"
+    ]
+}
+
+cc_binary {
+    name: "someipETSService",
+    defaults: ["someip_etsapp_defaults"],
+    srcs: [
+        "src/service/etsSvcMain.cpp",
+        "src/service/etsStubImpl.cpp",
+    ],
+    shared_libs: [
+       "libETS-someip",
+    ],
+}
+
+cc_binary {
+    name: "someipETSClient",
+    defaults: ["someip_etsapp_defaults"],
+    srcs: [
+        "src/client/etsCliMain.cpp",
+        "src/client/etsProxyImpl.cpp",
+    ],
+    shared_libs: [
+       "libETS-someip",
+    ],
+}
+
+prebuilt_etc {
+    name: "etsservice_config.json",
+    sub_dir: "someip",
+    src: "config/etsservice_config.json",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "etsclient_config.json",
+    sub_dir: "someip",
+    src: "config/etsclient_config.json",
+    vendor: true,
+}
