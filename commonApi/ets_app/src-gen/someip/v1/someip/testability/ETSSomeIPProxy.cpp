@@ -52,7 +52,7 @@ ETSSomeIPProxy::ETSSomeIPProxy(
           testEventUINT8Array_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x8002), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v1::someip::testability::ETS_::TestEventUINT8Array_uINT8ArrayDeployment)),
           testEventUINT8E2E_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x8004), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr))),
           testEventUINT8Multicast_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x800b), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr))),
-          testEventUINT8TP_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x800c), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v1::someip::testability::ETS_::TestEventUINT8TP_outUINT8ArrayDeployment)),
+          testEventUINT8ArrayTP_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x800c), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v1::someip::testability::ETS_::TestEventUINT8ArrayTP_outUINT8EventArrayDeployment)),
           testEventUINT32Periodic_(*this, 0x7, CommonAPI::SomeIP::event_id_t(0x800d), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr))),
           testEventUINT32UpdateOnChange_(*this, 0x7, CommonAPI::SomeIP::event_id_t(0x800e), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
 {
@@ -75,8 +75,8 @@ ETSSomeIPProxy::TestEventUINT8E2EEvent& ETSSomeIPProxy::getTestEventUINT8E2EEven
 ETSSomeIPProxy::TestEventUINT8MulticastEvent& ETSSomeIPProxy::getTestEventUINT8MulticastEvent() {
     return testEventUINT8Multicast_;
 }
-ETSSomeIPProxy::TestEventUINT8TPEvent& ETSSomeIPProxy::getTestEventUINT8TPEvent() {
-    return testEventUINT8TP_;
+ETSSomeIPProxy::TestEventUINT8ArrayTPEvent& ETSSomeIPProxy::getTestEventUINT8ArrayTPEvent() {
+    return testEventUINT8ArrayTP_;
 }
 ETSSomeIPProxy::TestEventUINT32PeriodicEvent& ETSSomeIPProxy::getTestEventUINT32PeriodicEvent() {
     return testEventUINT32Periodic_;
@@ -1870,26 +1870,26 @@ void ETSSomeIPProxy::triggerEventUINT8Multicast(uint32_t _triggerEventUINT8Multi
  * description: 
  * Returns back the e2e data passed as input parameter.
  */
-void ETSSomeIPProxy::echoUINT8E2E(uint32_t _echoUINT8E2E_ReqArg1, uint32_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, CommonAPI::CallStatus &_internalCallStatus, uint32_t &_echoUINT8E2E_ResArg1, uint32_t &_echoUINT8E2E_ResArg2, uint32_t &_echoUINT8E2E_ResArg3, uint32_t &_echoUINT8E2E_ResArg4, uint8_t &_echoUINT8E2E_ResArg5, const CommonAPI::CallInfo *_info) {
-    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ReqArg1(_echoUINT8E2E_ReqArg1, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
-    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ReqArg2(_echoUINT8E2E_ReqArg2, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+void ETSSomeIPProxy::echoUINT8E2E(uint16_t _echoUINT8E2E_ReqArg1, uint16_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, CommonAPI::CallStatus &_internalCallStatus, uint16_t &_echoUINT8E2E_ResArg1, uint16_t &_echoUINT8E2E_ResArg2, uint32_t &_echoUINT8E2E_ResArg3, uint32_t &_echoUINT8E2E_ResArg4, uint8_t &_echoUINT8E2E_ResArg5, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t>> deploy_echoUINT8E2E_ReqArg1(_echoUINT8E2E_ReqArg1, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr));
+    CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t>> deploy_echoUINT8E2E_ReqArg2(_echoUINT8E2E_ReqArg2, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr));
     CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ReqArg3(_echoUINT8E2E_ReqArg3, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
     CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ReqArg4(_echoUINT8E2E_ReqArg4, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
     CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_echoUINT8E2E_ReqArg5(_echoUINT8E2E_ReqArg5, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
-    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ResArg1(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
-    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ResArg2(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+    CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t>> deploy_echoUINT8E2E_ResArg1(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr));
+    CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t>> deploy_echoUINT8E2E_ResArg2(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr));
     CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ResArg3(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
     CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ResArg4(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
     CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_echoUINT8E2E_ResArg5(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
     CommonAPI::SomeIP::ProxyHelper<
         CommonAPI::SomeIP::SerializableArguments<
             CommonAPI::Deployable<
-                uint32_t,
-                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+                uint16_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint16_t>
             >,
             CommonAPI::Deployable<
-                uint32_t,
-                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+                uint16_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint16_t>
             >,
             CommonAPI::Deployable<
                 uint32_t,
@@ -1906,12 +1906,12 @@ void ETSSomeIPProxy::echoUINT8E2E(uint32_t _echoUINT8E2E_ReqArg1, uint32_t _echo
         >,
         CommonAPI::SomeIP::SerializableArguments<
             CommonAPI::Deployable<
-                uint32_t,
-                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+                uint16_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint16_t>
             >,
             CommonAPI::Deployable<
-                uint32_t,
-                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+                uint16_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint16_t>
             >,
             CommonAPI::Deployable<
                 uint32_t,
@@ -1942,26 +1942,26 @@ void ETSSomeIPProxy::echoUINT8E2E(uint32_t _echoUINT8E2E_ReqArg1, uint32_t _echo
     _echoUINT8E2E_ResArg5 = deploy_echoUINT8E2E_ResArg5.getValue();
 }
 
-std::future<CommonAPI::CallStatus> ETSSomeIPProxy::echoUINT8E2EAsync(const uint32_t &_echoUINT8E2E_ReqArg1, const uint32_t &_echoUINT8E2E_ReqArg2, const uint32_t &_echoUINT8E2E_ReqArg3, const uint32_t &_echoUINT8E2E_ReqArg4, const uint8_t &_echoUINT8E2E_ReqArg5, EchoUINT8E2EAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
-    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ReqArg1(_echoUINT8E2E_ReqArg1, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
-    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ReqArg2(_echoUINT8E2E_ReqArg2, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+std::future<CommonAPI::CallStatus> ETSSomeIPProxy::echoUINT8E2EAsync(const uint16_t &_echoUINT8E2E_ReqArg1, const uint16_t &_echoUINT8E2E_ReqArg2, const uint32_t &_echoUINT8E2E_ReqArg3, const uint32_t &_echoUINT8E2E_ReqArg4, const uint8_t &_echoUINT8E2E_ReqArg5, EchoUINT8E2EAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t>> deploy_echoUINT8E2E_ReqArg1(_echoUINT8E2E_ReqArg1, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr));
+    CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t>> deploy_echoUINT8E2E_ReqArg2(_echoUINT8E2E_ReqArg2, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr));
     CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ReqArg3(_echoUINT8E2E_ReqArg3, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
     CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ReqArg4(_echoUINT8E2E_ReqArg4, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
     CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_echoUINT8E2E_ReqArg5(_echoUINT8E2E_ReqArg5, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
-    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ResArg1(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
-    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ResArg2(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+    CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t>> deploy_echoUINT8E2E_ResArg1(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr));
+    CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t>> deploy_echoUINT8E2E_ResArg2(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr));
     CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ResArg3(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
     CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_echoUINT8E2E_ResArg4(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
     CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_echoUINT8E2E_ResArg5(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
     return CommonAPI::SomeIP::ProxyHelper<
         CommonAPI::SomeIP::SerializableArguments<
             CommonAPI::Deployable<
-                uint32_t,
-                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+                uint16_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint16_t>
             >,
             CommonAPI::Deployable<
-                uint32_t,
-                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+                uint16_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint16_t>
             >,
             CommonAPI::Deployable<
                 uint32_t,
@@ -1978,12 +1978,12 @@ std::future<CommonAPI::CallStatus> ETSSomeIPProxy::echoUINT8E2EAsync(const uint3
         >,
         CommonAPI::SomeIP::SerializableArguments<
             CommonAPI::Deployable<
-                uint32_t,
-                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+                uint16_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint16_t>
             >,
             CommonAPI::Deployable<
-                uint32_t,
-                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+                uint16_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint16_t>
             >,
             CommonAPI::Deployable<
                 uint32_t,
@@ -2005,7 +2005,7 @@ std::future<CommonAPI::CallStatus> ETSSomeIPProxy::echoUINT8E2EAsync(const uint3
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
         deploy_echoUINT8E2E_ReqArg1, deploy_echoUINT8E2E_ReqArg2, deploy_echoUINT8E2E_ReqArg3, deploy_echoUINT8E2E_ReqArg4, deploy_echoUINT8E2E_ReqArg5,
-        [_callback] (CommonAPI::CallStatus _internalCallStatus, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> > _echoUINT8E2E_ResArg1, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> > _echoUINT8E2E_ResArg2, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> > _echoUINT8E2E_ResArg3, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> > _echoUINT8E2E_ResArg4, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> > _echoUINT8E2E_ResArg5) {
+        [_callback] (CommonAPI::CallStatus _internalCallStatus, CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t> > _echoUINT8E2E_ResArg1, CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t> > _echoUINT8E2E_ResArg2, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> > _echoUINT8E2E_ResArg3, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> > _echoUINT8E2E_ResArg4, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> > _echoUINT8E2E_ResArg5) {
             if (_callback)
                 _callback(_internalCallStatus, _echoUINT8E2E_ResArg1.getValue(), _echoUINT8E2E_ResArg2.getValue(), _echoUINT8E2E_ResArg3.getValue(), _echoUINT8E2E_ResArg4.getValue(), _echoUINT8E2E_ResArg5.getValue());
         },
@@ -2016,8 +2016,70 @@ std::future<CommonAPI::CallStatus> ETSSomeIPProxy::echoUINT8E2EAsync(const uint3
  * description: 
  * Sends the uint8 array over SOME/IP TP.
  */
-void ETSSomeIPProxy::echoUINT8ArrayLengthTP(std::vector< uint8_t > _inUINT8Array, CommonAPI::CallStatus &_internalCallStatus) {
-    CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> deploy_inUINT8Array(_inUINT8Array, &::v1::someip::testability::ETS_::echoUINT8ArrayLengthTP_inUINT8ArrayDeployment);
+void ETSSomeIPProxy::echoUINT8ArrayLengthTP(std::vector< uint8_t > _inUINT8Array_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, std::vector< uint8_t > &_outUINT8Array_ResArg1, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> deploy_inUINT8Array_ReqArg1(_inUINT8Array_ReqArg1, &::v1::someip::testability::ETS_::echoUINT8ArrayLengthTP_inUINT8Array_ReqArg1Deployment);
+    CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> deploy_outUINT8Array_ResArg1(&::v1::someip::testability::ETS_::echoUINT8ArrayLengthTP_outUINT8Array_ResArg1Deployment);
+    CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                std::vector< uint8_t >,
+                CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                std::vector< uint8_t >,
+                CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >
+            >
+        >
+    >::callMethodWithReply(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x70),
+        false,
+        false,
+        (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
+        deploy_inUINT8Array_ReqArg1,
+        _internalCallStatus,
+        deploy_outUINT8Array_ResArg1);
+    _outUINT8Array_ResArg1 = deploy_outUINT8Array_ResArg1.getValue();
+}
+
+std::future<CommonAPI::CallStatus> ETSSomeIPProxy::echoUINT8ArrayLengthTPAsync(const std::vector< uint8_t > &_inUINT8Array_ReqArg1, EchoUINT8ArrayLengthTPAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> deploy_inUINT8Array_ReqArg1(_inUINT8Array_ReqArg1, &::v1::someip::testability::ETS_::echoUINT8ArrayLengthTP_inUINT8Array_ReqArg1Deployment);
+    CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> deploy_outUINT8Array_ResArg1(&::v1::someip::testability::ETS_::echoUINT8ArrayLengthTP_outUINT8Array_ResArg1Deployment);
+    return CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                std::vector< uint8_t >,
+                CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                std::vector< uint8_t >,
+                CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >
+            >
+        >
+    >::callMethodAsync(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x70),
+        false,
+        false,
+        (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
+        deploy_inUINT8Array_ReqArg1,
+        [_callback] (CommonAPI::CallStatus _internalCallStatus, CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > > _outUINT8Array_ResArg1) {
+            if (_callback)
+                _callback(_internalCallStatus, _outUINT8Array_ResArg1.getValue());
+        },
+        std::make_tuple(deploy_outUINT8Array_ResArg1));
+}
+
+/*
+ * description: 
+ * Requests to triggers an TP Event of type uint8 array.
+ */
+void ETSSomeIPProxy::triggerEventUINT8ArrayTP(std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1, CommonAPI::CallStatus &_internalCallStatus) {
+    CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> deploy_triggerEventUINT8ArrayTP_ReqArg1(_triggerEventUINT8ArrayTP_ReqArg1, &::v1::someip::testability::ETS_::triggerEventUINT8ArrayTP_triggerEventUINT8ArrayTP_ReqArg1Deployment);
     CommonAPI::SomeIP::ProxyHelper<
         CommonAPI::SomeIP::SerializableArguments<
             CommonAPI::Deployable<
@@ -2029,10 +2091,10 @@ void ETSSomeIPProxy::echoUINT8ArrayLengthTP(std::vector< uint8_t > _inUINT8Array
         >
     >::callMethod(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x70),
+        CommonAPI::SomeIP::method_id_t(0x4d),
         false,
         false,
-        deploy_inUINT8Array,
+        deploy_triggerEventUINT8ArrayTP_ReqArg1,
         _internalCallStatus);
 }
 

@@ -651,11 +651,11 @@ interface ETS {
 			<**
 				@description : The e2e header length.
 			**>
-            UInt32 echoUINT8E2E_ReqArg1
+            UInt16 echoUINT8E2E_ReqArg1
 			<**
 				@description : The e2e counter value.
 			**>
-            UInt32 echoUINT8E2E_ReqArg2
+            UInt16 echoUINT8E2E_ReqArg2
 			<**
 				@description : The e2e data Identifier.
 			**>
@@ -673,11 +673,11 @@ interface ETS {
 			<**
 				@description : The e2e header length.
 			**>
-            UInt32 echoUINT8E2E_ResArg1
+            UInt16 echoUINT8E2E_ResArg1
 			<**
 				@description : The e2e counter value.
 			**>
-            UInt32 echoUINT8E2E_ResArg2
+            UInt16 echoUINT8E2E_ResArg2
 			<**
 				@description : The e2e data Identifier.
 			**>
@@ -708,24 +708,42 @@ interface ETS {
 	<** 
 	    @description : Sends the uint8 array over SOME/IP TP.
 	**>
-	method echoUINT8ArrayLengthTP fireAndForget {
+	method echoUINT8ArrayLengthTP {
 		in {
 			<**
 				@description : An array of uint8 type.
 			**>
-			UInt8 [ ] inUINT8Array
+			UInt8 [ ] inUINT8Array_ReqArg1
+		}
+		out {
+			<**
+				@description : An array of uint8 type.
+			**>
+			UInt8 [ ] outUINT8Array_ResArg1
+		}
+	}
+
+	<**
+		@description : Requests to triggers an TP Event of type uint8 array.
+	**>
+	method triggerEventUINT8ArrayTP fireAndForget {
+		in {
+			<**
+				@description : The uint8 array input parameter for event.
+			**>
+			UInt8 [ ] triggerEventUINT8ArrayTP_ReqArg1
 		}
 	}
 
 	<**
 		@description : A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
 	**>
-	broadcast TestEventUINT8TP {
+	broadcast TestEventUINT8ArrayTP {
 		out {
 			<**
 				@description : An array of UINT8 elements.
 			**>
-			UInt8 [ ] outUINT8Array
+			UInt8 [ ] outUINT8EventArray
 		}
 	}
 

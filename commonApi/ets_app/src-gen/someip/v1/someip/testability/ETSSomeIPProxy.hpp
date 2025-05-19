@@ -64,7 +64,7 @@ public:
 
     virtual TestEventUINT8MulticastEvent& getTestEventUINT8MulticastEvent();
 
-    virtual TestEventUINT8TPEvent& getTestEventUINT8TPEvent();
+    virtual TestEventUINT8ArrayTPEvent& getTestEventUINT8ArrayTPEvent();
 
     virtual TestEventUINT32PeriodicEvent& getTestEventUINT32PeriodicEvent();
 
@@ -280,15 +280,23 @@ public:
      * description: 
      * Returns back the e2e data passed as input parameter.
      */
-    virtual void echoUINT8E2E(uint32_t _echoUINT8E2E_ReqArg1, uint32_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, CommonAPI::CallStatus &_internalCallStatus, uint32_t &_echoUINT8E2E_ResArg1, uint32_t &_echoUINT8E2E_ResArg2, uint32_t &_echoUINT8E2E_ResArg3, uint32_t &_echoUINT8E2E_ResArg4, uint8_t &_echoUINT8E2E_ResArg5, const CommonAPI::CallInfo *_info);
+    virtual void echoUINT8E2E(uint16_t _echoUINT8E2E_ReqArg1, uint16_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, CommonAPI::CallStatus &_internalCallStatus, uint16_t &_echoUINT8E2E_ResArg1, uint16_t &_echoUINT8E2E_ResArg2, uint32_t &_echoUINT8E2E_ResArg3, uint32_t &_echoUINT8E2E_ResArg4, uint8_t &_echoUINT8E2E_ResArg5, const CommonAPI::CallInfo *_info);
 
-    virtual std::future<CommonAPI::CallStatus> echoUINT8E2EAsync(const uint32_t &_echoUINT8E2E_ReqArg1, const uint32_t &_echoUINT8E2E_ReqArg2, const uint32_t &_echoUINT8E2E_ReqArg3, const uint32_t &_echoUINT8E2E_ReqArg4, const uint8_t &_echoUINT8E2E_ReqArg5, EchoUINT8E2EAsyncCallback _callback, const CommonAPI::CallInfo *_info);
+    virtual std::future<CommonAPI::CallStatus> echoUINT8E2EAsync(const uint16_t &_echoUINT8E2E_ReqArg1, const uint16_t &_echoUINT8E2E_ReqArg2, const uint32_t &_echoUINT8E2E_ReqArg3, const uint32_t &_echoUINT8E2E_ReqArg4, const uint8_t &_echoUINT8E2E_ReqArg5, EchoUINT8E2EAsyncCallback _callback, const CommonAPI::CallInfo *_info);
 
     /*
      * description: 
      * Sends the uint8 array over SOME/IP TP.
      */
-    virtual void echoUINT8ArrayLengthTP(std::vector< uint8_t > _inUINT8Array, CommonAPI::CallStatus &_internalCallStatus);
+    virtual void echoUINT8ArrayLengthTP(std::vector< uint8_t > _inUINT8Array_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, std::vector< uint8_t > &_outUINT8Array_ResArg1, const CommonAPI::CallInfo *_info);
+
+    virtual std::future<CommonAPI::CallStatus> echoUINT8ArrayLengthTPAsync(const std::vector< uint8_t > &_inUINT8Array_ReqArg1, EchoUINT8ArrayLengthTPAsyncCallback _callback, const CommonAPI::CallInfo *_info);
+
+    /*
+     * description: 
+     * Requests to triggers an TP Event of type uint8 array.
+     */
+    virtual void triggerEventUINT8ArrayTP(std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1, CommonAPI::CallStatus &_internalCallStatus);
 
     /*
      * description: 
@@ -311,7 +319,7 @@ private:
     CommonAPI::SomeIP::Event<TestEventUINT8ArrayEvent, CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > >> testEventUINT8Array_;
     CommonAPI::SomeIP::Event<TestEventUINT8E2EEvent, CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t> >, CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t> >, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> >, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> >, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> testEventUINT8E2E_;
     CommonAPI::SomeIP::Event<TestEventUINT8MulticastEvent, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> testEventUINT8Multicast_;
-    CommonAPI::SomeIP::Event<TestEventUINT8TPEvent, CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > >> testEventUINT8TP_;
+    CommonAPI::SomeIP::Event<TestEventUINT8ArrayTPEvent, CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > >> testEventUINT8ArrayTP_;
     CommonAPI::SomeIP::Event<TestEventUINT32PeriodicEvent, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> >> testEventUINT32Periodic_;
     CommonAPI::SomeIP::Event<TestEventUINT32UpdateOnChangeEvent, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> >> testEventUINT32UpdateOnChange_;
 

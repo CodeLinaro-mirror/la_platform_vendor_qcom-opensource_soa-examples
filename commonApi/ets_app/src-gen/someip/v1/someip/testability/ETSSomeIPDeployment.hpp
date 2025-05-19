@@ -61,11 +61,13 @@ COMMONAPI_EXPORT extern CommonAPI::SomeIP::StringDeployment echoUTF16FIXED_echoU
 COMMONAPI_EXPORT extern CommonAPI::SomeIP::StringDeployment echoUTF16FIXED_echoUTF16FIXED_ResArg1Deployment;
 COMMONAPI_EXPORT extern CommonAPI::SomeIP::StringDeployment echoUTF8FIXED_echoUTF8FIXED_ReqArg1Deployment;
 COMMONAPI_EXPORT extern CommonAPI::SomeIP::StringDeployment echoUTF8FIXED_echoUTF8FIXED_ResArg1Deployment;
-COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthTP_inUINT8ArrayDeployment;
+COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthTP_inUINT8Array_ReqArg1Deployment;
+COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthTP_outUINT8Array_ResArg1Deployment;
+COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > triggerEventUINT8ArrayTP_triggerEventUINT8ArrayTP_ReqArg1Deployment;
 
 // Broadcast-specific deployments
 COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > TestEventUINT8Array_uINT8ArrayDeployment;
-COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > TestEventUINT8TP_outUINT8ArrayDeployment;
+COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > TestEventUINT8ArrayTP_outUINT8EventArrayDeployment;
 
 } // namespace ETS_
 } // namespace testability

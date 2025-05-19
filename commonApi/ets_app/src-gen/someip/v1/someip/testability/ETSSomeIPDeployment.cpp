@@ -39,11 +39,13 @@ CommonAPI::SomeIP::StringDeployment echoUTF16FIXED_echoUTF16FIXED_ReqArg1Deploym
 CommonAPI::SomeIP::StringDeployment echoUTF16FIXED_echoUTF16FIXED_ResArg1Deployment(64, 0, CommonAPI::SomeIP::StringEncoding::UTF16BE);
 CommonAPI::SomeIP::StringDeployment echoUTF8FIXED_echoUTF8FIXED_ReqArg1Deployment(64, 0, CommonAPI::SomeIP::StringEncoding::UTF8);
 CommonAPI::SomeIP::StringDeployment echoUTF8FIXED_echoUTF8FIXED_ResArg1Deployment(64, 0, CommonAPI::SomeIP::StringEncoding::UTF8);
-CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthTP_inUINT8ArrayDeployment(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), 0, 50005, 4);
+CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthTP_inUINT8Array_ReqArg1Deployment(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), 0, 50005, 4);
+CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthTP_outUINT8Array_ResArg1Deployment(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), 0, 50005, 4);
+CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > triggerEventUINT8ArrayTP_triggerEventUINT8ArrayTP_ReqArg1Deployment(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), 0, 50005, 4);
 
 // Broadcast-specific deployments
 CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > TestEventUINT8Array_uINT8ArrayDeployment(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), 0, 2000, 4);
-CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > TestEventUINT8TP_outUINT8ArrayDeployment(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), 0, 50005, 4);
+CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > TestEventUINT8ArrayTP_outUINT8EventArrayDeployment(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), 0, 50005, 4);
 
 } // namespace ETS_
 } // namespace testability

@@ -475,12 +475,12 @@ void etsStubImpl::triggerEventUINT8Multicast(const std::shared_ptr<CommonAPI::Cl
     return;
 }
 
-void etsStubImpl::echoUINT8E2E(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _echoUINT8E2E_ReqArg1,
-                            uint32_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4,
+void etsStubImpl::echoUINT8E2E(const std::shared_ptr<CommonAPI::ClientId> _client, uint16_t _echoUINT8E2E_ReqArg1,
+                            uint16_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4,
                             uint8_t _echoUINT8E2E_ReqArg5, echoUINT8E2EReply_t _reply) {
     std::cout << "etsStubImpl::" << __func__ << std::endl;
-    uint32_t echoUINT8E2E_ResArg1 = _echoUINT8E2E_ReqArg1;
-    uint32_t echoUINT8E2E_ResArg2 = _echoUINT8E2E_ReqArg2;
+    uint16_t echoUINT8E2E_ResArg1 = _echoUINT8E2E_ReqArg1;
+    uint16_t echoUINT8E2E_ResArg2 = _echoUINT8E2E_ReqArg2;
     uint32_t echoUINT8E2E_ResArg3 = _echoUINT8E2E_ReqArg3;
     uint32_t echoUINT8E2E_ResArg4 = _echoUINT8E2E_ReqArg4;
     uint8_t echoUINT8E2E_ResArg5 = _echoUINT8E2E_ReqArg5;
@@ -488,11 +488,19 @@ void etsStubImpl::echoUINT8E2E(const std::shared_ptr<CommonAPI::ClientId> _clien
     return;
 }
 
-void etsStubImpl::echoUINT8ArrayLengthTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array) {
+void etsStubImpl::echoUINT8ArrayLengthTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array_ReqArg1, echoUINT8ArrayLengthTPReply_t _reply) {
     std::cout << "etsStubImpl::" << __func__ << std::endl;
-    std::vector< uint8_t > outUINT8ArrayRes;
-    outUINT8ArrayRes.assign(_inUINT8Array.begin(), _inUINT8Array.end());
-    fireTestEventUINT8TPEvent(outUINT8ArrayRes);
+    std::vector< uint8_t > outUINT8Array_ResArg1;
+    outUINT8Array_ResArg1.assign(_inUINT8Array_ReqArg1.begin(), _inUINT8Array_ReqArg1.end());
+    _reply(outUINT8Array_ResArg1);
+    return;
+}
+
+void etsStubImpl::triggerEventUINT8ArrayTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1) {
+    std::cout << "etsStubImpl::" << __func__ << std::endl;
+    std::vector< uint8_t > outUINT8EventArray;
+    outUINT8EventArray.assign(_triggerEventUINT8ArrayTP_ReqArg1.begin(), _triggerEventUINT8ArrayTP_ReqArg1.end());
+    fireTestEventUINT8ArrayTPEvent(outUINT8EventArray);
     return;
 }
 

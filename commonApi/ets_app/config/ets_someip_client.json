@@ -1,11 +1,11 @@
 {
-    "unicast" : "192.168.114.2",
+    "unicast" : "192.168.114.1",
     "netmask" : "255.255.255.0",
     "logging" :
     {
         "level" : "debug",
         "console" : "true",
-        "file" : { "enable" : "true", "path" : "/data/vsomeip_etsservice.log" },
+        "file" : { "enable" : "true", "path" : "/data/vsomeip_etsclient.log" },
         "version" : { "enable" : "false", "interval" : "10" },
         "dlt" : "false"
     },
@@ -13,15 +13,15 @@
     [
         {
             "name" : "ets_default_service",
-            "id" : "0x5444"
+            "id" : "0x5544"
         },
         {
             "name" : "ets_default_client",
-            "id" : "0x5445"
+            "id" : "0x5545"
         },
         {
-            "name" : "ets_secondary_client",
-            "id" : "0x5446"
+            "name" : "ets_secondary_service",
+            "id" : "0x5546"
         }
     ],
     "services":
@@ -32,7 +32,7 @@
             "unreliable": "30515",
             "unicast": "192.168.114.2",
             "someip-tp": {
-                "service-to-client": ["112", "32780"]
+                "client-to-service": ["112", "77"]
             },
             "events" :
             [
@@ -141,7 +141,7 @@
                 "service_id" : "257",
                 "event_id" : "11",
                 "profile" : "P04",
-                "variant" : "checker",
+                "variant" : "protector",
                 "crc_offset" : "64",
                 "data_id" : "0x1c"
             },
@@ -149,15 +149,15 @@
                 "service_id" : "257",
                 "event_id" : "32772",
                 "profile" : "P04",
-                "variant" : "protector",
+                "variant" : "checker",
                 "crc_offset" : "64",
                 "data_id" : "0x1d"
             }
         ]
     },
     "max-payload-size-unreliable" : "50005",
-    "routing" : "ets_default_service",
-    "network" : "ets_default_service",
+    "routing" : "ets_default_client",
+    "network" : "ets_default_client",
     "service-discovery" :
     {
         "enable" : "true",
