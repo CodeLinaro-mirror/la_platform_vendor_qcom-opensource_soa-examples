@@ -76,7 +76,7 @@ public:
      * description: 
      * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
      */
-    void fireTestEventUINT8TPEvent(const std::vector< uint8_t > &_outUINT8Array);
+    void fireTestEventUINT8ArrayTPEvent(const std::vector< uint8_t > &_outUINT8EventArray);
 
     /*
      * description: 
@@ -421,21 +421,33 @@ public:
      */
     CommonAPI::SomeIP::MethodWithReplyStubDispatcher<
         ::v1::someip::testability::ETSStub,
-        std::tuple< uint32_t, uint32_t, uint32_t, uint32_t, uint8_t>,
-        std::tuple< uint32_t, uint32_t, uint32_t, uint32_t, uint8_t>,
-        std::tuple< CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint8_t>>,
-        std::tuple< CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint8_t>>
+        std::tuple< uint16_t, uint16_t, uint32_t, uint32_t, uint8_t>,
+        std::tuple< uint16_t, uint16_t, uint32_t, uint32_t, uint8_t>,
+        std::tuple< CommonAPI::SomeIP::IntegerDeployment<uint16_t>, CommonAPI::SomeIP::IntegerDeployment<uint16_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint8_t>>,
+        std::tuple< CommonAPI::SomeIP::IntegerDeployment<uint16_t>, CommonAPI::SomeIP::IntegerDeployment<uint16_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint8_t>>
     > echoUINT8E2EStubDispatcher;
     
     /*
      * description: 
      * Sends the uint8 array over SOME/IP TP.
      */
+    CommonAPI::SomeIP::MethodWithReplyStubDispatcher<
+        ::v1::someip::testability::ETSStub,
+        std::tuple< std::vector< uint8_t >>,
+        std::tuple< std::vector< uint8_t >>,
+        std::tuple< CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >>,
+        std::tuple< CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >>
+    > echoUINT8ArrayLengthTPStubDispatcher;
+    
+    /*
+     * description: 
+     * Requests to triggers an TP Event of type uint8 array.
+     */
     CommonAPI::SomeIP::MethodStubDispatcher<
         ::v1::someip::testability::ETSStub,
         std::tuple< std::vector< uint8_t >>,
         std::tuple< CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >>
-    > echoUINT8ArrayLengthTPStubDispatcher;
+    > triggerEventUINT8ArrayTPStubDispatcher;
     
     /*
      * description: 
@@ -686,28 +698,36 @@ public:
             &ETSStub::echoUINT8E2E,
             false,
             _stub->hasElement(31),
-            std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr)),
-            std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr)))
+            std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr)),
+            std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr)))
         
         ,
         echoUINT8ArrayLengthTPStubDispatcher(
             &ETSStub::echoUINT8ArrayLengthTP,
             false,
             _stub->hasElement(33),
-            std::make_tuple(&::v1::someip::testability::ETS_::echoUINT8ArrayLengthTP_inUINT8ArrayDeployment))
+            std::make_tuple(&::v1::someip::testability::ETS_::echoUINT8ArrayLengthTP_inUINT8Array_ReqArg1Deployment),
+            std::make_tuple(&::v1::someip::testability::ETS_::echoUINT8ArrayLengthTP_outUINT8Array_ResArg1Deployment))
+        
+        ,
+        triggerEventUINT8ArrayTPStubDispatcher(
+            &ETSStub::triggerEventUINT8ArrayTP,
+            false,
+            _stub->hasElement(34),
+            std::make_tuple(&::v1::someip::testability::ETS_::triggerEventUINT8ArrayTP_triggerEventUINT8ArrayTP_ReqArg1Deployment))
         
         ,
         triggerEventUINT32PeriodicStubDispatcher(
             &ETSStub::triggerEventUINT32Periodic,
             false,
-            _stub->hasElement(35),
+            _stub->hasElement(36),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
         
         ,
         triggerEventUINT32UpdateOnChangeStubDispatcher(
             &ETSStub::triggerEventUINT32UpdateOnChange,
             false,
-            _stub->hasElement(37),
+            _stub->hasElement(38),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
         
     {
@@ -863,6 +883,11 @@ public:
         ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x70) }, &echoUINT8ArrayLengthTPStubDispatcher );
         /*
          * description: 
+         * Requests to triggers an TP Event of type uint8 array.
+         */
+        ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x4d) }, &triggerEventUINT8ArrayTPStubDispatcher );
+        /*
+         * description: 
          * Requests to triggers an periodic event of type uint32.
          */
         ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x4b) }, &triggerEventUINT32PeriodicStubDispatcher );
@@ -1006,15 +1031,15 @@ void ETSSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireTestEventUINT8Multicast
  * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
  */
 template <typename _Stub, typename... _Stubs>
-void ETSSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireTestEventUINT8TPEvent(const std::vector< uint8_t > &_outUINT8Array) {
-    CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> deployed_outUINT8Array(_outUINT8Array, &::v1::someip::testability::ETS_::TestEventUINT8TP_outUINT8ArrayDeployment);
+void ETSSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireTestEventUINT8ArrayTPEvent(const std::vector< uint8_t > &_outUINT8EventArray) {
+    CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> deployed_outUINT8EventArray(_outUINT8EventArray, &::v1::someip::testability::ETS_::TestEventUINT8ArrayTP_outUINT8EventArrayDeployment);
     CommonAPI::SomeIP::StubEventHelper<CommonAPI::SomeIP::SerializableArguments<  CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > > 
     >>
         ::sendEvent(
             *this,
             CommonAPI::SomeIP::event_id_t(0x800c),
             false,
-             deployed_outUINT8Array 
+             deployed_outUINT8EventArray 
     );
 }
 

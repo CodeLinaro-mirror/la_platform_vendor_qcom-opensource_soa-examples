@@ -379,10 +379,10 @@ void etsProxyImpl::tester_subscribe_TestEventUINT8TP() {
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     if (etsProxy && isAvailable) {
-        TestEventUINT8TPsubscription = etsProxy->getTestEventUINT8TPEvent().subscribe([&](const std::vector< uint8_t > &_outUINT8Array) {
+        TestEventUINT8TPsubscription = etsProxy->getTestEventUINT8ArrayTPEvent().subscribe([&](const std::vector< uint8_t > &_outUINT8EventArray) {
             std::cout << "etsProxyImpl::tester_subscribe_TestEventUINT8TP TestEventUINT8TP Notification" << std::endl;
-            for (int idx = 0; idx < _outUINT8Array.size(); idx++) {
-                std::cout << std::hex << (uint32_t)_outUINT8Array[idx];
+            for (auto &it : _outUINT8EventArray) {
+                std::cout << std::hex << (uint32_t)it;
             }
             std::cout << " Done" << std::endl;
         });
@@ -396,7 +396,7 @@ void etsProxyImpl::tester_unsubscribe_TestEventUINT8TP() {
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     if (etsProxy && isAvailable) {
-        etsProxy->getTestEventUINT8TPEvent().unsubscribe(TestEventUINT8TPsubscription);
+        etsProxy->getTestEventUINT8ArrayTPEvent().unsubscribe(TestEventUINT8TPsubscription);
     }
     else {
         std::cout << "ETS Service Not Available" << std::endl;
@@ -1168,14 +1168,14 @@ void etsProxyImpl::invoke_triggerEventUINT8Multicast(uint32_t start, uint32_t du
 }
 
 void etsProxyImpl::invoke_echoUINT8E2E() {
-    uint32_t echoUINT8E2E_ReqArg1 = 0x0;
-    uint32_t echoUINT8E2E_ReqArg2 = 0x0;
+    uint16_t echoUINT8E2E_ReqArg1 = 0x0;
+    uint16_t echoUINT8E2E_ReqArg2 = 0x0;
     uint32_t echoUINT8E2E_ReqArg3 = 0x0;
     uint32_t echoUINT8E2E_ReqArg4 = 0x0;
     uint8_t echoUINT8E2E_ReqArg5 = 0x9a;
     CommonAPI::CallStatus callStatus;
-    uint32_t echoUINT8E2E_ResArg1;
-    uint32_t echoUINT8E2E_ResArg2;
+    uint16_t echoUINT8E2E_ResArg1;
+    uint16_t echoUINT8E2E_ResArg2;
     uint32_t echoUINT8E2E_ResArg3;
     uint32_t echoUINT8E2E_ResArg4;
     uint8_t echoUINT8E2E_ResArg5;
@@ -1188,8 +1188,8 @@ void etsProxyImpl::invoke_echoUINT8E2E() {
             std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
         }
         else {
-            std::cout << "etsProxyImpl::" << __func__ << " echoUINT8E2E_ResArg1:" << std::hex << echoUINT8E2E_ResArg1
-                << " echoUINT8E2E_ResArg2:" << std::hex << echoUINT8E2E_ResArg2
+            std::cout << "etsProxyImpl::" << __func__ << " echoUINT8E2E_ResArg1:" << std::hex << (uint16_t)echoUINT8E2E_ResArg1
+                << " echoUINT8E2E_ResArg2:" << std::hex << (uint16_t)echoUINT8E2E_ResArg2
                 << " echoUINT8E2E_ResArg3:" << std::hex << echoUINT8E2E_ResArg3
                 << " echoUINT8E2E_ResArg4:" << std::hex << echoUINT8E2E_ResArg4
                 << " echoUINT8E2E_ResArg5:" << std::hex << (uint32_t)echoUINT8E2E_ResArg5;
@@ -1203,16 +1203,46 @@ void etsProxyImpl::invoke_echoUINT8E2E() {
 }
 
 void etsProxyImpl::invoke_echoUINT8ArrayLengthTP(int array_length) {
-    std::vector<uint8_t> inUINT8Array;
+    std::vector<uint8_t> inUINT8Array_ReqArg1 = {};
+    CommonAPI::CallStatus callStatus;
+    std::vector<uint8_t> outUINT8Array_ResArg1 = {};
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    for (int idx=0; idx<array_length; idx++) {
+        inUINT8Array_ReqArg1.push_back(0xab);
+    }
+
+    if (etsProxy && isAvailable) {
+        etsProxy->echoUINT8ArrayLengthTP(inUINT8Array_ReqArg1, callStatus, outUINT8Array_ResArg1);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+        else {
+            std::cout << "etsProxyImpl::" << __func__ << " Response:" << std::endl;
+            for (int idx = 0; idx < outUINT8Array_ResArg1.size(); idx++) {
+                std::cout << std::hex << (uint32_t)outUINT8Array_ResArg1[idx];
+            }
+            std::cout << '\n';
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::invoke_triggerEventUINT8ArrayTP(int array_length) {
+    std::vector< uint8_t > triggerEventUINT8ArrayTP_ReqArg1;
     CommonAPI::CallStatus callStatus;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     for (int idx=0; idx<array_length; idx++) {
-        inUINT8Array.push_back(0xab);
+        triggerEventUINT8ArrayTP_ReqArg1.push_back(0xab);
     }
 
     if (etsProxy && isAvailable) {
-        etsProxy->echoUINT8ArrayLengthTP(inUINT8Array, callStatus);
+        etsProxy->triggerEventUINT8ArrayTP(triggerEventUINT8ArrayTP_ReqArg1, callStatus);
         if (callStatus != CommonAPI::CallStatus::SUCCESS) {
             std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
         }

@@ -393,15 +393,15 @@ public:
      * description: 
      * Returns back the e2e data passed as input parameter.
      */
-    COMMONAPI_EXPORT virtual void echoUINT8E2E(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _echoUINT8E2E_ReqArg1, uint32_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, echoUINT8E2EReply_t _reply) {
+    COMMONAPI_EXPORT virtual void echoUINT8E2E(const std::shared_ptr<CommonAPI::ClientId> _client, uint16_t _echoUINT8E2E_ReqArg1, uint16_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, echoUINT8E2EReply_t _reply) {
         (void)_client;
         (void)_echoUINT8E2E_ReqArg1;
         (void)_echoUINT8E2E_ReqArg2;
         (void)_echoUINT8E2E_ReqArg3;
         (void)_echoUINT8E2E_ReqArg4;
         (void)_echoUINT8E2E_ReqArg5;
-        uint32_t echoUINT8E2E_ResArg1 = 0ul;
-        uint32_t echoUINT8E2E_ResArg2 = 0ul;
+        uint16_t echoUINT8E2E_ResArg1 = 0u;
+        uint16_t echoUINT8E2E_ResArg2 = 0u;
         uint32_t echoUINT8E2E_ResArg3 = 0ul;
         uint32_t echoUINT8E2E_ResArg4 = 0ul;
         uint8_t echoUINT8E2E_ResArg5 = 0u;
@@ -418,16 +418,26 @@ public:
      * description: 
      * Sends the uint8 array over SOME/IP TP.
      */
-    COMMONAPI_EXPORT virtual void echoUINT8ArrayLengthTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array) {
+    COMMONAPI_EXPORT virtual void echoUINT8ArrayLengthTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array_ReqArg1, echoUINT8ArrayLengthTPReply_t _reply) {
         (void)_client;
-        (void)_inUINT8Array;
+        (void)_inUINT8Array_ReqArg1;
+        std::vector< uint8_t > outUINT8Array_ResArg1 = {};
+        _reply(outUINT8Array_ResArg1);
+    }
+    /*
+     * description: 
+     * Requests to triggers an TP Event of type uint8 array.
+     */
+    COMMONAPI_EXPORT virtual void triggerEventUINT8ArrayTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1) {
+        (void)_client;
+        (void)_triggerEventUINT8ArrayTP_ReqArg1;
     }
     /*
      * description: 
      * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
      */
-    COMMONAPI_EXPORT virtual void fireTestEventUINT8TPEvent(const std::vector< uint8_t > &_outUINT8Array) {
-        ETSStub::fireTestEventUINT8TPEvent(_outUINT8Array);
+    COMMONAPI_EXPORT virtual void fireTestEventUINT8ArrayTPEvent(const std::vector< uint8_t > &_outUINT8EventArray) {
+        ETSStub::fireTestEventUINT8ArrayTPEvent(_outUINT8EventArray);
     }
     /*
      * description: 

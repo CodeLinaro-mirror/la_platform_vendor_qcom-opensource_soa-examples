@@ -55,7 +55,7 @@ public:
     > TestEventUINT8MulticastEvent;
     typedef CommonAPI::Event<
         std::vector< uint8_t >
-    > TestEventUINT8TPEvent;
+    > TestEventUINT8ArrayTPEvent;
     typedef CommonAPI::Event<
         uint32_t
     > TestEventUINT32PeriodicEvent;
@@ -82,7 +82,8 @@ public:
     typedef std::function<void(const CommonAPI::CallStatus&, const std::string&)> EchoUTF16FIXEDAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const uint32_t&, const std::string&)> EchoUTF8DYNAMICAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const std::string&)> EchoUTF8FIXEDAsyncCallback;
-    typedef std::function<void(const CommonAPI::CallStatus&, const uint32_t&, const uint32_t&, const uint32_t&, const uint32_t&, const uint8_t&)> EchoUINT8E2EAsyncCallback;
+    typedef std::function<void(const CommonAPI::CallStatus&, const uint16_t&, const uint16_t&, const uint32_t&, const uint32_t&, const uint8_t&)> EchoUINT8E2EAsyncCallback;
+    typedef std::function<void(const CommonAPI::CallStatus&, const std::vector< uint8_t >&)> EchoUINT8ArrayLengthTPAsyncCallback;
 
     /*
      * description: 
@@ -289,8 +290,8 @@ public:
      * description: 
      * Returns back the e2e data passed as input parameter.
      */
-    virtual void echoUINT8E2E(uint32_t _echoUINT8E2E_ReqArg1, uint32_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, CommonAPI::CallStatus &_internalCallStatus, uint32_t &_echoUINT8E2E_ResArg1, uint32_t &_echoUINT8E2E_ResArg2, uint32_t &_echoUINT8E2E_ResArg3, uint32_t &_echoUINT8E2E_ResArg4, uint8_t &_echoUINT8E2E_ResArg5, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    virtual std::future<CommonAPI::CallStatus> echoUINT8E2EAsync(const uint32_t &_echoUINT8E2E_ReqArg1, const uint32_t &_echoUINT8E2E_ReqArg2, const uint32_t &_echoUINT8E2E_ReqArg3, const uint32_t &_echoUINT8E2E_ReqArg4, const uint8_t &_echoUINT8E2E_ReqArg5, EchoUINT8E2EAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual void echoUINT8E2E(uint16_t _echoUINT8E2E_ReqArg1, uint16_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, CommonAPI::CallStatus &_internalCallStatus, uint16_t &_echoUINT8E2E_ResArg1, uint16_t &_echoUINT8E2E_ResArg2, uint32_t &_echoUINT8E2E_ResArg3, uint32_t &_echoUINT8E2E_ResArg4, uint8_t &_echoUINT8E2E_ResArg5, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual std::future<CommonAPI::CallStatus> echoUINT8E2EAsync(const uint16_t &_echoUINT8E2E_ReqArg1, const uint16_t &_echoUINT8E2E_ReqArg2, const uint32_t &_echoUINT8E2E_ReqArg3, const uint32_t &_echoUINT8E2E_ReqArg4, const uint8_t &_echoUINT8E2E_ReqArg5, EchoUINT8E2EAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
     /*
      * description: 
      * A broadcast e2e event triggered on triggerEventUINT8Multicast method request.
@@ -300,15 +301,21 @@ public:
      * description: 
      * Sends the uint8 array over SOME/IP TP.
      */
+    virtual void echoUINT8ArrayLengthTP(std::vector< uint8_t > _inUINT8Array_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, std::vector< uint8_t > &_outUINT8Array_ResArg1, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual std::future<CommonAPI::CallStatus> echoUINT8ArrayLengthTPAsync(const std::vector< uint8_t > &_inUINT8Array_ReqArg1, EchoUINT8ArrayLengthTPAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    /*
+     * description: 
+     * Requests to triggers an TP Event of type uint8 array.
+     */
     /**
      * @invariant Fire And Forget
      */
-    virtual void echoUINT8ArrayLengthTP(std::vector< uint8_t > _inUINT8Array, CommonAPI::CallStatus &_internalCallStatus) = 0;
+    virtual void triggerEventUINT8ArrayTP(std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1, CommonAPI::CallStatus &_internalCallStatus) = 0;
     /*
      * description: 
      * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
      */
-    virtual TestEventUINT8TPEvent& getTestEventUINT8TPEvent() = 0;
+    virtual TestEventUINT8ArrayTPEvent& getTestEventUINT8ArrayTPEvent() = 0;
     /*
      * description: 
      * Requests to triggers an periodic event of type uint32.

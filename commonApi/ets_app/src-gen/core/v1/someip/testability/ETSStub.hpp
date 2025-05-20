@@ -72,10 +72,10 @@ class ETSStubAdapter
     */
     virtual void fireTestEventUINT8MulticastEvent(const uint8_t &_uINT8Value) = 0;
     /**
-    * Sends a broadcast event for TestEventUINT8TP. Should not be called directly.
+    * Sends a broadcast event for TestEventUINT8ArrayTP. Should not be called directly.
     * Instead, the "fire<broadcastName>Event" methods of the stub should be used.
     */
-    virtual void fireTestEventUINT8TPEvent(const std::vector< uint8_t > &_outUINT8Array) = 0;
+    virtual void fireTestEventUINT8ArrayTPEvent(const std::vector< uint8_t > &_outUINT8EventArray) = 0;
     /**
     * Sends a broadcast event for TestEventUINT32Periodic. Should not be called directly.
     * Instead, the "fire<broadcastName>Event" methods of the stub should be used.
@@ -147,12 +147,13 @@ public:
     typedef std::function<void (std::string _echoUTF16FIXED_ResArg1)> echoUTF16FIXEDReply_t;
     typedef std::function<void (uint32_t _echoUTF8DYNAMIC_ResArg1, std::string _echoUTF8DYNAMIC_ResArg2)> echoUTF8DYNAMICReply_t;
     typedef std::function<void (std::string _echoUTF8FIXED_ResArg1)> echoUTF8FIXEDReply_t;
-    typedef std::function<void (uint32_t _echoUINT8E2E_ResArg1, uint32_t _echoUINT8E2E_ResArg2, uint32_t _echoUINT8E2E_ResArg3, uint32_t _echoUINT8E2E_ResArg4, uint8_t _echoUINT8E2E_ResArg5)> echoUINT8E2EReply_t;
+    typedef std::function<void (uint16_t _echoUINT8E2E_ResArg1, uint16_t _echoUINT8E2E_ResArg2, uint32_t _echoUINT8E2E_ResArg3, uint32_t _echoUINT8E2E_ResArg4, uint8_t _echoUINT8E2E_ResArg5)> echoUINT8E2EReply_t;
+    typedef std::function<void (std::vector< uint8_t > _outUINT8Array_ResArg1)> echoUINT8ArrayLengthTPReply_t;
 
     virtual ~ETSStub() {}
     void lockInterfaceVersionAttribute(bool _lockAccess) { static_cast<void>(_lockAccess); }
     bool hasElement(const uint32_t _id) const {
-        return (_id < 39);
+        return (_id < 40);
     }
     virtual const CommonAPI::Version& getInterfaceVersion(std::shared_ptr<CommonAPI::ClientId> _client) = 0;
 
@@ -359,7 +360,7 @@ public:
      * Returns back the e2e data passed as input parameter.
      */
     /// This is the method that will be called on remote calls on the method echoUINT8E2E.
-    virtual void echoUINT8E2E(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _echoUINT8E2E_ReqArg1, uint32_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, echoUINT8E2EReply_t _reply) = 0;
+    virtual void echoUINT8E2E(const std::shared_ptr<CommonAPI::ClientId> _client, uint16_t _echoUINT8E2E_ReqArg1, uint16_t _echoUINT8E2E_ReqArg2, uint32_t _echoUINT8E2E_ReqArg3, uint32_t _echoUINT8E2E_ReqArg4, uint8_t _echoUINT8E2E_ReqArg5, echoUINT8E2EReply_t _reply) = 0;
     /*
      * description: 
      * A broadcast e2e event triggered on triggerEventUINT8Multicast method request.
@@ -375,16 +376,22 @@ public:
      * Sends the uint8 array over SOME/IP TP.
      */
     /// This is the method that will be called on remote calls on the method echoUINT8ArrayLengthTP.
-    virtual void echoUINT8ArrayLengthTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array) = 0;
+    virtual void echoUINT8ArrayLengthTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array_ReqArg1, echoUINT8ArrayLengthTPReply_t _reply) = 0;
+    /*
+     * description: 
+     * Requests to triggers an TP Event of type uint8 array.
+     */
+    /// This is the method that will be called on remote calls on the method triggerEventUINT8ArrayTP.
+    virtual void triggerEventUINT8ArrayTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1) = 0;
     /*
      * description: 
      * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
      */
-    /// Sends a broadcast event for TestEventUINT8TP.
-    virtual void fireTestEventUINT8TPEvent(const std::vector< uint8_t > &_outUINT8Array) {
+    /// Sends a broadcast event for TestEventUINT8ArrayTP.
+    virtual void fireTestEventUINT8ArrayTPEvent(const std::vector< uint8_t > &_outUINT8EventArray) {
         auto stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
         if (stubAdapter)
-            stubAdapter->fireTestEventUINT8TPEvent(_outUINT8Array);
+            stubAdapter->fireTestEventUINT8ArrayTPEvent(_outUINT8EventArray);
     }
     /*
      * description: 
