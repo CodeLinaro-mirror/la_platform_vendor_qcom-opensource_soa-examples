@@ -149,11 +149,13 @@ public:
     typedef std::function<void (std::string _echoUTF8FIXED_ResArg1)> echoUTF8FIXEDReply_t;
     typedef std::function<void (uint16_t _echoUINT8E2E_ResArg1, uint16_t _echoUINT8E2E_ResArg2, uint32_t _echoUINT8E2E_ResArg3, uint32_t _echoUINT8E2E_ResArg4, uint8_t _echoUINT8E2E_ResArg5)> echoUINT8E2EReply_t;
     typedef std::function<void (std::vector< uint8_t > _outUINT8Array_ResArg1)> echoUINT8ArrayLengthTPReply_t;
+    typedef std::function<void (uint32_t _outUINT32_ResArg1)> echoUINT8ArrayLengthInTPReply_t;
+    typedef std::function<void (std::vector< uint8_t > _outUINT8Array_ResArg1)> echoUINT8ArrayLengthOutTPReply_t;
 
     virtual ~ETSStub() {}
     void lockInterfaceVersionAttribute(bool _lockAccess) { static_cast<void>(_lockAccess); }
     bool hasElement(const uint32_t _id) const {
-        return (_id < 40);
+        return (_id < 44);
     }
     virtual const CommonAPI::Version& getInterfaceVersion(std::shared_ptr<CommonAPI::ClientId> _client) = 0;
 
@@ -379,13 +381,31 @@ public:
     virtual void echoUINT8ArrayLengthTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array_ReqArg1, echoUINT8ArrayLengthTPReply_t _reply) = 0;
     /*
      * description: 
+     * Sends the uint8 array as input over SOME/IP TP.
+     */
+    /// This is the method that will be called on remote calls on the method echoUINT8ArrayLengthInTP.
+    virtual void echoUINT8ArrayLengthInTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array_ReqArg1, echoUINT8ArrayLengthInTPReply_t _reply) = 0;
+    /*
+     * description: 
+     * Sends the uint8 array as reply over SOME/IP TP.
+     */
+    /// This is the method that will be called on remote calls on the method echoUINT8ArrayLengthOutTP.
+    virtual void echoUINT8ArrayLengthOutTP(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _inUINT32_ReqArg1, echoUINT8ArrayLengthOutTPReply_t _reply) = 0;
+    /*
+     * description: 
+     * Sends the uint8 array as input over SOME/IP TP.
+     */
+    /// This is the method that will be called on remote calls on the method echoUINT8ArrayLengthTPNoResponse.
+    virtual void echoUINT8ArrayLengthTPNoResponse(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _echoUINT8ArrayLengthTPNoResponse_ReqArg1) = 0;
+    /*
+     * description: 
      * Requests to triggers an TP Event of type uint8 array.
      */
     /// This is the method that will be called on remote calls on the method triggerEventUINT8ArrayTP.
     virtual void triggerEventUINT8ArrayTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1) = 0;
     /*
      * description: 
-     * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
+     * A broadcast TP event triggered on triggerEventUINT8ArrayTP method request.
      */
     /// Sends a broadcast event for TestEventUINT8ArrayTP.
     virtual void fireTestEventUINT8ArrayTPEvent(const std::vector< uint8_t > &_outUINT8EventArray) {
@@ -393,6 +413,12 @@ public:
         if (stubAdapter)
             stubAdapter->fireTestEventUINT8ArrayTPEvent(_outUINT8EventArray);
     }
+    /*
+     * description: 
+     * Requests to triggers an TP Event of type uint8 array.
+     */
+    /// This is the method that will be called on remote calls on the method triggerEventUINT8ArrayTPNoReqTPPayload.
+    virtual void triggerEventUINT8ArrayTPNoReqTPPayload(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) = 0;
     /*
      * description: 
      * Requests to triggers an periodic event of type uint32.
