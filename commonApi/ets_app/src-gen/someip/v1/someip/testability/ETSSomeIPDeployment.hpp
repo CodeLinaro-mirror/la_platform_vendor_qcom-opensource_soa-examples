@@ -63,6 +63,9 @@ COMMONAPI_EXPORT extern CommonAPI::SomeIP::StringDeployment echoUTF8FIXED_echoUT
 COMMONAPI_EXPORT extern CommonAPI::SomeIP::StringDeployment echoUTF8FIXED_echoUTF8FIXED_ResArg1Deployment;
 COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthTP_inUINT8Array_ReqArg1Deployment;
 COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthTP_outUINT8Array_ResArg1Deployment;
+COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthInTP_inUINT8Array_ReqArg1Deployment;
+COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthOutTP_outUINT8Array_ResArg1Deployment;
+COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoUINT8ArrayLengthTPNoResponse_echoUINT8ArrayLengthTPNoResponse_ReqArg1Deployment;
 COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > triggerEventUINT8ArrayTP_triggerEventUINT8ArrayTP_ReqArg1Deployment;
 
 // Broadcast-specific deployments

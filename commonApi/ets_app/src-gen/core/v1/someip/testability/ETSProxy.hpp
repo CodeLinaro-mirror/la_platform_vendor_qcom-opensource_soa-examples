@@ -690,6 +690,63 @@ public:
     virtual std::future<CommonAPI::CallStatus> echoUINT8ArrayLengthTPAsync(const std::vector< uint8_t > &_inUINT8Array_ReqArg1, EchoUINT8ArrayLengthTPAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
     /**
      * description: 
+     * Sends the uint8 array as input over SOME/IP TP.
+     * Calls echoUINT8ArrayLengthInTP with synchronous semantics.
+     *
+     * All const parameters are input parameters to this method.
+     * All non-const parameters will be filled with the returned values.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
+     */
+    virtual void echoUINT8ArrayLengthInTP(std::vector< uint8_t > _inUINT8Array_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, uint32_t &_outUINT32_ResArg1, const CommonAPI::CallInfo *_info = nullptr);
+    /**
+     * Calls echoUINT8ArrayLengthInTP with asynchronous semantics.
+     *
+     * The provided callback will be called when the reply to this call arrives or
+     * an error occurs during the call. The CallStatus will indicate either "SUCCESS"
+     * or which type of error has occurred. In case of any error, ONLY the CallStatus
+     * will have a defined value.
+     * The std::future returned by this method will be fulfilled at arrival of the reply.
+     * It will provide the same value for CallStatus as will be handed to the callback.
+     */
+    virtual std::future<CommonAPI::CallStatus> echoUINT8ArrayLengthInTPAsync(const std::vector< uint8_t > &_inUINT8Array_ReqArg1, EchoUINT8ArrayLengthInTPAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
+    /**
+     * description: 
+     * Sends the uint8 array as reply over SOME/IP TP.
+     * Calls echoUINT8ArrayLengthOutTP with synchronous semantics.
+     *
+     * All const parameters are input parameters to this method.
+     * All non-const parameters will be filled with the returned values.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
+     */
+    virtual void echoUINT8ArrayLengthOutTP(uint32_t _inUINT32_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, std::vector< uint8_t > &_outUINT8Array_ResArg1, const CommonAPI::CallInfo *_info = nullptr);
+    /**
+     * Calls echoUINT8ArrayLengthOutTP with asynchronous semantics.
+     *
+     * The provided callback will be called when the reply to this call arrives or
+     * an error occurs during the call. The CallStatus will indicate either "SUCCESS"
+     * or which type of error has occurred. In case of any error, ONLY the CallStatus
+     * will have a defined value.
+     * The std::future returned by this method will be fulfilled at arrival of the reply.
+     * It will provide the same value for CallStatus as will be handed to the callback.
+     */
+    virtual std::future<CommonAPI::CallStatus> echoUINT8ArrayLengthOutTPAsync(const uint32_t &_inUINT32_ReqArg1, EchoUINT8ArrayLengthOutTPAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
+    /**
+     * description: 
+     * Sends the uint8 array as input over SOME/IP TP.
+     * Calls echoUINT8ArrayLengthTPNoResponse with Fire&Forget semantics.
+     *
+     * All const parameters are input parameters to this method.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
+     */
+    virtual void echoUINT8ArrayLengthTPNoResponse(std::vector< uint8_t > _echoUINT8ArrayLengthTPNoResponse_ReqArg1, CommonAPI::CallStatus &_internalCallStatus);
+    /**
+     * description: 
      * Requests to triggers an TP Event of type uint8 array.
      * Calls triggerEventUINT8ArrayTP with Fire&Forget semantics.
      *
@@ -701,7 +758,7 @@ public:
     virtual void triggerEventUINT8ArrayTP(std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1, CommonAPI::CallStatus &_internalCallStatus);
     /*
      * description: 
-     * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
+     * A broadcast TP event triggered on triggerEventUINT8ArrayTP method request.
      */
     /**
      * Returns the wrapper class that provides access to the broadcast TestEventUINT8ArrayTP.
@@ -709,6 +766,17 @@ public:
     virtual TestEventUINT8ArrayTPEvent& getTestEventUINT8ArrayTPEvent() {
         return delegate_->getTestEventUINT8ArrayTPEvent();
     }
+    /**
+     * description: 
+     * Requests to triggers an TP Event of type uint8 array.
+     * Calls triggerEventUINT8ArrayTPNoReqTPPayload with Fire&Forget semantics.
+     *
+     * All const parameters are input parameters to this method.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
+     */
+    virtual void triggerEventUINT8ArrayTPNoReqTPPayload(uint32_t _triggerEventUINT32_ReqArg1, CommonAPI::CallStatus &_internalCallStatus);
     /**
      * description: 
      * Requests to triggers an periodic event of type uint32.
@@ -1132,11 +1200,53 @@ std::future<CommonAPI::CallStatus> ETSProxy<_AttributeExtensions...>::echoUINT8A
 }
 /*
  * description: 
+ * Sends the uint8 array as input over SOME/IP TP.
+ */
+template <typename ... _AttributeExtensions>
+void ETSProxy<_AttributeExtensions...>::echoUINT8ArrayLengthInTP(std::vector< uint8_t > _inUINT8Array_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, uint32_t &_outUINT32_ResArg1, const CommonAPI::CallInfo *_info) {
+    delegate_->echoUINT8ArrayLengthInTP(_inUINT8Array_ReqArg1, _internalCallStatus, _outUINT32_ResArg1, _info);
+}
+
+template <typename ... _AttributeExtensions>
+std::future<CommonAPI::CallStatus> ETSProxy<_AttributeExtensions...>::echoUINT8ArrayLengthInTPAsync(const std::vector< uint8_t > &_inUINT8Array_ReqArg1, EchoUINT8ArrayLengthInTPAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    return delegate_->echoUINT8ArrayLengthInTPAsync(_inUINT8Array_ReqArg1, _callback, _info);
+}
+/*
+ * description: 
+ * Sends the uint8 array as reply over SOME/IP TP.
+ */
+template <typename ... _AttributeExtensions>
+void ETSProxy<_AttributeExtensions...>::echoUINT8ArrayLengthOutTP(uint32_t _inUINT32_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, std::vector< uint8_t > &_outUINT8Array_ResArg1, const CommonAPI::CallInfo *_info) {
+    delegate_->echoUINT8ArrayLengthOutTP(_inUINT32_ReqArg1, _internalCallStatus, _outUINT8Array_ResArg1, _info);
+}
+
+template <typename ... _AttributeExtensions>
+std::future<CommonAPI::CallStatus> ETSProxy<_AttributeExtensions...>::echoUINT8ArrayLengthOutTPAsync(const uint32_t &_inUINT32_ReqArg1, EchoUINT8ArrayLengthOutTPAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    return delegate_->echoUINT8ArrayLengthOutTPAsync(_inUINT32_ReqArg1, _callback, _info);
+}
+/*
+ * description: 
+ * Sends the uint8 array as input over SOME/IP TP.
+ */
+template <typename ... _AttributeExtensions>
+void ETSProxy<_AttributeExtensions...>::echoUINT8ArrayLengthTPNoResponse(std::vector< uint8_t > _echoUINT8ArrayLengthTPNoResponse_ReqArg1, CommonAPI::CallStatus &_internalCallStatus) {
+    delegate_->echoUINT8ArrayLengthTPNoResponse(_echoUINT8ArrayLengthTPNoResponse_ReqArg1, _internalCallStatus);
+}
+/*
+ * description: 
  * Requests to triggers an TP Event of type uint8 array.
  */
 template <typename ... _AttributeExtensions>
 void ETSProxy<_AttributeExtensions...>::triggerEventUINT8ArrayTP(std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1, CommonAPI::CallStatus &_internalCallStatus) {
     delegate_->triggerEventUINT8ArrayTP(_triggerEventUINT8ArrayTP_ReqArg1, _internalCallStatus);
+}
+/*
+ * description: 
+ * Requests to triggers an TP Event of type uint8 array.
+ */
+template <typename ... _AttributeExtensions>
+void ETSProxy<_AttributeExtensions...>::triggerEventUINT8ArrayTPNoReqTPPayload(uint32_t _triggerEventUINT32_ReqArg1, CommonAPI::CallStatus &_internalCallStatus) {
+    delegate_->triggerEventUINT8ArrayTPNoReqTPPayload(_triggerEventUINT32_ReqArg1, _internalCallStatus);
 }
 /*
  * description: 

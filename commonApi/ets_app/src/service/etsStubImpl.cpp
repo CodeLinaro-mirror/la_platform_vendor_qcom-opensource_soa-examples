@@ -496,6 +496,28 @@ void etsStubImpl::echoUINT8ArrayLengthTP(const std::shared_ptr<CommonAPI::Client
     return;
 }
 
+
+void etsStubImpl::echoUINT8ArrayLengthInTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array_ReqArg1, echoUINT8ArrayLengthInTPReply_t _reply) {
+    std::cout << "etsStubImpl::" << __func__ << " Data size:" << std::dec << (uint32_t)_inUINT8Array_ReqArg1.size() << std::endl;
+    uint32_t outUINT32_ResArg1 = _inUINT8Array_ReqArg1.size();
+    for (uint32_t idx = 0; idx < outUINT32_ResArg1; idx++) {
+        std::cout << std::hex << (uint32_t)_inUINT8Array_ReqArg1[idx];
+    }
+    std::cout << '\n';
+    _reply(outUINT32_ResArg1);
+    return;
+}
+
+void etsStubImpl::echoUINT8ArrayLengthOutTP(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _inUINT32_ReqArg1, echoUINT8ArrayLengthOutTPReply_t _reply) {
+    std::cout << "etsStubImpl::" << __func__ << " _inUINT32_ReqArg1:" << std::dec << _inUINT32_ReqArg1 << std::endl;
+    std::vector< uint8_t > outUINT8Array_ResArg1;
+    for (uint32_t idx=0; idx<_inUINT32_ReqArg1; idx++) {
+        outUINT8Array_ResArg1.push_back(0xab);
+    }
+    _reply(outUINT8Array_ResArg1);
+    return;
+}
+
 void etsStubImpl::triggerEventUINT8ArrayTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1) {
     std::cout << "etsStubImpl::" << __func__ << std::endl;
     std::vector< uint8_t > outUINT8EventArray;
@@ -503,6 +525,27 @@ void etsStubImpl::triggerEventUINT8ArrayTP(const std::shared_ptr<CommonAPI::Clie
     fireTestEventUINT8ArrayTPEvent(outUINT8EventArray);
     return;
 }
+
+void etsStubImpl::echoUINT8ArrayLengthTPNoResponse(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _echoUINT8ArrayLengthTPNoResponse_ReqArg1) {
+    std::cout << "etsStubImpl::" << __func__ << " Data size:" << std::dec << (uint32_t)_echoUINT8ArrayLengthTPNoResponse_ReqArg1.size() << std::endl;
+    uint32_t UINT8ArrayTP_ReqArg1Size = _echoUINT8ArrayLengthTPNoResponse_ReqArg1.size();
+    for (uint32_t idx = 0; idx < UINT8ArrayTP_ReqArg1Size; idx++) {
+        std::cout << std::hex << (uint32_t)_echoUINT8ArrayLengthTPNoResponse_ReqArg1[idx];
+    }
+    std::cout << '\n';
+    return;
+}
+
+void etsStubImpl::triggerEventUINT8ArrayTPNoReqTPPayload(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) {
+    std::cout << "etsStubImpl::" << __func__ << " _triggerEventUINT32_ReqArg1:" << std::dec << _triggerEventUINT32_ReqArg1 << std::endl;
+    std::vector< uint8_t > outINT8EventArray;
+    for (int idx=0; idx<_triggerEventUINT32_ReqArg1; idx++) {
+        outINT8EventArray.push_back(0xab);
+    }
+    fireTestEventUINT8ArrayTPEvent(outINT8EventArray);
+    return; 
+}
+
 
 void etsStubImpl::triggerEventUINT32Periodic(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) {
     std::cout << "etsStubImpl::" << __func__ << " _triggerEventUINT32_ReqArg1:" << _triggerEventUINT32_ReqArg1 << std::endl;

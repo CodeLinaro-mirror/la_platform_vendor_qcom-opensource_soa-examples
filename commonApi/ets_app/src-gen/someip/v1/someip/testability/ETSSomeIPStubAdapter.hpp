@@ -74,7 +74,7 @@ public:
 
     /*
      * description: 
-     * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
+     * A broadcast TP event triggered on triggerEventUINT8ArrayTP method request.
      */
     void fireTestEventUINT8ArrayTPEvent(const std::vector< uint8_t > &_outUINT8EventArray);
 
@@ -441,6 +441,40 @@ public:
     
     /*
      * description: 
+     * Sends the uint8 array as input over SOME/IP TP.
+     */
+    CommonAPI::SomeIP::MethodWithReplyStubDispatcher<
+        ::v1::someip::testability::ETSStub,
+        std::tuple< std::vector< uint8_t >>,
+        std::tuple< uint32_t>,
+        std::tuple< CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >>,
+        std::tuple< CommonAPI::SomeIP::IntegerDeployment<uint32_t>>
+    > echoUINT8ArrayLengthInTPStubDispatcher;
+    
+    /*
+     * description: 
+     * Sends the uint8 array as reply over SOME/IP TP.
+     */
+    CommonAPI::SomeIP::MethodWithReplyStubDispatcher<
+        ::v1::someip::testability::ETSStub,
+        std::tuple< uint32_t>,
+        std::tuple< std::vector< uint8_t >>,
+        std::tuple< CommonAPI::SomeIP::IntegerDeployment<uint32_t>>,
+        std::tuple< CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >>
+    > echoUINT8ArrayLengthOutTPStubDispatcher;
+    
+    /*
+     * description: 
+     * Sends the uint8 array as input over SOME/IP TP.
+     */
+    CommonAPI::SomeIP::MethodStubDispatcher<
+        ::v1::someip::testability::ETSStub,
+        std::tuple< std::vector< uint8_t >>,
+        std::tuple< CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >>
+    > echoUINT8ArrayLengthTPNoResponseStubDispatcher;
+    
+    /*
+     * description: 
      * Requests to triggers an TP Event of type uint8 array.
      */
     CommonAPI::SomeIP::MethodStubDispatcher<
@@ -448,6 +482,16 @@ public:
         std::tuple< std::vector< uint8_t >>,
         std::tuple< CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >>
     > triggerEventUINT8ArrayTPStubDispatcher;
+    
+    /*
+     * description: 
+     * Requests to triggers an TP Event of type uint8 array.
+     */
+    CommonAPI::SomeIP::MethodStubDispatcher<
+        ::v1::someip::testability::ETSStub,
+        std::tuple< uint32_t>,
+        std::tuple< CommonAPI::SomeIP::IntegerDeployment<uint32_t>>
+    > triggerEventUINT8ArrayTPNoReqTPPayloadStubDispatcher;
     
     /*
      * description: 
@@ -710,24 +754,54 @@ public:
             std::make_tuple(&::v1::someip::testability::ETS_::echoUINT8ArrayLengthTP_outUINT8Array_ResArg1Deployment))
         
         ,
+        echoUINT8ArrayLengthInTPStubDispatcher(
+            &ETSStub::echoUINT8ArrayLengthInTP,
+            false,
+            _stub->hasElement(34),
+            std::make_tuple(&::v1::someip::testability::ETS_::echoUINT8ArrayLengthInTP_inUINT8Array_ReqArg1Deployment),
+            std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
+        
+        ,
+        echoUINT8ArrayLengthOutTPStubDispatcher(
+            &ETSStub::echoUINT8ArrayLengthOutTP,
+            false,
+            _stub->hasElement(35),
+            std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)),
+            std::make_tuple(&::v1::someip::testability::ETS_::echoUINT8ArrayLengthOutTP_outUINT8Array_ResArg1Deployment))
+        
+        ,
+        echoUINT8ArrayLengthTPNoResponseStubDispatcher(
+            &ETSStub::echoUINT8ArrayLengthTPNoResponse,
+            false,
+            _stub->hasElement(36),
+            std::make_tuple(&::v1::someip::testability::ETS_::echoUINT8ArrayLengthTPNoResponse_echoUINT8ArrayLengthTPNoResponse_ReqArg1Deployment))
+        
+        ,
         triggerEventUINT8ArrayTPStubDispatcher(
             &ETSStub::triggerEventUINT8ArrayTP,
             false,
-            _stub->hasElement(34),
+            _stub->hasElement(37),
             std::make_tuple(&::v1::someip::testability::ETS_::triggerEventUINT8ArrayTP_triggerEventUINT8ArrayTP_ReqArg1Deployment))
+        
+        ,
+        triggerEventUINT8ArrayTPNoReqTPPayloadStubDispatcher(
+            &ETSStub::triggerEventUINT8ArrayTPNoReqTPPayload,
+            false,
+            _stub->hasElement(39),
+            std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
         
         ,
         triggerEventUINT32PeriodicStubDispatcher(
             &ETSStub::triggerEventUINT32Periodic,
             false,
-            _stub->hasElement(36),
+            _stub->hasElement(40),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
         
         ,
         triggerEventUINT32UpdateOnChangeStubDispatcher(
             &ETSStub::triggerEventUINT32UpdateOnChange,
             false,
-            _stub->hasElement(38),
+            _stub->hasElement(42),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
         
     {
@@ -883,9 +957,29 @@ public:
         ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x70) }, &echoUINT8ArrayLengthTPStubDispatcher );
         /*
          * description: 
+         * Sends the uint8 array as input over SOME/IP TP.
+         */
+        ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x71) }, &echoUINT8ArrayLengthInTPStubDispatcher );
+        /*
+         * description: 
+         * Sends the uint8 array as reply over SOME/IP TP.
+         */
+        ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x72) }, &echoUINT8ArrayLengthOutTPStubDispatcher );
+        /*
+         * description: 
+         * Sends the uint8 array as input over SOME/IP TP.
+         */
+        ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x4f) }, &echoUINT8ArrayLengthTPNoResponseStubDispatcher );
+        /*
+         * description: 
          * Requests to triggers an TP Event of type uint8 array.
          */
         ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x4d) }, &triggerEventUINT8ArrayTPStubDispatcher );
+        /*
+         * description: 
+         * Requests to triggers an TP Event of type uint8 array.
+         */
+        ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x4e) }, &triggerEventUINT8ArrayTPNoReqTPPayloadStubDispatcher );
         /*
          * description: 
          * Requests to triggers an periodic event of type uint32.
@@ -1028,7 +1122,7 @@ void ETSSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireTestEventUINT8Multicast
 
 /*
  * description: 
- * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
+ * A broadcast TP event triggered on triggerEventUINT8ArrayTP method request.
  */
 template <typename _Stub, typename... _Stubs>
 void ETSSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireTestEventUINT8ArrayTPEvent(const std::vector< uint8_t > &_outUINT8EventArray) {
