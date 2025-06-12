@@ -32,7 +32,7 @@
             "unreliable": "30515",
             "unicast": "192.168.114.2",
             "someip-tp": {
-                "service-to-client": ["112", "32780", "77"]
+                "service-to-client": ["77", "112", "113", "114", "32780", "79"]
             },
             "events" :
             [
@@ -65,7 +65,7 @@
                     "event" : "32781",
                     "is_field" : "false",
                     "is_reliable" : "false",
-                    "cycle" : "5000",
+                    "cycle" : "1000",
                     "change_resets_cycle" : "true"
                 },
                 {
@@ -99,7 +99,7 @@
             "service": "258",
             "instance": "244",
             "unreliable": "30516",
-            "unicast": "192.168.114.1",
+            "unicast": "192.168.114.5",
             "multicast" :
             {
                 "address" : "224.225.226.234",
@@ -155,7 +155,7 @@
             }
         ]
     },
-    "max-payload-size-unreliable" : "50005",
+    "max-payload-size-unreliable" : "255300",
     "routing" : "ets_default_service",
     "network" : "ets_default_service",
     "service-discovery" :

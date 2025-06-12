@@ -84,6 +84,8 @@ public:
     typedef std::function<void(const CommonAPI::CallStatus&, const std::string&)> EchoUTF8FIXEDAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const uint16_t&, const uint16_t&, const uint32_t&, const uint32_t&, const uint8_t&)> EchoUINT8E2EAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const std::vector< uint8_t >&)> EchoUINT8ArrayLengthTPAsyncCallback;
+    typedef std::function<void(const CommonAPI::CallStatus&, const uint32_t&)> EchoUINT8ArrayLengthInTPAsyncCallback;
+    typedef std::function<void(const CommonAPI::CallStatus&, const std::vector< uint8_t >&)> EchoUINT8ArrayLengthOutTPAsyncCallback;
 
     /*
      * description: 
@@ -305,6 +307,26 @@ public:
     virtual std::future<CommonAPI::CallStatus> echoUINT8ArrayLengthTPAsync(const std::vector< uint8_t > &_inUINT8Array_ReqArg1, EchoUINT8ArrayLengthTPAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
     /*
      * description: 
+     * Sends the uint8 array as input over SOME/IP TP.
+     */
+    virtual void echoUINT8ArrayLengthInTP(std::vector< uint8_t > _inUINT8Array_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, uint32_t &_outUINT32_ResArg1, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual std::future<CommonAPI::CallStatus> echoUINT8ArrayLengthInTPAsync(const std::vector< uint8_t > &_inUINT8Array_ReqArg1, EchoUINT8ArrayLengthInTPAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    /*
+     * description: 
+     * Sends the uint8 array as reply over SOME/IP TP.
+     */
+    virtual void echoUINT8ArrayLengthOutTP(uint32_t _inUINT32_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, std::vector< uint8_t > &_outUINT8Array_ResArg1, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual std::future<CommonAPI::CallStatus> echoUINT8ArrayLengthOutTPAsync(const uint32_t &_inUINT32_ReqArg1, EchoUINT8ArrayLengthOutTPAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    /*
+     * description: 
+     * Sends the uint8 array as input over SOME/IP TP.
+     */
+    /**
+     * @invariant Fire And Forget
+     */
+    virtual void echoUINT8ArrayLengthTPNoResponse(std::vector< uint8_t > _echoUINT8ArrayLengthTPNoResponse_ReqArg1, CommonAPI::CallStatus &_internalCallStatus) = 0;
+    /*
+     * description: 
      * Requests to triggers an TP Event of type uint8 array.
      */
     /**
@@ -313,9 +335,17 @@ public:
     virtual void triggerEventUINT8ArrayTP(std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1, CommonAPI::CallStatus &_internalCallStatus) = 0;
     /*
      * description: 
-     * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
+     * A broadcast TP event triggered on triggerEventUINT8ArrayTP method request.
      */
     virtual TestEventUINT8ArrayTPEvent& getTestEventUINT8ArrayTPEvent() = 0;
+    /*
+     * description: 
+     * Requests to triggers an TP Event of type uint8 array.
+     */
+    /**
+     * @invariant Fire And Forget
+     */
+    virtual void triggerEventUINT8ArrayTPNoReqTPPayload(uint32_t _triggerEventUINT32_ReqArg1, CommonAPI::CallStatus &_internalCallStatus) = 0;
     /*
      * description: 
      * Requests to triggers an periodic event of type uint32.
