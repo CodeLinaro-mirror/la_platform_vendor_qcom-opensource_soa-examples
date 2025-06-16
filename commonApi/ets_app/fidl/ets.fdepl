@@ -403,13 +403,52 @@ define org.genivi.commonapi.someip.deployment for interface someip.testability.E
         SomeIpMethodRequestDebounceTime = 100
         in {
             inUINT8Array_ReqArg1 {
-                SomeIpArrayMaxLength = 50005
+                SomeIpArrayMaxLength = 255242
                 SomeIpArrayMinLength = 0
             }
         }
         out {
             outUINT8Array_ResArg1 {
-                SomeIpArrayMaxLength = 50005
+                SomeIpArrayMaxLength = 255242
+                SomeIpArrayMinLength = 0
+            }
+        }
+    }
+
+    method echoUINT8ArrayLengthInTP {
+        SomeIpMethodID = 113
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+        in {
+            inUINT8Array_ReqArg1 {
+                SomeIpArrayMaxLength = 255242
+                SomeIpArrayMinLength = 0
+            }
+        }
+    }
+
+    method echoUINT8ArrayLengthOutTP {
+        SomeIpMethodID = 114
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+        out {
+            outUINT8Array_ResArg1 {
+                SomeIpArrayMaxLength = 255242
+                SomeIpArrayMinLength = 0
+            }
+        }
+    }
+
+    method echoUINT8ArrayLengthTPNoResponse {
+        SomeIpMethodID = 79
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+        in {
+            echoUINT8ArrayLengthTPNoResponse_ReqArg1 {
+                SomeIpArrayMaxLength = 255242
                 SomeIpArrayMinLength = 0
             }
         }
@@ -422,7 +461,7 @@ define org.genivi.commonapi.someip.deployment for interface someip.testability.E
         SomeIpMethodRequestDebounceTime = 100
         in {
             triggerEventUINT8ArrayTP_ReqArg1 {
-                SomeIpArrayMaxLength = 50005
+                SomeIpArrayMaxLength = 255242
                 SomeIpArrayMinLength = 0
             }
         }
@@ -438,10 +477,17 @@ define org.genivi.commonapi.someip.deployment for interface someip.testability.E
         }
         out {
             outUINT8EventArray {
-                SomeIpArrayMaxLength = 50005
+                SomeIpArrayMaxLength = 255242
                 SomeIpArrayMinLength = 0
             }
         }
+    }
+
+    method triggerEventUINT8ArrayTPNoReqTPPayload {
+        SomeIpMethodID = 78
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
     }
 
     method triggerEventUINT32Periodic {

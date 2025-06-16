@@ -723,6 +723,54 @@ interface ETS {
 		}
 	}
 
+	<** 
+	    @description : Sends the uint8 array as input over SOME/IP TP.
+	**>
+	method echoUINT8ArrayLengthInTP {
+		in {
+			<**
+				@description : An array of uint8 type.
+			**>
+			UInt8 [ ] inUINT8Array_ReqArg1
+		}
+		out {
+			<**
+				@description : A uint32 type value for in array size.
+			**>
+			UInt32 outUINT32_ResArg1
+		}
+	}
+
+	<** 
+	    @description : Sends the uint8 array as reply over SOME/IP TP.
+	**>
+	method echoUINT8ArrayLengthOutTP {
+		in {
+			<**
+				@description : An uint32 type value for out array size.
+			**>
+			UInt32 inUINT32_ReqArg1
+		}
+		out {
+			<**
+				@description : An array of uint8 type.
+			**>
+			UInt8 [ ] outUINT8Array_ResArg1
+		}
+	}
+
+	<**
+		@description : Sends the uint8 array as input over SOME/IP TP.
+	**>
+	method echoUINT8ArrayLengthTPNoResponse fireAndForget {
+		in {
+			<**
+				@description : The uint8 array input parameter for event.
+			**>
+			UInt8 [ ] echoUINT8ArrayLengthTPNoResponse_ReqArg1
+		}
+	}
+
 	<**
 		@description : Requests to triggers an TP Event of type uint8 array.
 	**>
@@ -736,7 +784,7 @@ interface ETS {
 	}
 
 	<**
-		@description : A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
+		@description : A broadcast TP event triggered on triggerEventUINT8ArrayTP method request.
 	**>
 	broadcast TestEventUINT8ArrayTP {
 		out {
@@ -744,6 +792,18 @@ interface ETS {
 				@description : An array of UINT8 elements.
 			**>
 			UInt8 [ ] outUINT8EventArray
+		}
+	}
+
+	<**
+		@description : Requests to triggers an TP Event of type uint8 array.
+	**>
+	method triggerEventUINT8ArrayTPNoReqTPPayload fireAndForget {
+		in {
+			<**
+				@description : The uint32 input parameter for TP event size.
+			**>
+			UInt32 triggerEventUINT32_ReqArg1
 		}
 	}
 
