@@ -102,7 +102,11 @@ class etsProxyImpl {
         void invoke_triggerEventUINT8Array(uint32_t start, uint32_t duration, uint32_t debounce);
         void invoke_triggerEventUINT8Multicast(uint32_t start, uint32_t duration, uint32_t debounce);
         void invoke_echoUINT8ArrayLengthTP(int array_length);
+        void invoke_echoUINT8ArrayLengthInTP(int array_length);
+        void invoke_echoUINT8ArrayLengthOutTP(int array_length);
         void invoke_triggerEventUINT8ArrayTP(int array_length);
+        void invoke_echoUINT8ArrayLengthTPNoResponse(int array_length);
+        void invoke_triggerEventUINT8ArrayTPNoReqTPPayload(int array_length);
         void invoke_triggerEventUINT8E2E(uint32_t start, uint32_t duration, uint32_t debounce);
         void invoke_echoUINT8E2E();
         void invoke_triggerEventUINT32Periodic(uint32_t event_value);

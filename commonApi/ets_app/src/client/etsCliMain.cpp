@@ -182,7 +182,7 @@ int main() {
                     remote_unicast_ipaddr = "192.168.114.2";
                 }
                 remote_udp_port = 30515;
-                std::cout << "Select local ip: 1->RBVM 2->QNX 3->FVM" << std::endl;
+                std::cout << "Select local ip: 1->RBVM 2->QNX 3->FVM 4->Linux VM" << std::endl;
                 std::cin >> indx;
                 if (1 == indx) {
                     local_unicast_ipaddr = "192.168.114.1";
@@ -190,8 +190,11 @@ int main() {
                 else if(2 == indx) {
                     local_unicast_ipaddr = "192.168.114.42";
                 }
-                else {
+                else if(3 == indx) {
                     local_unicast_ipaddr = "192.168.114.2";
+                }
+                else {
+                    local_unicast_ipaddr = "192.168.114.5";
                 }
                 local_udp_port = 30701;
                 multicast_ipaddr = "237.50.20.1";
@@ -202,25 +205,61 @@ int main() {
                 sleep(2);
                 proxyPtr->invoke_echoCommonDatatypes();
                 sleep(2);
-                array_length = 1451;
+                array_length = 1395;
                 proxyPtr->invoke_echoUINT8ArrayLengthTP(array_length);
                 sleep(2);
-                array_length = 1452;
+                array_length = 1396;
                 proxyPtr->invoke_echoUINT8ArrayLengthTP(array_length);
                 sleep(2);
-                array_length = 1453;
+                array_length = 1397;
                 proxyPtr->invoke_echoUINT8ArrayLengthTP(array_length);
+                sleep(2);
+                array_length = 1395;
+                proxyPtr->invoke_echoUINT8ArrayLengthInTP(array_length);
+                sleep(2);
+                array_length = 1396;
+                proxyPtr->invoke_echoUINT8ArrayLengthInTP(array_length);
+                sleep(2);
+                array_length = 1397;
+                proxyPtr->invoke_echoUINT8ArrayLengthInTP(array_length);
+                sleep(2);
+                array_length = 1395;
+                proxyPtr->invoke_echoUINT8ArrayLengthOutTP(array_length);
+                sleep(2);
+                array_length = 1396;
+                proxyPtr->invoke_echoUINT8ArrayLengthOutTP(array_length);
+                sleep(2);
+                array_length = 1397;
+                proxyPtr->invoke_echoUINT8ArrayLengthOutTP(array_length);
+                sleep(2);
+                array_length = 1395;
+                proxyPtr->invoke_echoUINT8ArrayLengthTPNoResponse(array_length);
+                sleep(2);
+                array_length = 1396;
+                proxyPtr->invoke_echoUINT8ArrayLengthTPNoResponse(array_length);
+                sleep(2);
+                array_length = 1397;
+                proxyPtr->invoke_echoUINT8ArrayLengthTPNoResponse(array_length);
                 sleep(2);
                 proxyPtr->tester_subscribe_TestEventUINT8TP();
                 sleep(2);
-                array_length = 1451;
+                array_length = 1395;
                 proxyPtr->invoke_triggerEventUINT8ArrayTP(array_length);
                 sleep(2);
-                array_length = 1452;
+                array_length = 1396;
                 proxyPtr->invoke_triggerEventUINT8ArrayTP(array_length);
                 sleep(2);
-                array_length = 1453;
+                array_length = 1397;
                 proxyPtr->invoke_triggerEventUINT8ArrayTP(array_length);
+                sleep(2);
+                array_length = 1395;
+                proxyPtr->invoke_triggerEventUINT8ArrayTPNoReqTPPayload(array_length);
+                sleep(2);
+                array_length = 1396;
+                proxyPtr->invoke_triggerEventUINT8ArrayTPNoReqTPPayload(array_length);
+                sleep(2);
+                array_length = 1397;
+                proxyPtr->invoke_triggerEventUINT8ArrayTPNoReqTPPayload(array_length);
                 sleep(2);
                 proxyPtr->tester_unsubscribe_TestEventUINT8TP();
                 sleep(2);
@@ -520,9 +559,25 @@ int main() {
             case 16:
             {
                 std::cout << "Send TP data over method call" << std::endl;
-                std::cout << "Enter TP Array length(range:0-50005):";
+                std::cout << "Enter TP Array length(range:0-255300):";
                 std::cin >> array_length;
-                proxyPtr->invoke_echoUINT8ArrayLengthTP(array_length);
+                std::cout << "1. IN-TP OUT-TP" << std::endl;
+                std::cout << "2. Only IN-TP" << std::endl;
+                std::cout << "3. Only OUT-TP" << std::endl;
+                std::cout << "4. Fire and Forget TP" << std::endl;
+                std::cin >> indx;
+                if (1==indx) {
+                    proxyPtr->invoke_echoUINT8ArrayLengthTP(array_length);
+                }
+                else if (2==indx) {
+                    proxyPtr->invoke_echoUINT8ArrayLengthInTP(array_length);
+                }
+                else if (3==indx) {
+                    proxyPtr->invoke_echoUINT8ArrayLengthOutTP(array_length);
+                }
+                else if (4==indx) {
+                    proxyPtr->invoke_echoUINT8ArrayLengthTPNoResponse(array_length);
+                }
                 break;
             }
             case 17:
@@ -534,9 +589,17 @@ int main() {
             case 18:
             {
                 std::cout << "TP broadcast event" << std::endl;
-                std::cout << "Enter TP Array length(range:0-50005):";
+                std::cout << "Enter TP Array length(range:0-255300):";
                 std::cin >> array_length;
-                proxyPtr->invoke_triggerEventUINT8ArrayTP(array_length);
+                std::cout << "1. With TP Payload as Input" << std::endl;
+                std::cout << "2. With TP Payload Size as Input" << std::endl;
+                std::cin >> indx;
+                if (1==indx) {
+                    proxyPtr->invoke_triggerEventUINT8ArrayTP(array_length);
+                }
+                else if (2==indx) {
+                   proxyPtr->invoke_triggerEventUINT8ArrayTPNoReqTPPayload(array_length);
+                }
                 break;
             }
             case 19:

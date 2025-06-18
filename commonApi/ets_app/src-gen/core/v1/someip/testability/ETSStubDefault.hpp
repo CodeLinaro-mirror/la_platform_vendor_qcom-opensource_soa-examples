@@ -426,6 +426,34 @@ public:
     }
     /*
      * description: 
+     * Sends the uint8 array as input over SOME/IP TP.
+     */
+    COMMONAPI_EXPORT virtual void echoUINT8ArrayLengthInTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _inUINT8Array_ReqArg1, echoUINT8ArrayLengthInTPReply_t _reply) {
+        (void)_client;
+        (void)_inUINT8Array_ReqArg1;
+        uint32_t outUINT32_ResArg1 = 0ul;
+        _reply(outUINT32_ResArg1);
+    }
+    /*
+     * description: 
+     * Sends the uint8 array as reply over SOME/IP TP.
+     */
+    COMMONAPI_EXPORT virtual void echoUINT8ArrayLengthOutTP(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _inUINT32_ReqArg1, echoUINT8ArrayLengthOutTPReply_t _reply) {
+        (void)_client;
+        (void)_inUINT32_ReqArg1;
+        std::vector< uint8_t > outUINT8Array_ResArg1 = {};
+        _reply(outUINT8Array_ResArg1);
+    }
+    /*
+     * description: 
+     * Sends the uint8 array as input over SOME/IP TP.
+     */
+    COMMONAPI_EXPORT virtual void echoUINT8ArrayLengthTPNoResponse(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _echoUINT8ArrayLengthTPNoResponse_ReqArg1) {
+        (void)_client;
+        (void)_echoUINT8ArrayLengthTPNoResponse_ReqArg1;
+    }
+    /*
+     * description: 
      * Requests to triggers an TP Event of type uint8 array.
      */
     COMMONAPI_EXPORT virtual void triggerEventUINT8ArrayTP(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _triggerEventUINT8ArrayTP_ReqArg1) {
@@ -434,10 +462,18 @@ public:
     }
     /*
      * description: 
-     * A broadcast TP event triggered on echoUINT8ArrayLengthTP method request.
+     * A broadcast TP event triggered on triggerEventUINT8ArrayTP method request.
      */
     COMMONAPI_EXPORT virtual void fireTestEventUINT8ArrayTPEvent(const std::vector< uint8_t > &_outUINT8EventArray) {
         ETSStub::fireTestEventUINT8ArrayTPEvent(_outUINT8EventArray);
+    }
+    /*
+     * description: 
+     * Requests to triggers an TP Event of type uint8 array.
+     */
+    COMMONAPI_EXPORT virtual void triggerEventUINT8ArrayTPNoReqTPPayload(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) {
+        (void)_client;
+        (void)_triggerEventUINT32_ReqArg1;
     }
     /*
      * description: 

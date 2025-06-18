@@ -32,7 +32,7 @@
             "unreliable": "30515",
             "unicast": "192.168.114.2",
             "someip-tp": {
-                "client-to-service": ["112", "77"]
+                "client-to-service": ["112", "77", "113", "79"]
             },
             "events" :
             [
@@ -155,7 +155,7 @@
             }
         ]
     },
-    "max-payload-size-unreliable" : "50005",
+    "max-payload-size-unreliable" : "255300",
     "routing" : "ets_default_client",
     "network" : "ets_default_client",
     "service-discovery" :
