@@ -523,6 +523,20 @@ define org.genivi.commonapi.someip.deployment for interface someip.testability.E
             7
         }
     }
+
+    method activateTestSerivce {
+        SomeIpMethodID = 82
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
+
+    method deactivateTestSerivce {
+        SomeIpMethodID = 83
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
 }
 
 define org.genivi.commonapi.someip.deployment for provider as Service {
@@ -560,5 +574,48 @@ define org.genivi.commonapi.someip.deployment for provider as Service {
     instance someip.testability.ETSSecondaryService {
         InstanceId = "someip.testability.ETSSecondaryService"
         SomeIpInstanceID = 244
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for interface someip.testability.ETSTestService1 {
+    SomeIpServiceID = 259
+
+    method echoUINT32 {
+        SomeIpMethodID = 80
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for provider as Service {
+    instance someip.testability.ETSTestService1 {
+        InstanceId = "someip.testability.ETSTestService1Context1"
+        SomeIpInstanceID = 1
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for provider as Service {
+    instance someip.testability.ETSTestService1 {
+        InstanceId = "someip.testability.ETSTestService1Context2"
+        SomeIpInstanceID = 2
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for interface someip.testability.ETSTestService2 {
+    SomeIpServiceID = 260
+
+    method echoUINT32 {
+        SomeIpMethodID = 81
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for provider as Service {
+    instance someip.testability.ETSTestService2 {
+        InstanceId = "someip.testability.ETSTestService2Context1"
+        SomeIpInstanceID = 1
     }
 }

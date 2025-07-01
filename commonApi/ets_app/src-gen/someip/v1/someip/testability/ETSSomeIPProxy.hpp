@@ -338,6 +338,18 @@ public:
      */
     virtual void triggerEventUINT32UpdateOnChange(uint32_t _triggerEventUINT32_ReqArg1, CommonAPI::CallStatus &_internalCallStatus);
 
+    /*
+     * description: 
+     * Activates Test Service in the server side.
+     */
+    virtual void activateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus);
+
+    /*
+     * description: 
+     * Deactivates Test Service in the server side.
+     */
+    virtual void deactivateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus);
+
     virtual void getOwnVersion(uint16_t &_major, uint16_t &_minor) const;
 
     virtual std::future<void> getCompletionFuture();
