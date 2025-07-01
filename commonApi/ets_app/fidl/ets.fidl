@@ -855,6 +855,38 @@ interface ETS {
 		}
 	}
 
+	<**
+		@description : Activates Test Service in the server side.
+	**>
+	method activateTestSerivce fireAndForget {
+		in {
+			<**
+				@description : Service Id.
+			**>
+			UInt32 activateTestSerivce_ReqArg1
+			<**
+				@description : Instance Id.
+			**>
+			UInt32 activateTestSerivce_ReqArg2
+		}
+	}
+
+	<**
+		@description : Deactivates Test Service in the server side.
+	**>
+	method deactivateTestSerivce fireAndForget {
+		in {
+			<**
+				@description : Service Id.
+			**>
+			UInt32 activateTestSerivce_ReqArg1
+			<**
+				@description : Instance Id.
+			**>
+			UInt32 activateTestSerivce_ReqArg2
+		}
+	}
+
 }
 
 <** 
@@ -887,6 +919,62 @@ interface ETSSecondaryService {
 				@description : An event of type uint8.
 			**>
 			UInt8 uINT8Value
+		}
+	}
+}
+
+<**
+	@description : First Test Service for service port validation.
+**>
+interface ETSTestService1 {
+	version {
+		major 1
+		minor 0
+	}
+
+	<**
+	    @description : Sends the uint32 value as reply.
+	**>
+	method echoUINT32 {
+		in {
+			<**
+				@description : An uint32 type value.
+			**>
+			UInt32 inUINT32_ReqArg1
+		}
+		out {
+			<**
+				@description : An uint32 type value.
+			**>
+			UInt32 outUINT32_ResArg1
+		}
+	}
+}
+
+<**
+	@description : Second Test Service for service port validation.
+**>
+interface ETSTestService2 {
+	version {
+		major 1
+		minor 0
+	}
+
+	<**
+	    @description : Sends the uint32 value as reply.
+	**>
+	method echoUINT32 {
+		in {
+			<**
+				@description : An uint32 type value.
+			**>
+			UInt32 inUINT32_ReqArg1
+		}
+		out {
+			<**
+				@description : An uint32 type value.
+			**>
+			UInt32 outUINT32_ResArg1
 		}
 	}
 }

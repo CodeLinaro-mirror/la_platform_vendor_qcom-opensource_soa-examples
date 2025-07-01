@@ -155,7 +155,7 @@ public:
     virtual ~ETSStub() {}
     void lockInterfaceVersionAttribute(bool _lockAccess) { static_cast<void>(_lockAccess); }
     bool hasElement(const uint32_t _id) const {
-        return (_id < 44);
+        return (_id < 46);
     }
     virtual const CommonAPI::Version& getInterfaceVersion(std::shared_ptr<CommonAPI::ClientId> _client) = 0;
 
@@ -451,6 +451,18 @@ public:
         if (stubAdapter)
             stubAdapter->fireTestEventUINT32UpdateOnChangeEvent(_uINT32Value);
     }
+    /*
+     * description: 
+     * Activates Test Service in the server side.
+     */
+    /// This is the method that will be called on remote calls on the method activateTestSerivce.
+    virtual void activateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2) = 0;
+    /*
+     * description: 
+     * Deactivates Test Service in the server side.
+     */
+    /// This is the method that will be called on remote calls on the method deactivateTestSerivce.
+    virtual void deactivateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2) = 0;
 
 
     using CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::initStubAdapter;

@@ -819,6 +819,28 @@ public:
     virtual TestEventUINT32UpdateOnChangeEvent& getTestEventUINT32UpdateOnChangeEvent() {
         return delegate_->getTestEventUINT32UpdateOnChangeEvent();
     }
+    /**
+     * description: 
+     * Activates Test Service in the server side.
+     * Calls activateTestSerivce with Fire&Forget semantics.
+     *
+     * All const parameters are input parameters to this method.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
+     */
+    virtual void activateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus);
+    /**
+     * description: 
+     * Deactivates Test Service in the server side.
+     * Calls deactivateTestSerivce with Fire&Forget semantics.
+     *
+     * All const parameters are input parameters to this method.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
+     */
+    virtual void deactivateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus);
 
 
 
@@ -1263,6 +1285,22 @@ void ETSProxy<_AttributeExtensions...>::triggerEventUINT32Periodic(uint32_t _tri
 template <typename ... _AttributeExtensions>
 void ETSProxy<_AttributeExtensions...>::triggerEventUINT32UpdateOnChange(uint32_t _triggerEventUINT32_ReqArg1, CommonAPI::CallStatus &_internalCallStatus) {
     delegate_->triggerEventUINT32UpdateOnChange(_triggerEventUINT32_ReqArg1, _internalCallStatus);
+}
+/*
+ * description: 
+ * Activates Test Service in the server side.
+ */
+template <typename ... _AttributeExtensions>
+void ETSProxy<_AttributeExtensions...>::activateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus) {
+    delegate_->activateTestSerivce(_activateTestSerivce_ReqArg1, _activateTestSerivce_ReqArg2, _internalCallStatus);
+}
+/*
+ * description: 
+ * Deactivates Test Service in the server side.
+ */
+template <typename ... _AttributeExtensions>
+void ETSProxy<_AttributeExtensions...>::deactivateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus) {
+    delegate_->deactivateTestSerivce(_activateTestSerivce_ReqArg1, _activateTestSerivce_ReqArg2, _internalCallStatus);
 }
 
 template <typename ... _AttributeExtensions>

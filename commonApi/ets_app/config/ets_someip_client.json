@@ -22,6 +22,22 @@
         {
             "name" : "ets_secondary_service",
             "id" : "0x5546"
+        },
+        {
+            "name" : "TestService1Context1Client",
+            "id" : "0x5547"
+        },
+        {
+            "name" : "TestService1Context2Client",
+            "id" : "0x5548"
+        },
+        {
+            "name" : "TestService2Context1Client",
+            "id" : "0x5549"
+        },
+        {
+            "name" : "ets_duplicate_client",
+            "id" : "0x5550"
         }
     ],
     "services":
@@ -33,6 +49,11 @@
             "unicast": "192.168.114.2",
             "someip-tp": {
                 "client-to-service": ["112", "77", "113", "79"]
+            },
+            "multicast" :
+            {
+                "address" : "237.50.20.1",
+                "port" : "32345"
             },
             "events" :
             [
@@ -87,6 +108,8 @@
                 },
                 {
                     "eventgroup" : "6",
+                    "threshold" : "1",
+                    "is_multicast" : "true",
                     "events" : [ "32779" ]
                 },
                 {
@@ -102,7 +125,7 @@
             "unicast": "192.168.114.1",
             "multicast" :
             {
-                "address" : "224.225.226.234",
+                "address" : "237.50.20.1",
                 "port" : "32344"
             },
             "events" :
@@ -126,6 +149,7 @@
                 },
                 {
                     "eventgroup" : "9",
+                    "threshold" : "1",
                     "is_multicast" : "true",
                     "events" : [ "32902" ]
                 }
@@ -155,7 +179,7 @@
             }
         ]
     },
-    "max-payload-size-unreliable" : "255300",
+    "max-payload-size-unreliable" : "5000",
     "routing" : "ets_default_client",
     "network" : "ets_default_client",
     "service-discovery" :

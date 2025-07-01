@@ -58,7 +58,7 @@ std::string etsProxyImpl::returnCodeToString(vsomeip::return_code_e return_code)
     }
 }
 
-void etsProxyImpl::createProxy() {
+void etsProxyImpl::createProxy(std::string appname) {
     CommonAPI::Runtime::setProperty("LogContext", "ETS01C");
     CommonAPI::Runtime::setProperty("LibraryBase", "ETS");
 
@@ -66,9 +66,9 @@ void etsProxyImpl::createProxy() {
 
     std::string domain = "local";
     std::string instance = "someip.testability.ETS";
-    std::string connection = "ets_default_client";
+    std::string connection = appname;
 
-    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+    std::cout << "etsProxyImpl::" << __func__ << "[app:" << connection << "]" << std::endl;
 
     etsProxy = runtime->buildProxy<ETSProxy>(domain, instance, connection);
 
@@ -452,6 +452,122 @@ void etsProxyImpl::tester_unsubscribe_TestEventUINT32UpdateOnChangeEvent() {
     }
     else {
         std::cout << "ETS Service Not Available" << std::endl;
+    }
+}
+
+void etsProxyImpl::tester_requestTestService(uint32_t service_id, uint32_t instance_id) {
+    std::string domain = "local";
+    int retry_counter = 0;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (259 == service_id && 1 == instance_id) {
+        std::string instance = "someip.testability.ETSTestService1Context1";
+        std::string connection = "TestService1Context1Client";
+        testSvcProxy1 = CommonAPI::Runtime::get()->buildProxy<ETSTestService1Proxy>(domain, instance, connection);
+        std::cout << "Checking availability!" << std::endl;
+        while (!testSvcProxy1->isAvailable() && retry_counter<10) {
+            std::cout << "Service not available, trying again in 100 milliseconds..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            ++retry_counter;
+        }
+        if (retry_counter<10) {
+            std::cout << "TestService1 Service Available..." << std::endl;
+        }
+        else {
+            std::cout << "TestService1 Service Not Available..." << std::endl;
+        }
+    }
+    else if (259 == service_id && 2 == instance_id) {
+        std::string instance = "someip.testability.ETSTestService1Context2";
+        std::string connection = "TestService1Context2Client";
+        testSvcProxy2 = CommonAPI::Runtime::get()->buildProxy<ETSTestService1Proxy>(domain, instance, connection);
+        std::cout << "Checking availability!" << std::endl;
+        while (!testSvcProxy2->isAvailable() && retry_counter<10) {
+            std::cout << "Service not available, trying again in 100 milliseconds..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            ++retry_counter;
+        }
+        if (retry_counter<10) {
+            std::cout << "TestService2 Service Available..." << std::endl;
+        }
+        else {
+            std::cout << "TestService2 Service Not Available..." << std::endl;
+        }
+    }
+    else if (260 == service_id && 1 == instance_id) {
+        std::string instance = "someip.testability.ETSTestService2Context1";
+        std::string connection = "TestService2Context1Client";
+        testSvcProxy3 = CommonAPI::Runtime::get()->buildProxy<ETSTestService2Proxy>(domain, instance, connection);
+        std::cout << "Checking availability!" << std::endl;
+        while (!testSvcProxy3->isAvailable() && retry_counter<10) {
+            std::cout << "Service not available, trying again in 100 milliseconds..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            ++retry_counter;
+        }
+        if (retry_counter<10) {
+            std::cout << "TestService3 Service Available..." << std::endl;
+        }
+        else {
+            std::cout << "TestService3 Service Not Available..." << std::endl;
+        }
+    }
+    else {
+       std::cerr << "Invalid service info" << std::endl; 
+    }
+}
+
+void etsProxyImpl::invoke_requestTestServiceMethod(uint32_t service_id, uint32_t instance_id) {
+    CommonAPI::CallStatus callStatus;
+    uint32_t inUINT32_ReqArg1;
+    uint32_t outUINT32_ResArg1;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+    if (259 == service_id && 1 == instance_id) {
+        if (testSvcProxy1 && testSvcProxy1->isAvailable()) {
+            inUINT32_ReqArg1 = service_id + instance_id;
+            testSvcProxy1->echoUINT32(inUINT32_ReqArg1, callStatus, outUINT32_ResArg1);
+            if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+                std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+            }
+            else {
+                std::cout << "outUINT32_ResArg1:" << outUINT32_ResArg1 << std::endl;
+            }
+        }
+        else {
+            std::cout << "testSvcProxy1 Not Available" << std::endl;
+        }
+    }
+    else if (259 == service_id && 2 == instance_id) {
+        if (testSvcProxy1 && testSvcProxy1->isAvailable()) {
+            inUINT32_ReqArg1 = service_id + instance_id;
+            testSvcProxy2->echoUINT32(inUINT32_ReqArg1, callStatus, outUINT32_ResArg1);
+            if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+                std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+            }
+            else {
+                std::cout << "outUINT32_ResArg1:" << outUINT32_ResArg1 << std::endl;
+            }
+        }
+        else {
+            std::cout << "testSvcProxy1 Not Available" << std::endl;
+        }
+    }
+    else if (260 == service_id && 1 == instance_id) {
+        if (testSvcProxy1 && testSvcProxy1->isAvailable()) {
+            inUINT32_ReqArg1 = service_id + instance_id;
+            testSvcProxy3->echoUINT32(inUINT32_ReqArg1, callStatus, outUINT32_ResArg1);
+            if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+                std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+            }
+            else {
+                std::cout << "outUINT32_ResArg1:" << outUINT32_ResArg1 << std::endl;
+            }
+        }
+        else {
+            std::cout << "testSvcProxy1 Not Available" << std::endl;
+        }
+    }
+    else {
+        std::cerr << "Invalid service info" << std::endl;
     }
 }
 
@@ -955,6 +1071,71 @@ void etsProxyImpl::invoke_echoUINT8ArrayMinSize() {
             }
             std::cout << '\n';
         }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::invoke_echoUINT8ArrayMinSize_too_short(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port) {
+    uint8_t recv_buffer[1400] = {0};
+    std::cout << "etsProxyImpl::" << __func__ << " remote_addresss:" << remote_address
+        << " remote port:" << (uint32_t)remote_port << " local_address:" << local_address
+        << " local_port:" << (uint32_t)local_port << std::endl;
+
+    /* malformed message with too short length */
+    const uint8_t request_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x37,   	        /* method id */
+        0x00, 0x00, 0x00, 0x11,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01, 		    /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x00, 			        /* request type */
+        0x00,			        /* return code */
+        0x00,			        /* payload */
+        0x00,			        /* payload */
+        0x00,			        /* payload */
+        0x01,			        /* payload */
+        0x00,			        /* payload */
+        0x00,			        /* payload */
+        0x00,			        /* payload */
+        0x01,			        /* payload */
+        0x12			        /* payload */
+    };
+
+    if (isAvailable) {
+        boost::asio::io_service io_ctx;
+        boost::system::error_code err_code;
+        boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
+        boost::asio::ip::udp::socket::endpoint_type udp_server_endpoint(boost::asio::ip::address::from_string(remote_address), remote_port);
+        boost::asio::ip::udp::socket udp_client_sock(io_ctx, udp_client_endpoint);
+        boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+
+        io_ctx.run();
+
+        std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+        udp_client_sock.send_to(boost::asio::buffer(request_data, sizeof(request_data)), udp_server_endpoint);
+
+        udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
+        std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
+        for (int idx=0; idx<16; idx++) {
+            std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
+            if ((idx+1)%4 == 0) {
+                std::cout << '\n';
+            }
+        }
+        std::cout << "etsProxyImpl::" << __func__ << " Return Code:"
+             << returnCodeToString(static_cast<vsomeip::return_code_e>(recv_buffer[15])) << std::endl;
+
+
+        io_ctx.stop();
+
+        udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+        udp_client_sock.close(err_code);
     }
     else {
         std::cout << "ETS Service Not Available" << std::endl;
@@ -3208,10 +3389,11 @@ void etsProxyImpl::invoke_Wrong_Interface_Version() {
     return;
 }
 
+/* Checking for Fire and Forget Method */
 void etsProxyImpl::invoke_Wrong_Message_Type() {
     vsomeip::service_t service_id = 0x101;
     vsomeip::instance_t instance_id = 0x1;
-    vsomeip::method_t method_id = 0x8;
+    vsomeip::method_t method_id = 0x3;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     std::shared_ptr<vsomeip::application> _app = vsomeip::runtime::get()->get_application("ets_default_client");
@@ -3257,11 +3439,24 @@ void etsProxyImpl::invoke_Wrong_Message_Type() {
             _request->set_interface_version(0x1);
             _request->set_reliable(false);
             /* wrong message type */
-            _request->set_message_type(vsomeip::message_type_e::MT_REQUEST_NO_RETURN);
+            _request->set_message_type(vsomeip::message_type_e::MT_REQUEST);
             std::shared_ptr<vsomeip::payload> _payload = vsomeip::runtime::get()->create_payload();
             std::vector<vsomeip::byte_t> _payload_data;
-            /* echoUINT8_ReqArg1=0x12 */
-            _payload_data.push_back(0x12);
+            /* triggerEventUINT8_ReqArg1=0x2 */
+            _payload_data.push_back(0x0);
+            _payload_data.push_back(0x0);
+            _payload_data.push_back(0x0);
+            _payload_data.push_back(0x2);
+            /* triggerEventUINT8_ReqArg1=0x4 */
+            _payload_data.push_back(0x0);
+            _payload_data.push_back(0x0);
+            _payload_data.push_back(0x0);
+            _payload_data.push_back(0x4);
+            /* triggerEventUINT8_ReqArg1=0x2 */
+            _payload_data.push_back(0x0);
+            _payload_data.push_back(0x0);
+            _payload_data.push_back(0x0);
+            _payload_data.push_back(0x2);
             _payload->set_data(_payload_data);
             _request->set_payload(_payload);
 
@@ -3544,6 +3739,51 @@ void etsProxyImpl::invoke_Wrong_SOMEIP_Protocol_Version(std::string remote_addre
         std::cout << "etsProxyImpl::" << __func__ << " Return Code:"
              << returnCodeToString(static_cast<vsomeip::return_code_e>(recv_buffer[15])) << std::endl;
 
+
+        io_ctx.stop();
+
+        udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+        udp_client_sock.close(err_code);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+/*  Do not reply to messages already carrying an error */
+void etsProxyImpl::invoke_Wrong_Return_Code(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port) {
+    std::cout << "etsProxyImpl::" << __func__ << " remote_addresss:" << remote_address
+        << " remote port:" << (uint32_t)remote_port << " local_address:" << local_address
+        << " local_port:" << (uint32_t)local_port << std::endl;
+
+    /* malformed message with unknown return code */
+    const uint8_t request_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x08,   	        /* method id */
+        0x00, 0x00, 0x00, 0x09,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01, 		    /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x00, 			        /* request type */
+        0x1f,			        /* unknown return code */
+        0x12			        /* payload */
+    };
+
+    if (isAvailable) {
+        boost::asio::io_service io_ctx;
+        boost::system::error_code err_code;
+        boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
+        boost::asio::ip::udp::socket::endpoint_type udp_server_endpoint(boost::asio::ip::address::from_string(remote_address), remote_port);
+        boost::asio::ip::udp::socket udp_client_sock(io_ctx, udp_client_endpoint);
+        boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+
+        io_ctx.run();
+
+        std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+        udp_client_sock.send_to(boost::asio::buffer(request_data, sizeof(request_data)), udp_server_endpoint);
 
         io_ctx.stop();
 
@@ -6944,5 +7184,666 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Multicast_Eventgroup_6(std::s
 
 void etsProxyImpl::invoke_SD_Interface_Version(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
+    return;
+}
+
+void etsProxyImpl::invoke_activateTestSerivce(uint32_t service_id, uint32_t instance_id) {
+    CommonAPI::CallStatus callStatus;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+    if (etsProxy && isAvailable) {
+        etsProxy->activateTestSerivce(service_id, instance_id, callStatus);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+}
+
+void etsProxyImpl::invoke_deactivateTestSerivce(uint32_t service_id, uint32_t instance_id) {
+    CommonAPI::CallStatus callStatus;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+    if (etsProxy && isAvailable) {
+        etsProxy->deactivateTestSerivce(service_id, instance_id, callStatus);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+}
+
+void etsProxyImpl::invoke_TP_Verify_ErrorDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port) {
+    /* payload data type array
+       number of element sent in the array 4000 bytes
+       array length field is 4 bytes
+       so, actual payload to vsomeip send buffer is 4004 bytes.
+    */
+    uint8_t send_buffer_segment1[1412] = {0};
+    int segment1_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment2[1412] = {0};
+    int segment2_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment3[1240] = {0};
+    int segment3_payload_length = 1220+4+16;
+    int offset = 0;
+    std::cout << "etsProxyImpl::" << __func__ << " remote_addresss:" << remote_address
+        << " remote port:" << (uint32_t)remote_port << " local_address:" << local_address
+        << " local_port:" << (uint32_t)local_port << std::endl;
+
+    /* someip header data */
+    const uint8_t segment1_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    /* Incorrect Message ID(service id + method id) and Request ID(client id + session id) */
+    const uint8_t segment2_header_data[] = {
+        0x00, 0x00,   	        /* service id */
+        0x00, 0x02,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x00, 0x00,		        /* client id */
+        0x00, 0x02,		        /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    /* Incorrect Message ID(service id + method id) and Request ID(client id + session id) */
+    const uint8_t segment3_header_data[] = {
+        0x00, 0x00,   	        /* service id */
+        0x00, 0x02,   	        /* method id */
+        0x00, 0x00, 0x04, 0xd0,	/* length */
+        0x00, 0x00,		        /* client id */
+        0x00, 0x02,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    /* TP header (offset(28bit) + reserved(3bit) + more segment(1bit)) */
+    const uint8_t tp_hader_data_segment1[] = {0x00, 0x00, 0x00, 0x01};
+    const uint8_t tp_hader_data_segment2[] = {0x00, 0x00, 0x05, 0x71};
+    const uint8_t tp_hader_data_segment3[] = {0x00, 0x00, 0x0a, 0xe0};
+    const uint8_t array_payload_length[] = {0x00, 0x00, 0x0f, 0xa0}; /* 0xfa0 -> 4000 (array payload length) */
+
+    /* prepare first segment */
+    memset(send_buffer_segment1, 0, 1412);
+    memcpy(&send_buffer_segment1[0], &segment1_header_data[0], sizeof(segment1_header_data));
+    offset = sizeof(segment1_header_data);
+    memcpy(&send_buffer_segment1[offset], &tp_hader_data_segment1[0], sizeof(tp_hader_data_segment1));
+    offset += sizeof(tp_hader_data_segment1);
+    memcpy(&send_buffer_segment1[offset], &array_payload_length[0], sizeof(array_payload_length));
+    offset += sizeof(array_payload_length);
+    for (int idx=offset; idx<segment1_payload_length; idx++) {
+        send_buffer_segment1[idx]=0xab;
+    }
+    /* prepare second segment */
+    offset = 0;
+    memset(send_buffer_segment2, 0, 1412);
+    memcpy(&send_buffer_segment2[0], &segment2_header_data[0], sizeof(segment2_header_data));
+    offset = sizeof(segment2_header_data);
+    memcpy(&send_buffer_segment2[offset], &tp_hader_data_segment2[0], sizeof(tp_hader_data_segment2));
+    offset += sizeof(tp_hader_data_segment2);
+    for (int idx=offset; idx<segment2_payload_length; idx++) {
+        send_buffer_segment2[idx]=0xab;
+    }
+    /* prepare third segment */
+    offset = 0;
+    memset(send_buffer_segment3, 0, 1240);
+    memcpy(&send_buffer_segment3[0], &segment3_header_data[0], sizeof(segment3_header_data));
+    offset = sizeof(segment3_header_data);
+    memcpy(&send_buffer_segment3[offset], &tp_hader_data_segment3[0], sizeof(tp_hader_data_segment3));
+    offset += sizeof(tp_hader_data_segment3);
+    for (int idx=offset; idx<segment3_payload_length; idx++) {
+        send_buffer_segment3[idx]=0xab;
+    }
+
+    if (isAvailable) {
+        boost::asio::io_service io_ctx;
+        boost::system::error_code err_code;
+        boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
+        boost::asio::ip::udp::socket::endpoint_type udp_server_endpoint(boost::asio::ip::address::from_string(remote_address), remote_port);
+        boost::asio::ip::udp::socket udp_client_sock(io_ctx, udp_client_endpoint);
+        boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+
+        io_ctx.run();
+
+        std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment1, sizeof(send_buffer_segment1)), udp_server_endpoint);
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment2, sizeof(send_buffer_segment2)), udp_server_endpoint);
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment3, sizeof(send_buffer_segment3)), udp_server_endpoint);
+
+        sleep(5);
+        io_ctx.stop();
+
+        udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+        udp_client_sock.close(err_code);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::invoke_TP_Verify_ReceptionBufferManagement(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port) {
+    /* payload data type array
+       number of element sent in the array 5000 bytes
+       array length field is 4 bytes
+       so, actual payload to vsomeip send buffer is 5004 bytes.
+    */
+    uint8_t send_buffer_segment1[1412] = {0};
+    int segment1_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment2[1412] = {0};
+    int segment2_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment3[1412] = {0};
+    int segment3_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment4[848] = {0};
+    int segment4_payload_length = 828+4+16;
+    int offset = 0;
+    std::cout << "etsProxyImpl::" << __func__ << " remote_addresss:" << remote_address
+        << " remote port:" << (uint32_t)remote_port << " local_address:" << local_address
+        << " local_port:" << (uint32_t)local_port << std::endl;
+
+    /* someip header data */
+    const uint8_t segment1_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment2_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment3_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment4_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x03, 0x48,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    /* TP header (offset(28bit) + reserved(3bit) + more segment(1bit)) */
+    const uint8_t tp_hader_data_segment1[] = {0x00, 0x00, 0x00, 0x01};
+    const uint8_t tp_hader_data_segment2[] = {0x00, 0x00, 0x05, 0x71};
+    const uint8_t tp_hader_data_segment3[] = {0x00, 0x00, 0x0a, 0xe1};
+    const uint8_t tp_hader_data_segment4[] = {0x00, 0x00, 0x10, 0x50};
+    const uint8_t array_payload_length[] = {0x00, 0x00, 0x13, 0x88}; /* 0x1388 -> 5000 (array payload length) */
+
+    /* prepare first segment */
+    memset(send_buffer_segment1, 0, 1412);
+    memcpy(&send_buffer_segment1[0], &segment1_header_data[0], sizeof(segment1_header_data));
+    offset = sizeof(segment1_header_data);
+    memcpy(&send_buffer_segment1[offset], &tp_hader_data_segment1[0], sizeof(tp_hader_data_segment1));
+    offset += sizeof(tp_hader_data_segment1);
+    memcpy(&send_buffer_segment1[offset], &array_payload_length[0], sizeof(array_payload_length));
+    offset += sizeof(array_payload_length);
+    for (int idx=offset; idx<segment1_payload_length; idx++) {
+        send_buffer_segment1[idx]=0xab;
+    }
+    /* prepare second segment */
+    offset = 0;
+    memset(send_buffer_segment2, 0, 1412);
+    memcpy(&send_buffer_segment2[0], &segment2_header_data[0], sizeof(segment2_header_data));
+    offset = sizeof(segment2_header_data);
+    memcpy(&send_buffer_segment2[offset], &tp_hader_data_segment2[0], sizeof(tp_hader_data_segment2));
+    offset += sizeof(tp_hader_data_segment2);
+    for (int idx=offset; idx<segment2_payload_length; idx++) {
+        send_buffer_segment2[idx]=0xab;
+    }
+    /* prepare third segment */
+    offset = 0;
+    memset(send_buffer_segment3, 0, 1412);
+    memcpy(&send_buffer_segment3[0], &segment3_header_data[0], sizeof(segment3_header_data));
+    offset = sizeof(segment3_header_data);
+    memcpy(&send_buffer_segment3[offset], &tp_hader_data_segment3[0], sizeof(tp_hader_data_segment3));
+    offset += sizeof(tp_hader_data_segment3);
+    for (int idx=offset; idx<segment3_payload_length; idx++) {
+        send_buffer_segment3[idx]=0xab;
+    }
+    /* prepare fourth segment */
+    offset = 0;
+    memset(send_buffer_segment4, 0, 848);
+    memcpy(&send_buffer_segment4[0], &segment4_header_data[0], sizeof(segment4_header_data));
+    offset = sizeof(segment4_header_data);
+    memcpy(&send_buffer_segment4[offset], &tp_hader_data_segment4[0], sizeof(tp_hader_data_segment4));
+    offset += sizeof(tp_hader_data_segment4);
+    for (int idx=offset; idx<segment4_payload_length; idx++) {
+        send_buffer_segment4[idx]=0xab;
+    }
+
+    if (isAvailable) {
+        boost::asio::io_service io_ctx;
+        boost::system::error_code err_code;
+        boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
+        boost::asio::ip::udp::socket::endpoint_type udp_server_endpoint(boost::asio::ip::address::from_string(remote_address), remote_port);
+        boost::asio::ip::udp::socket udp_client_sock(io_ctx, udp_client_endpoint);
+        boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+
+        io_ctx.run();
+
+        std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment1, sizeof(send_buffer_segment1)), udp_server_endpoint);
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment2, sizeof(send_buffer_segment2)), udp_server_endpoint);
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment3, sizeof(send_buffer_segment3)), udp_server_endpoint);
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment4, sizeof(send_buffer_segment4)), udp_server_endpoint);
+
+        sleep(5);
+        io_ctx.stop();
+
+        udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+        udp_client_sock.close(err_code);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::invoke_TP_Verify_OffsetCalculationDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port) {
+    /* payload data type array
+       number of element sent in the array 4000 bytes
+       array length field is 4 bytes
+       so, actual payload to vsomeip send buffer is 4004 bytes.
+    */
+    uint8_t send_buffer_segment1[1412] = {0};
+    int segment1_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment2[1412] = {0};
+    int segment2_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment3[1240] = {0};
+    int segment3_payload_length = 1220+4+16;
+    int offset = 0;
+    std::cout << "etsProxyImpl::" << __func__ << " remote_addresss:" << remote_address
+        << " remote port:" << (uint32_t)remote_port << " local_address:" << local_address
+        << " local_port:" << (uint32_t)local_port << std::endl;
+
+    /* someip header data */
+    const uint8_t segment1_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment2_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment3_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x04, 0xd0,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    /* TP header (offset(28bit) + reserved(3bit) + more segment(1bit)) */
+    const uint8_t tp_hader_data_segment1[] = {0x00, 0x00, 0x00, 0x01};
+    const uint8_t tp_hader_data_segment2[] = {0x00, 0x00, 0x00, 0x31};
+    const uint8_t tp_hader_data_segment3[] = {0x00, 0x00, 0x0a, 0xe0};
+    const uint8_t array_payload_length[] = {0x00, 0x00, 0x0f, 0xa0}; /* 0xfa0 -> 4000 (array payload length) */
+
+    /* prepare first segment */
+    memset(send_buffer_segment1, 0, 1412);
+    memcpy(&send_buffer_segment1[0], &segment1_header_data[0], sizeof(segment1_header_data));
+    offset = sizeof(segment1_header_data);
+    memcpy(&send_buffer_segment1[offset], &tp_hader_data_segment1[0], sizeof(tp_hader_data_segment1));
+    offset += sizeof(tp_hader_data_segment1);
+    memcpy(&send_buffer_segment1[offset], &array_payload_length[0], sizeof(array_payload_length));
+    offset += sizeof(array_payload_length);
+    for (int idx=offset; idx<segment1_payload_length; idx++) {
+        send_buffer_segment1[idx]=0xab;
+    }
+    /* prepare second segment */
+    offset = 0;
+    memset(send_buffer_segment2, 0, 1412);
+    memcpy(&send_buffer_segment2[0], &segment2_header_data[0], sizeof(segment2_header_data));
+    offset = sizeof(segment2_header_data);
+    memcpy(&send_buffer_segment2[offset], &tp_hader_data_segment2[0], sizeof(tp_hader_data_segment2));
+    offset += sizeof(tp_hader_data_segment2);
+    for (int idx=offset; idx<segment2_payload_length; idx++) {
+        send_buffer_segment2[idx]=0xab;
+    }
+    /* prepare third segment */
+    offset = 0;
+    memset(send_buffer_segment3, 0, 1240);
+    memcpy(&send_buffer_segment3[0], &segment3_header_data[0], sizeof(segment3_header_data));
+    offset = sizeof(segment3_header_data);
+    memcpy(&send_buffer_segment3[offset], &tp_hader_data_segment3[0], sizeof(tp_hader_data_segment3));
+    offset += sizeof(tp_hader_data_segment3);
+    for (int idx=offset; idx<segment3_payload_length; idx++) {
+        send_buffer_segment3[idx]=0xab;
+    }
+
+    if (isAvailable) {
+        boost::asio::io_service io_ctx;
+        boost::system::error_code err_code;
+        boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
+        boost::asio::ip::udp::socket::endpoint_type udp_server_endpoint(boost::asio::ip::address::from_string(remote_address), remote_port);
+        boost::asio::ip::udp::socket udp_client_sock(io_ctx, udp_client_endpoint);
+        boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+
+        io_ctx.run();
+
+        std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment1, sizeof(send_buffer_segment1)), udp_server_endpoint);
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment2, sizeof(send_buffer_segment2)), udp_server_endpoint);
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment3, sizeof(send_buffer_segment3)), udp_server_endpoint);
+
+        sleep(5);
+        io_ctx.stop();
+
+        udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+        udp_client_sock.close(err_code);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::invoke_TP_Verify_MissingFrameDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port) {
+    /* payload data type array
+       number of element sent in the array 4000 bytes
+       array length field is 4 bytes
+       so, actual payload to vsomeip send buffer is 4004 bytes.
+    */
+    uint8_t send_buffer_segment1[1412] = {0};
+    int segment1_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment2[1412] = {0};
+    int segment2_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment3[1240] = {0};
+    int segment3_payload_length = 1220+4+16;
+    int offset = 0;
+    std::cout << "etsProxyImpl::" << __func__ << " remote_addresss:" << remote_address
+        << " remote port:" << (uint32_t)remote_port << " local_address:" << local_address
+        << " local_port:" << (uint32_t)local_port << std::endl;
+
+    /* someip header data */
+    const uint8_t segment1_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment2_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment3_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x04, 0xd0,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    /* TP header (offset(28bit) + reserved(3bit) + more segment(1bit)) */
+    const uint8_t tp_hader_data_segment1[] = {0x00, 0x00, 0x00, 0x01};
+    const uint8_t tp_hader_data_segment2[] = {0x00, 0x00, 0x05, 0x71};
+    const uint8_t tp_hader_data_segment3[] = {0x00, 0x00, 0x0a, 0xe0};
+    const uint8_t array_payload_length[] = {0x00, 0x00, 0x0f, 0xa0}; /* 0xfa0 -> 4000 (array payload length) */
+
+    /* prepare first segment */
+    memset(send_buffer_segment1, 0, 1412);
+    memcpy(&send_buffer_segment1[0], &segment1_header_data[0], sizeof(segment1_header_data));
+    offset = sizeof(segment1_header_data);
+    memcpy(&send_buffer_segment1[offset], &tp_hader_data_segment1[0], sizeof(tp_hader_data_segment1));
+    offset += sizeof(tp_hader_data_segment1);
+    memcpy(&send_buffer_segment1[offset], &array_payload_length[0], sizeof(array_payload_length));
+    offset += sizeof(array_payload_length);
+    for (int idx=offset; idx<segment1_payload_length; idx++) {
+        send_buffer_segment1[idx]=0xab;
+    }
+    /* prepare second segment */
+    offset = 0;
+    memset(send_buffer_segment2, 0, 1412);
+    memcpy(&send_buffer_segment2[0], &segment2_header_data[0], sizeof(segment2_header_data));
+    offset = sizeof(segment2_header_data);
+    memcpy(&send_buffer_segment2[offset], &tp_hader_data_segment2[0], sizeof(tp_hader_data_segment2));
+    offset += sizeof(tp_hader_data_segment2);
+    for (int idx=offset; idx<segment2_payload_length; idx++) {
+        send_buffer_segment2[idx]=0xab;
+    }
+    /* prepare third segment */
+    offset = 0;
+    memset(send_buffer_segment3, 0, 1240);
+    memcpy(&send_buffer_segment3[0], &segment3_header_data[0], sizeof(segment3_header_data));
+    offset = sizeof(segment3_header_data);
+    memcpy(&send_buffer_segment3[offset], &tp_hader_data_segment3[0], sizeof(tp_hader_data_segment3));
+    offset += sizeof(tp_hader_data_segment3);
+    for (int idx=offset; idx<segment3_payload_length; idx++) {
+        send_buffer_segment3[idx]=0xab;
+    }
+
+    if (isAvailable) {
+        boost::asio::io_service io_ctx;
+        boost::system::error_code err_code;
+        boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
+        boost::asio::ip::udp::socket::endpoint_type udp_server_endpoint(boost::asio::ip::address::from_string(remote_address), remote_port);
+        boost::asio::ip::udp::socket udp_client_sock(io_ctx, udp_client_endpoint);
+        boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+
+        io_ctx.run();
+
+        std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment1, sizeof(send_buffer_segment1)), udp_server_endpoint);
+        /* Don't send second segment
+        *  udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment2, sizeof(send_buffer_segment2)), udp_server_endpoint);
+        */
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment3, sizeof(send_buffer_segment3)), udp_server_endpoint);
+
+        sleep(5);
+        io_ctx.stop();
+
+        udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+        udp_client_sock.close(err_code);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::invoke_TP_Verify_DuplicateFrameDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port) {
+    uint8_t recv_buffer[1400] = {0};
+    /* payload data type array
+       number of element sent in the array 4000 bytes
+       array length field is 4 bytes
+       so, actual payload to vsomeip send buffer is 4004 bytes.
+    */
+    uint8_t send_buffer_segment1[1412] = {0};
+    int segment1_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment2[1412] = {0};
+    uint8_t send_duplicate_buffer_segment2[1412] = {0};
+    int segment2_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment3[1240] = {0};
+    int segment3_payload_length = 1220+4+16;
+    int offset = 0;
+    std::cout << "etsProxyImpl::" << __func__ << " remote_addresss:" << remote_address
+        << " remote port:" << (uint32_t)remote_port << " local_address:" << local_address
+        << " local_port:" << (uint32_t)local_port << std::endl;
+
+    /* someip header data */
+    const uint8_t segment1_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment2_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment3_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x04, 0xd0,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    /* TP header (offset(28bit) + reserved(3bit) + more segment(1bit)) */
+    const uint8_t tp_hader_data_segment1[] = {0x00, 0x00, 0x00, 0x01};
+    const uint8_t tp_hader_data_segment2[] = {0x00, 0x00, 0x05, 0x71};
+    const uint8_t tp_hader_data_segment3[] = {0x00, 0x00, 0x0a, 0xe0};
+    const uint8_t array_payload_length[] = {0x00, 0x00, 0x0f, 0xa0}; /* 0xfa0 -> 4000 (array payload length) */
+
+    /* prepare first segment */
+    memset(send_buffer_segment1, 0, 1412);
+    memcpy(&send_buffer_segment1[0], &segment1_header_data[0], sizeof(segment1_header_data));
+    offset = sizeof(segment1_header_data);
+    memcpy(&send_buffer_segment1[offset], &tp_hader_data_segment1[0], sizeof(tp_hader_data_segment1));
+    offset += sizeof(tp_hader_data_segment1);
+    memcpy(&send_buffer_segment1[offset], &array_payload_length[0], sizeof(array_payload_length));
+    offset += sizeof(array_payload_length);
+    for (int idx=offset; idx<segment1_payload_length; idx++) {
+        send_buffer_segment1[idx]=0xab;
+    }
+    /* prepare second segment */
+    offset = 0;
+    memset(send_buffer_segment2, 0, 1412);
+    memset(send_duplicate_buffer_segment2, 0, 1412);
+    memcpy(&send_buffer_segment2[0], &segment2_header_data[0], sizeof(segment2_header_data));
+    memcpy(&send_duplicate_buffer_segment2[0], &segment2_header_data[0], sizeof(segment2_header_data));
+    offset = sizeof(segment2_header_data);
+    memcpy(&send_buffer_segment2[offset], &tp_hader_data_segment2[0], sizeof(tp_hader_data_segment2));
+    memcpy(&send_duplicate_buffer_segment2[offset], &tp_hader_data_segment2[0], sizeof(tp_hader_data_segment2));
+    offset += sizeof(tp_hader_data_segment2);
+    for (int idx=offset; idx<segment2_payload_length; idx++) {
+        send_buffer_segment2[idx]=0xab;
+        /* duplicate frame with different payload */
+        send_duplicate_buffer_segment2[idx]=0xaa;
+    }
+    /* prepare third segment */
+    offset = 0;
+    memset(send_buffer_segment3, 0, 1240);
+    memcpy(&send_buffer_segment3[0], &segment3_header_data[0], sizeof(segment3_header_data));
+    offset = sizeof(segment3_header_data);
+    memcpy(&send_buffer_segment3[offset], &tp_hader_data_segment3[0], sizeof(tp_hader_data_segment3));
+    offset += sizeof(tp_hader_data_segment3);
+    for (int idx=offset; idx<segment3_payload_length; idx++) {
+        send_buffer_segment3[idx]=0xab;
+    }
+
+    if (isAvailable) {
+        boost::asio::io_service io_ctx;
+        boost::system::error_code err_code;
+        boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
+        boost::asio::ip::udp::socket::endpoint_type udp_server_endpoint(boost::asio::ip::address::from_string(remote_address), remote_port);
+        boost::asio::ip::udp::socket udp_client_sock(io_ctx, udp_client_endpoint);
+        boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+
+        io_ctx.run();
+
+        std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment1, sizeof(send_buffer_segment1)), udp_server_endpoint);
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment2, sizeof(send_buffer_segment2)), udp_server_endpoint);
+        /* send duplicate frame */
+        udp_client_sock.send_to(boost::asio::buffer(send_duplicate_buffer_segment2, sizeof(send_duplicate_buffer_segment2)), udp_server_endpoint);
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment3, sizeof(send_buffer_segment3)), udp_server_endpoint);
+
+        udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
+        std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
+        for (int idx=0; idx<16; idx++) {
+            std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
+            if ((idx+1)%4 == 0) {
+                std::cout << '\n';
+            }
+        }
+        std::cout << "etsProxyImpl::" << __func__ << " Return Code:"
+             << returnCodeToString(static_cast<vsomeip::return_code_e>(recv_buffer[15])) << std::endl;
+
+        io_ctx.stop();
+
+        udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+        udp_client_sock.close(err_code);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
     return;
 }

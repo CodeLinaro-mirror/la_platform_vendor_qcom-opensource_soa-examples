@@ -372,6 +372,22 @@ public:
      * A broadcast periodic event triggered on triggerEventUINT32UpdateOnChange method request.
      */
     virtual TestEventUINT32UpdateOnChangeEvent& getTestEventUINT32UpdateOnChangeEvent() = 0;
+    /*
+     * description: 
+     * Activates Test Service in the server side.
+     */
+    /**
+     * @invariant Fire And Forget
+     */
+    virtual void activateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus) = 0;
+    /*
+     * description: 
+     * Deactivates Test Service in the server side.
+     */
+    /**
+     * @invariant Fire And Forget
+     */
+    virtual void deactivateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus) = 0;
 
     virtual std::future<void> getCompletionFuture() = 0;
 };
