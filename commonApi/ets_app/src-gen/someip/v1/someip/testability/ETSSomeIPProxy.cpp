@@ -2318,6 +2318,64 @@ void ETSSomeIPProxy::triggerEventUINT32UpdateOnChange(uint32_t _triggerEventUINT
         _internalCallStatus);
 }
 
+/*
+ * description: 
+ * Activates Test Service in the server side.
+ */
+void ETSSomeIPProxy::activateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus) {
+    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_activateTestSerivce_ReqArg1(_activateTestSerivce_ReqArg1, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_activateTestSerivce_ReqArg2(_activateTestSerivce_ReqArg2, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+    CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                uint32_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+            >,
+            CommonAPI::Deployable<
+                uint32_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+        >
+    >::callMethod(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x52),
+        false,
+        false,
+        deploy_activateTestSerivce_ReqArg1, deploy_activateTestSerivce_ReqArg2,
+        _internalCallStatus);
+}
+
+/*
+ * description: 
+ * Deactivates Test Service in the server side.
+ */
+void ETSSomeIPProxy::deactivateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus) {
+    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_activateTestSerivce_ReqArg1(_activateTestSerivce_ReqArg1, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_activateTestSerivce_ReqArg2(_activateTestSerivce_ReqArg2, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+    CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                uint32_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+            >,
+            CommonAPI::Deployable<
+                uint32_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+        >
+    >::callMethod(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x53),
+        false,
+        false,
+        deploy_activateTestSerivce_ReqArg1, deploy_activateTestSerivce_ReqArg2,
+        _internalCallStatus);
+}
+
 void ETSSomeIPProxy::getOwnVersion(uint16_t& ownVersionMajor, uint16_t& ownVersionMinor) const {
     ownVersionMajor = 1;
     ownVersionMinor = 0;

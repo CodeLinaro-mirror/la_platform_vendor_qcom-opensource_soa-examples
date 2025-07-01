@@ -505,6 +505,24 @@ public:
     COMMONAPI_EXPORT virtual void fireTestEventUINT32UpdateOnChangeEvent(const uint32_t &_uINT32Value) {
         ETSStub::fireTestEventUINT32UpdateOnChangeEvent(_uINT32Value);
     }
+    /*
+     * description: 
+     * Activates Test Service in the server side.
+     */
+    COMMONAPI_EXPORT virtual void activateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2) {
+        (void)_client;
+        (void)_activateTestSerivce_ReqArg1;
+        (void)_activateTestSerivce_ReqArg2;
+    }
+    /*
+     * description: 
+     * Deactivates Test Service in the server side.
+     */
+    COMMONAPI_EXPORT virtual void deactivateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2) {
+        (void)_client;
+        (void)_activateTestSerivce_ReqArg1;
+        (void)_activateTestSerivce_ReqArg2;
+    }
 
 
 protected:

@@ -22,6 +22,18 @@
         {
             "name" : "ets_secondary_client",
             "id" : "0x5446"
+        },
+        {
+            "name" : "TestService1Context1",
+            "id" : "0x5447"
+        },
+        {
+            "name" : "TestService1Context2",
+            "id" : "0x5448"
+        },
+        {
+            "name" : "TestService2Context1",
+            "id" : "0x5449"
         }
     ],
     "services":
@@ -33,6 +45,11 @@
             "unicast": "192.168.114.2",
             "someip-tp": {
                 "service-to-client": ["77", "112", "113", "114", "32780", "79"]
+            },
+            "multicast" :
+            {
+                "address" : "237.50.20.1",
+                "port" : "32345"
             },
             "events" :
             [
@@ -87,6 +104,8 @@
                 },
                 {
                     "eventgroup" : "6",
+                    "threshold" : "1",
+                    "is_multicast" : "true",
                     "events" : [ "32779" ]
                 },
                 {
@@ -102,7 +121,7 @@
             "unicast": "192.168.114.5",
             "multicast" :
             {
-                "address" : "224.225.226.234",
+                "address" : "237.50.20.1",
                 "port" : "32344"
             },
             "events" :
@@ -126,10 +145,26 @@
                 },
                 {
                     "eventgroup" : "9",
+                    "threshold" : "1",
                     "is_multicast" : "true",
                     "events" : [ "32902" ]
                 }
             ]
+        },
+        {
+            "service": "259",
+            "instance": "1",
+            "unreliable": "30516"
+        },
+        {
+            "service": "259",
+            "instance": "2",
+            "unreliable": "30517"
+        },
+        {
+            "service": "260",
+            "instance": "1",
+            "unreliable": "30516"
         }
     ],
     "e2e" :
@@ -155,7 +190,7 @@
             }
         ]
     },
-    "max-payload-size-unreliable" : "255300",
+    "max-payload-size-unreliable" : "5000",
     "routing" : "ets_default_service",
     "network" : "ets_default_service",
     "service-discovery" :

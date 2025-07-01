@@ -513,6 +513,26 @@ public:
         std::tuple< CommonAPI::SomeIP::IntegerDeployment<uint32_t>>
     > triggerEventUINT32UpdateOnChangeStubDispatcher;
     
+    /*
+     * description: 
+     * Activates Test Service in the server side.
+     */
+    CommonAPI::SomeIP::MethodStubDispatcher<
+        ::v1::someip::testability::ETSStub,
+        std::tuple< uint32_t, uint32_t>,
+        std::tuple< CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>>
+    > activateTestSerivceStubDispatcher;
+    
+    /*
+     * description: 
+     * Deactivates Test Service in the server side.
+     */
+    CommonAPI::SomeIP::MethodStubDispatcher<
+        ::v1::someip::testability::ETSStub,
+        std::tuple< uint32_t, uint32_t>,
+        std::tuple< CommonAPI::SomeIP::IntegerDeployment<uint32_t>, CommonAPI::SomeIP::IntegerDeployment<uint32_t>>
+    > deactivateTestSerivceStubDispatcher;
+    
     ETSSomeIPStubAdapterInternal(
         const CommonAPI::SomeIP::Address &_address,
         const std::shared_ptr<CommonAPI::SomeIP::ProxyConnection> &_connection,
@@ -804,6 +824,20 @@ public:
             _stub->hasElement(42),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
         
+        ,
+        activateTestSerivceStubDispatcher(
+            &ETSStub::activateTestSerivce,
+            false,
+            _stub->hasElement(44),
+            std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
+        
+        ,
+        deactivateTestSerivceStubDispatcher(
+            &ETSStub::deactivateTestSerivce,
+            false,
+            _stub->hasElement(45),
+            std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
+        
     {
         /*
          * description: 
@@ -990,6 +1024,16 @@ public:
          * Requests to triggers an on change event of type uint32.
          */
         ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x4c) }, &triggerEventUINT32UpdateOnChangeStubDispatcher );
+        /*
+         * description: 
+         * Activates Test Service in the server side.
+         */
+        ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x52) }, &activateTestSerivceStubDispatcher );
+        /*
+         * description: 
+         * Deactivates Test Service in the server side.
+         */
+        ETSSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x53) }, &deactivateTestSerivceStubDispatcher );
         // Provided events/fields
         {
             std::set<CommonAPI::SomeIP::eventgroup_id_t> itsEventGroups;

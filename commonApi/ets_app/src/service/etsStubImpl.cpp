@@ -7,12 +7,17 @@
 
 etsStubImpl::etsStubImpl() {
     secondaryClientActive = false;
+    clientServiceUnicastEventSubscrptionStatus = 0;
+    clientServiceMulticastEventSubscrptionStatus = 0;
     isAvailableSecondary = 0;
     lastUnicastuINT8Value = 0;
     lastMulticastuINT8Value = 0;
     startTimeout = 0;
     durationTimeout = 0;
     debounceTimeout = 0;
+    TestService1Context1Registered = false;
+    TestService1Context2Registered = false;
+    TestService2Context1Registered = false;
 }
 
 etsStubImpl::~etsStubImpl() {
@@ -86,7 +91,16 @@ void etsStubImpl::clientServiceActivate(const std::shared_ptr<CommonAPI::ClientI
 void etsStubImpl::clientServiceDeactivate(const std::shared_ptr<CommonAPI::ClientId> _client,
                                             uint8_t _clientServiceDeactivate_ReqArg1) {
     std::cout << "etsStubImpl::" << __func__ << std::endl;
-    secondaryClientActive = false;
+    if (secondaryClientActive) {
+        secondaryClientActive = false;
+        std::cout << "etsStubImpl::clientServiceDeactivate -> Send stop subscribe for unicast event" << std::endl;
+        secProxy->getSecondaryEventUINT8Event().unsubscribe(clientServiceUnicastEventSubscrptionStatus);
+        std::cout << "etsStubImpl::clientServiceDeactivate -> Send stop subscribe for multicast event" << std::endl;
+        secProxy->getSecondaryEventUINT8Event().unsubscribe(clientServiceMulticastEventSubscrptionStatus);
+    }
+    else {
+        std::cout << "etsStubImpl::" << __func__ << " Client service not yet active" << std::endl;
+    }
     return;
 }
 
@@ -124,25 +138,28 @@ void etsStubImpl::clientServiceSubscribeEventgroup(const std::shared_ptr<CommonA
             start = start-1;
         }
 
-        uint32_t subscription = secProxy->getSecondaryEventUINT8Event().subscribe([&](const uint8_t& uINT8Value) {
+        clientServiceUnicastEventSubscrptionStatus = secProxy->getSecondaryEventUINT8Event().subscribe([&](const uint8_t& uINT8Value) {
             std::cout << "etsStubImpl::clientServiceSubscribeEventgroup SecondaryEventUINT8 Notification:" << std::hex << (uint32_t)uINT8Value << std::endl;
             lastUnicastuINT8Value = uINT8Value;
         });
 
-        uint32_t msubscription = secProxy->getSecondaryMulticastEventUINT8Event().subscribe([&](const uint8_t& uINT8Value) {
+        clientServiceMulticastEventSubscrptionStatus = secProxy->getSecondaryMulticastEventUINT8Event().subscribe([&](const uint8_t& uINT8Value) {
             std::cout << "etsStubImpl::clientServiceSubscribeEventgroup SecondaryMulticastEventUINT8 Notification:" << std::hex << (uint32_t)uINT8Value << std::endl;
             lastMulticastuINT8Value = uINT8Value;
         });
 
-        std::cout << "etsStubImpl::clientServiceSubscribeEventgroup duration timeout:" << duration << std::endl;
+        std::cout << "etsStubImpl::clientServiceSubscribeEventgroup duration timeout value:" << duration << std::endl;
         while (duration > 0) {
-            std::cout << "etsStubImpl::clientServiceSubscribeEventgroup wait for delay timeout" << std::endl;
+            std::cout << "etsStubImpl::clientServiceSubscribeEventgroup wait for duration timeout" << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(1));
             duration = duration-1;
         }
 
-        secProxy->getSecondaryEventUINT8Event().unsubscribe(subscription);
-        secProxy->getSecondaryEventUINT8Event().unsubscribe(msubscription);
+        std::cout << "etsStubImpl::clientServiceSubscribeEventgroup duration timeout" << std::endl;
+        std::cout << "etsStubImpl::clientServiceSubscribeEventgroup -> Send stop subscribe for unicast event" << std::endl;
+        secProxy->getSecondaryEventUINT8Event().unsubscribe(clientServiceUnicastEventSubscrptionStatus);
+        std::cout << "etsStubImpl::clientServiceSubscribeEventgroup -> Send stop subscribe for multicast event" << std::endl;
+        secProxy->getSecondaryEventUINT8Event().unsubscribe(clientServiceMulticastEventSubscrptionStatus);
     });
 
     return;
@@ -539,13 +556,12 @@ void etsStubImpl::echoUINT8ArrayLengthTPNoResponse(const std::shared_ptr<CommonA
 void etsStubImpl::triggerEventUINT8ArrayTPNoReqTPPayload(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) {
     std::cout << "etsStubImpl::" << __func__ << " _triggerEventUINT32_ReqArg1:" << std::dec << _triggerEventUINT32_ReqArg1 << std::endl;
     std::vector< uint8_t > outINT8EventArray;
-    for (int idx=0; idx<_triggerEventUINT32_ReqArg1; idx++) {
+    for (uint32_t idx=0; idx<_triggerEventUINT32_ReqArg1; idx++) {
         outINT8EventArray.push_back(0xab);
     }
     fireTestEventUINT8ArrayTPEvent(outINT8EventArray);
     return; 
 }
-
 
 void etsStubImpl::triggerEventUINT32Periodic(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) {
     std::cout << "etsStubImpl::" << __func__ << " _triggerEventUINT32_ReqArg1:" << _triggerEventUINT32_ReqArg1 << std::endl;
@@ -556,5 +572,145 @@ void etsStubImpl::triggerEventUINT32Periodic(const std::shared_ptr<CommonAPI::Cl
 void etsStubImpl::triggerEventUINT32UpdateOnChange(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) {
     std::cout << "etsStubImpl::" << __func__ << " _triggerEventUINT32_ReqArg1:" << _triggerEventUINT32_ReqArg1 << std::endl;
     fireTestEventUINT32UpdateOnChangeEvent(_triggerEventUINT32_ReqArg1);
+    return;
+}
+
+void etsStubImpl::activateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2) {
+    std::cout << "etsStubImpl::" << __func__ << " _activateTestSerivce_ReqArg1:" << _activateTestSerivce_ReqArg1
+        << " _activateTestSerivce_ReqArg2:" << _activateTestSerivce_ReqArg2 << std::endl;
+    int retry_counter = 0;
+    std::string domain = "local";
+    if (false == TestService1Context1Registered && 259 == _activateTestSerivce_ReqArg1 && 1 == _activateTestSerivce_ReqArg2) {
+        std::string instance = "someip.testability.ETSTestService1Context1";
+        std::string connection = "TestService1Context1";
+        std::shared_ptr<etsStubImplService1> testService = std::make_shared<etsStubImplService1>();
+        TestService1Context1Registered = CommonAPI::Runtime::get()->registerService(domain, instance, testService, connection);
+        while (!TestService1Context1Registered && retry_counter<10) {
+            std::cout << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            TestService1Context1Registered = CommonAPI::Runtime::get()->registerService(domain, instance, testService, connection);
+            ++retry_counter;
+        }
+        if (retry_counter < 5) {
+            std::cout << "etsStubImpl::" << __func__ << "Successfully Registered ETSTestService1 Service for Context1!" << std::endl;
+        }
+        else {
+            std::cout << "etsStubImpl::" << __func__ << "Registration Of ETSTestService1 Service Failed for Context1!" << std::endl;
+        }
+    }
+    else if (false == TestService1Context2Registered && 259 == _activateTestSerivce_ReqArg1 && 2 == _activateTestSerivce_ReqArg2) {
+        std::string instance = "someip.testability.ETSTestService1Context2";
+        std::string connection = "TestService1Context2";
+        std::shared_ptr<etsStubImplService1> testService = std::make_shared<etsStubImplService1>();
+        TestService1Context2Registered = CommonAPI::Runtime::get()->registerService(domain, instance, testService, connection);
+        while (!TestService1Context2Registered && retry_counter<10) {
+            std::cout << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            TestService1Context2Registered = CommonAPI::Runtime::get()->registerService(domain, instance, testService, connection);
+            ++retry_counter;
+        }
+        if (retry_counter < 5) {
+            std::cout << "etsStubImpl::" << __func__ << "Successfully Registered ETSTestService1 Service for Context2!" << std::endl;
+        }
+        else {
+            std::cout << "etsStubImpl::" << __func__ << "Registration Of ETSTestService1 Service Failed for Context2!" << std::endl;
+        }
+    }
+    else if (false == TestService2Context1Registered && 260 == _activateTestSerivce_ReqArg1 && 1 == _activateTestSerivce_ReqArg2) {
+        std::string instance = "someip.testability.ETSTestService2Context1";
+        std::string connection = "TestService2Context1";
+        std::shared_ptr<etsStubImplService2> testService = std::make_shared<etsStubImplService2>();
+        TestService2Context1Registered = CommonAPI::Runtime::get()->registerService(domain, instance, testService, connection);
+        while (!TestService2Context1Registered && retry_counter<10) {
+            std::cout << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            TestService2Context1Registered = CommonAPI::Runtime::get()->registerService(domain, instance, testService, connection);
+            ++retry_counter;
+        }
+        if (retry_counter < 5) {
+            std::cout << "etsStubImpl::" << __func__ << "Successfully Registered ETSTestService2 Service!" << std::endl;
+        }
+        else {
+            std::cout << "etsStubImpl::" << __func__ << "Registration Of ETSTestService2 Service Failed!" << std::endl;
+        }
+    }
+    else {
+        std::cerr << "etsStubImpl::" << __func__ << " Invalid service info" << std::endl;
+    }
+}
+
+void etsStubImpl::deactivateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2) {
+    std::cout << "etsStubImpl::" << __func__ << " _activateTestSerivce_ReqArg1:" << _activateTestSerivce_ReqArg1
+        << " _activateTestSerivce_ReqArg2:" << _activateTestSerivce_ReqArg2 << std::endl;
+    int retry_counter = 0;
+    std::string domain = "local";
+    if (true == TestService1Context1Registered && 259 == _activateTestSerivce_ReqArg1 && 1 == _activateTestSerivce_ReqArg2) {
+        std::string instance = "someip.testability.ETSTestService1Context1";
+        std::string connection = "TestService1Context1";
+        bool successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService1::getInterface(), instance);
+        while (!successfullydeRegistered && retry_counter<10) {
+            std::cout << "etsStubImpl::" << __func__ << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService1::getInterface(), instance);
+            ++retry_counter;
+        }
+        if (retry_counter < 5) {
+            std::cout << "etsStubImpl::" << __func__ << "Successfully DeRegistered ETSTestService1 Service!" << std::endl;
+            TestService1Context1Registered = false;
+        }
+        else {
+            std::cout << "etsStubImpl::" << __func__ << "DeRegistration Of ETSTestService1 Service Failed!" << std::endl;
+        }
+    }
+    else if (true == TestService1Context2Registered && 259 == _activateTestSerivce_ReqArg1 && 2 == _activateTestSerivce_ReqArg2) {
+        std::string instance = "someip.testability.ETSTestService1Context2";
+        std::string connection = "TestService1Context2";
+        bool successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService1::getInterface(), instance);
+        while (!successfullydeRegistered && retry_counter<10) {
+            std::cout << "etsStubImpl::" << __func__ << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService1::getInterface(), instance);
+            ++retry_counter;
+        }
+        if (retry_counter < 5) {
+            std::cout << "etsStubImpl::" << __func__ << "Successfully DeRegistered ETSTestService1 Service!" << std::endl;
+            TestService1Context2Registered = false;
+        }
+        else {
+            std::cout << "etsStubImpl::" << __func__ << "DeRegistration Of ETSTestService1 Service Failed!" << std::endl;
+        }
+    }
+    else if (true == TestService2Context1Registered && 260 == _activateTestSerivce_ReqArg1 && 1 == _activateTestSerivce_ReqArg2) {
+        std::string instance = "someip.testability.ETSTestService2Context1";
+        std::string connection = "TestService2Context1";
+        bool successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService2::getInterface(), instance);
+        while (!successfullydeRegistered && retry_counter<10) {
+            std::cout << "etsStubImpl::" << __func__ << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService2::getInterface(), instance);
+            ++retry_counter;
+        }
+        if (retry_counter < 5) {
+            std::cout << "etsStubImpl::" << __func__ << "Successfully DeRegistered ETSTestService2 Service!" << std::endl;
+            TestService2Context1Registered = false;
+        }
+        else {
+            std::cout << "etsStubImpl::" << __func__ << "DeRegistration Of ETSTestService2 Service Failed!" << std::endl;
+        }
+    }
+    else {
+        std::cerr << "etsStubImpl::" << __func__ << " Invalid service info" << std::endl;
+    }
+}
+
+void etsStubImplService1::echoUINT32(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _inUINT32_ReqArg1, echoUINT32Reply_t _reply) {
+    std::cout << "etsStubImplService1::" << __func__ << " _inUINT32_ReqArg1:" << _inUINT32_ReqArg1 << std::endl;
+    _reply(_inUINT32_ReqArg1);
+    return;
+}
+
+void etsStubImplService2::echoUINT32(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _inUINT32_ReqArg1, echoUINT32Reply_t _reply) {
+    std::cout << "etsStubImplService2::" << __func__ << " _inUINT32_ReqArg1:" << _inUINT32_ReqArg1 << std::endl;
+    _reply(_inUINT32_ReqArg1);
     return;
 }

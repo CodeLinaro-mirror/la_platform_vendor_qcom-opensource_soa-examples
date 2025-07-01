@@ -10,6 +10,8 @@
 #include <CommonAPI/CommonAPI.hpp>
 #include <v1/someip/testability/ETSProxy.hpp>
 #include <v1/someip/testability/ETSSecondaryServiceStubDefault.hpp>
+#include <v1/someip/testability/ETSTestService1Proxy.hpp>
+#include <v1/someip/testability/ETSTestService2Proxy.hpp>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -31,6 +33,9 @@ class etsProxyImpl {
     private:
         std::shared_ptr<ETSProxy<>> etsProxy;
         bool isAvailable;
+        std::shared_ptr<ETSTestService1Proxy<>> testSvcProxy1;
+        std::shared_ptr<ETSTestService1Proxy<>> testSvcProxy2;
+        std::shared_ptr<ETSTestService2Proxy<>> testSvcProxy3;
         std::mutex mtx;
         std::condition_variable cond;
         bool method_response_received;
@@ -52,7 +57,7 @@ class etsProxyImpl {
         ~etsProxyImpl();
         std::string callstatusToString(CommonAPI::CallStatus status);
         std::string returnCodeToString(vsomeip::return_code_e return_code);
-        void createProxy();
+        void createProxy(std::string appname);
         void tester_send_offer();
         void tester_send_stop_offer(int without_offer);
         void tester_send_unicast_event(int eventval);
@@ -74,6 +79,8 @@ class etsProxyImpl {
         void tester_unsubscribe_TestEventUINT32PeriodicEvent();
         void tester_subscribe_TestEventUINT32UpdateOnChangeEvent();
         void tester_unsubscribe_TestEventUINT32UpdateOnChangeEvent();
+        void tester_requestTestService(uint32_t service_id, uint32_t instance_id);
+        void invoke_requestTestServiceMethod(uint32_t service_id, uint32_t instance_id);
         void invoke_checkByteOrder();
         void invoke_clientServiceActivate(uint32_t start_timeout);
         void invoke_clientServiceDeactivate(int stop_timeout);
@@ -92,6 +99,7 @@ class etsProxyImpl {
         void invoke_echoUINT8Array2Dim();
         void invoke_echoUINT8Array8BitLength();
         void invoke_echoUINT8ArrayMinSize();
+        void invoke_echoUINT8ArrayMinSize_too_short(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_echoUTF16DYNAMIC();
         void invoke_echoUTF16FIXED();
         void invoke_echoUTF8DYNAMIC();
@@ -136,6 +144,7 @@ class etsProxyImpl {
         void invoke_Fire_And_Forget_Wrong_Method_ID();
         void invoke_Wrong_Service_ID(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_Wrong_SOMEIP_Protocol_Version(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
+        void invoke_Wrong_Return_Code(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_Length_equals_0_Test(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_Length_smaller_than_8_Test(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_Length_way_too_long(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
@@ -181,6 +190,13 @@ class etsProxyImpl {
         void invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Send_triggerEventUINT8Multicast_Eventgroup_6(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Interface_Version(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_activateTestSerivce(uint32_t service_id, uint32_t instance_id);
+        void invoke_deactivateTestSerivce(uint32_t service_id, uint32_t instance_id);
+        void invoke_TP_Verify_ErrorDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
+        void invoke_TP_Verify_ReceptionBufferManagement(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
+        void invoke_TP_Verify_OffsetCalculationDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
+        void invoke_TP_Verify_MissingFrameDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
+        void invoke_TP_Verify_DuplicateFrameDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
 };
 
 #endif

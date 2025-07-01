@@ -10,6 +10,8 @@
 #include <CommonAPI/CommonAPI.hpp>
 #include <v1/someip/testability/ETSStubDefault.hpp>
 #include <v1/someip/testability/ETSSecondaryServiceProxy.hpp>
+#include <v1/someip/testability/ETSTestService1StubDefault.hpp>
+#include <v1/someip/testability/ETSTestService2StubDefault.hpp>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -23,13 +25,17 @@ class etsStubImpl: public ETSStubDefault {
         std::vector<std::thread> appThreadPool;
         bool secondaryClientActive;
         std::shared_ptr<ETSSecondaryServiceProxy<>> secProxy;
+        uint32_t clientServiceUnicastEventSubscrptionStatus;
+        uint32_t clientServiceMulticastEventSubscrptionStatus;
         bool isAvailableSecondary;
         uint8_t lastUnicastuINT8Value;
         uint8_t lastMulticastuINT8Value;
         uint32_t startTimeout;
         uint32_t durationTimeout;
         uint32_t debounceTimeout;
-
+        bool TestService1Context1Registered;
+        bool TestService1Context2Registered;
+        bool TestService2Context1Registered;
     public:
         etsStubImpl();
         ~etsStubImpl();
@@ -70,6 +76,18 @@ class etsStubImpl: public ETSStubDefault {
         void triggerEventUINT8ArrayTPNoReqTPPayload(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) override;
         void triggerEventUINT32Periodic(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) override;
         void triggerEventUINT32UpdateOnChange(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) override;
+        void activateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2);
+        void deactivateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2);
+};
+
+class etsStubImplService1: public ETSTestService1StubDefault {
+    public:
+        void echoUINT32(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _inUINT32_ReqArg1, echoUINT32Reply_t _reply);
+};
+
+class etsStubImplService2: public ETSTestService2StubDefault {
+    public:
+        void echoUINT32(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _inUINT32_ReqArg1, echoUINT32Reply_t _reply);
 };
 
 #endif
