@@ -458,7 +458,7 @@ void etsProxyImpl::tester_unsubscribe_TestEventUINT32UpdateOnChangeEvent() {
 void etsProxyImpl::invoke_checkByteOrder() {
     uint8_t checkByteOrder_ReqArg1 = 0x12;
     uint16_t checkByteOrder_ReqArg2 = 0x1234;
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus = CommonAPI::CallStatus::UNKNOWN;
     uint32_t checkByteOrder_ResArg1 = 0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -485,8 +485,8 @@ void etsProxyImpl::invoke_checkByteOrder() {
 }
 
 void etsProxyImpl::invoke_clientServiceActivate(uint32_t start_timeout) {
-    uint8_t clientServiceActivate_ReqArg1;
-    CommonAPI::CallStatus callStatus;
+    uint8_t clientServiceActivate_ReqArg1 = 0;
+    CommonAPI::CallStatus callStatus = CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     clientServiceActivate_ReqArg1 = (uint8_t)start_timeout;
@@ -504,8 +504,8 @@ void etsProxyImpl::invoke_clientServiceActivate(uint32_t start_timeout) {
 }
 
 void etsProxyImpl::invoke_clientServiceDeactivate(int stop_timeout) {
-    uint8_t clientServiceDeactivate_ReqArg1;
-    CommonAPI::CallStatus callStatus;
+    uint8_t clientServiceDeactivate_ReqArg1=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
     clientServiceDeactivate_ReqArg1 = (uint8_t)stop_timeout;
 
@@ -523,8 +523,8 @@ void etsProxyImpl::invoke_clientServiceDeactivate(int stop_timeout) {
 }
 
 void etsProxyImpl::invoke_clientServiceGetLastValueOfEventUDPMulticast() {
-    CommonAPI::CallStatus callStatus;
-    uint8_t clientServiceGetLastValueOfEventUDPMulticast_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint8_t clientServiceGetLastValueOfEventUDPMulticast_ResArg1=0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     if (etsProxy && isAvailable) {
@@ -544,8 +544,8 @@ void etsProxyImpl::invoke_clientServiceGetLastValueOfEventUDPMulticast() {
 }
 
 void etsProxyImpl::invoke_clientServiceGetLastValueOfEventUDPUnicast() {
-    CommonAPI::CallStatus callStatus;
-    uint8_t clientServiceGetLastValueOfEventUDPUnicast_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint8_t clientServiceGetLastValueOfEventUDPUnicast_ResArg1=0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     if (etsProxy && isAvailable) {
@@ -565,9 +565,9 @@ void etsProxyImpl::invoke_clientServiceGetLastValueOfEventUDPUnicast() {
 }
 
 void etsProxyImpl::invoke_clientServiceSubscribeEventgroup(uint32_t start_timeout, uint32_t subscription_duration) {
-    uint32_t clientServiceSubscribeEventgroup_ReqArg1;
-    uint32_t clientServiceSubscribeEventgroup_ReqArg2;
-    CommonAPI::CallStatus callStatus;
+    uint32_t clientServiceSubscribeEventgroup_ReqArg1=0;
+    uint32_t clientServiceSubscribeEventgroup_ReqArg2=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     clientServiceSubscribeEventgroup_ReqArg1 = (uint8_t)start_timeout;
@@ -589,10 +589,10 @@ void etsProxyImpl::invoke_echoBitfields() {
     uint8_t echoBitfields_ReqArg1 = 0x12;
     uint16_t echoBitfields_ReqArg2 = 0x1234;
     uint32_t echoBitfields_ReqArg3 = 0x12345678;
-    CommonAPI::CallStatus callStatus;
-    uint8_t echoBitfields_ResArg1;
-    uint16_t echoBitfields_ResArg2;
-    uint32_t echoBitfields_ResArg3;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint8_t echoBitfields_ResArg1=0;
+    uint16_t echoBitfields_ResArg2=0;
+    uint32_t echoBitfields_ResArg3=0;
     std::cout << "etsProxyImpl::" << __func__ << " echoBitfields_ReqArg1:" << std::hex << (uint32_t)echoBitfields_ReqArg1
             << " echoBitfields_ReqArg2:" << std::hex << (uint32_t)echoBitfields_ReqArg2
             << " echoBitfields_ReqArg3:" << std::hex << (uint32_t)echoBitfields_ReqArg3 << std::endl;
@@ -627,7 +627,7 @@ void etsProxyImpl::invoke_echoCommonDatatypes() {
     int32_t _EchoCommonDatatypes_ReqArg7 = 0x76543211;
     float EchoCommonDatatypes_ReqArg8 = 8.146723;
     double EchoCommonDatatypes_ReqArg9 = 11.98765432152346;
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     double EchoCommonDatatypes_ResArg1 = 0;
     float EchoCommonDatatypes_ResArg2 = 0;
     int32_t EchoCommonDatatypes_ResArg3 = 0;
@@ -670,8 +670,8 @@ void etsProxyImpl::invoke_echoCommonDatatypes() {
 
 void etsProxyImpl::invoke_echoENUM() {
     ETS::Enum echoENUM_ReqArg1 = ETS::Enum::ONE;
-    CommonAPI::CallStatus callStatus;
-    ETS::Enum echoENUM_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    ETS::Enum echoENUM_ResArg1=ETS::Enum::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     if (etsProxy && isAvailable) {
@@ -692,7 +692,7 @@ void etsProxyImpl::invoke_echoENUM() {
 
 void etsProxyImpl::invoke_echoFLOAT64() {
     double echoFLOAT64_ReqArg1 = 5.98765432152346;
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     double echoFLOAT64_ResArg1 = 0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -714,8 +714,8 @@ void etsProxyImpl::invoke_echoFLOAT64() {
 
 void etsProxyImpl::invoke_echoINT8() {
     int8_t echoINT8_ReqArg1 = 12;
-    CommonAPI::CallStatus callStatus;
-    int8_t echoINT8_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    int8_t echoINT8_ResArg1=0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     if (etsProxy && isAvailable) {
@@ -736,7 +736,7 @@ void etsProxyImpl::invoke_echoINT8() {
 
 void etsProxyImpl::invoke_echoStaticUINT8Array() {
     std::vector<uint8_t> echoStaticUINT8Array_ReqArg1;
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::vector<uint8_t> echoStaticUINT8Array_ResArg1;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -768,8 +768,8 @@ void etsProxyImpl::invoke_echoStaticUINT8Array() {
 
 void etsProxyImpl::invoke_echoUINT8() {
     uint8_t echoUINT8_ReqArg1 = 17;
-    CommonAPI::CallStatus callStatus;
-    uint8_t echoUINT8_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint8_t echoUINT8_ResArg1=0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     if (etsProxy && isAvailable) {
@@ -789,10 +789,10 @@ void etsProxyImpl::invoke_echoUINT8() {
 }
 
 void etsProxyImpl::invoke_echoUINT8Array() {
-    uint32_t echoUINT8Array_ReqArg1;
+    uint32_t echoUINT8Array_ReqArg1=0;
     std::vector<uint8_t> echoUINT8Array_ReqArg2;
-    CommonAPI::CallStatus callStatus;
-    uint32_t echoUINT8Array_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint32_t echoUINT8Array_ResArg1=0;
     std::vector<uint8_t> echoUINT8Array_ResArg2;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -823,10 +823,10 @@ void etsProxyImpl::invoke_echoUINT8Array() {
 }
 
 void etsProxyImpl::invoke_echoUINT8Array16BitLength() {
-    uint16_t echoUINT8Array16BitLength_ReqArg1;
+    uint16_t echoUINT8Array16BitLength_ReqArg1=0;
     std::vector<uint8_t> echoUINT8Array16BitLength_ReqArg2;
-    CommonAPI::CallStatus callStatus;
-    uint16_t echoUINT8Array16BitLength_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint16_t echoUINT8Array16BitLength_ResArg1=0;
     std::vector<uint8_t> echoUINT8Array16BitLength_ResArg2;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -857,10 +857,10 @@ void etsProxyImpl::invoke_echoUINT8Array16BitLength() {
 }
 
 void etsProxyImpl::invoke_echoUINT8Array2Dim() {
-    uint32_t echoUINT8Array2Dim_ReqArg1;
+    uint32_t echoUINT8Array2Dim_ReqArg1=0;
     std::vector< ETS::uint8ArrayArray > echoUINT8Array2Dim_ReqArg2;
-    CommonAPI::CallStatus callStatus;
-    uint32_t echoUINT8Array2Dim_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint32_t echoUINT8Array2Dim_ResArg1=0;
     std::vector< ETS::uint8ArrayReturnArray > echoUINT8Array2Dim_ResArg2;
     ETS::uint8ArrayArray echoUINT8Array1Dim_ReqArg1;
     ETS::uint8ArrayArray echoUINT8Array1Dim_ReqArg2;
@@ -897,10 +897,10 @@ void etsProxyImpl::invoke_echoUINT8Array2Dim() {
 }
 
 void etsProxyImpl::invoke_echoUINT8Array8BitLength() {
-    uint8_t echoUINT8Array8BitLength_ReqArg1;
+    uint8_t echoUINT8Array8BitLength_ReqArg1=0;
     std::vector<uint8_t> echoUINT8Array8BitLength_ReqArg2;
-    CommonAPI::CallStatus callStatus;
-    uint8_t echoUINT8Array8BitLength_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint8_t echoUINT8Array8BitLength_ResArg1=0;
     std::vector<uint8_t> echoUINT8Array8BitLength_ResArg2;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -931,10 +931,10 @@ void etsProxyImpl::invoke_echoUINT8Array8BitLength() {
 }
 
 void etsProxyImpl::invoke_echoUINT8ArrayMinSize() {
-    uint32_t echoUINT8ArrayMinSize_ReqArg1;
+    uint32_t echoUINT8ArrayMinSize_ReqArg1=0;
     std::vector<uint8_t> echoUINT8ArrayMinSize_ReqArg2;
-    CommonAPI::CallStatus callStatus;
-    uint32_t echoUINT8ArrayMinSize_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint32_t echoUINT8ArrayMinSize_ResArg1=0;
     std::vector<uint8_t> echoUINT8ArrayMinSize_ResArg2;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -964,10 +964,10 @@ void etsProxyImpl::invoke_echoUINT8ArrayMinSize() {
 }
 
 void etsProxyImpl::invoke_echoUTF16DYNAMIC() {
-    uint32_t echoUTF16DYNAMIC_ReqArg1;
+    uint32_t echoUTF16DYNAMIC_ReqArg1=0;
     std::string echoUTF16DYNAMIC_ReqArg2;
-    CommonAPI::CallStatus callStatus;
-    uint32_t echoUTF16DYNAMIC_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint32_t echoUTF16DYNAMIC_ResArg1=0;
     std::string echoUTF16DYNAMIC_ResArg2;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -993,7 +993,7 @@ void etsProxyImpl::invoke_echoUTF16DYNAMIC() {
 
 void etsProxyImpl::invoke_echoUTF16FIXED() {
     std::string echoUTF16FIXED_ReqArg1(30, 'a');
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::string echoUTF16FIXED_ResArg1;
     std::cout << "etsProxyImpl::" << __func__ << " echoUTF16FIXED_ReqArg1:" << echoUTF16FIXED_ReqArg1 << std::endl;
 
@@ -1014,10 +1014,10 @@ void etsProxyImpl::invoke_echoUTF16FIXED() {
 }
 
 void etsProxyImpl::invoke_echoUTF8DYNAMIC() {
-    uint32_t echoUTF8DYNAMIC_ReqArg1;
+    uint32_t echoUTF8DYNAMIC_ReqArg1=0;
     std::string echoUTF8DYNAMIC_ReqArg2;
-    CommonAPI::CallStatus callStatus;
-    uint32_t echoUTF8DYNAMIC_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint32_t echoUTF8DYNAMIC_ResArg1=0;
     std::string echoUTF8DYNAMIC_ResArg2;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -1043,7 +1043,7 @@ void etsProxyImpl::invoke_echoUTF8DYNAMIC() {
 
 void etsProxyImpl::invoke_echoUTF8FIXED() {
     std::string echoUTF8FIXED_ReqArg1(60, 'a');
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::string echoUTF8FIXED_ResArg1;
     std::cout << "etsProxyImpl::" << __func__ << " echoUTF8FIXED_ReqArg1:" << echoUTF8FIXED_ReqArg1 << std::endl;
 
@@ -1076,10 +1076,10 @@ void etsProxyImpl::invoke_suspendInterface() {
 }
 
 void etsProxyImpl::invoke_triggerEventUINT8(uint32_t start, uint32_t duration, uint32_t debounce) {
-    uint32_t triggerEventUINT8_ReqArg1;
-    uint32_t triggerEventUINT8_ReqArg2;
-    uint32_t triggerEventUINT8_ReqArg3;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT8_ReqArg1=0;
+    uint32_t triggerEventUINT8_ReqArg2=0;
+    uint32_t triggerEventUINT8_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     triggerEventUINT8_ReqArg1 = start;
@@ -1099,10 +1099,10 @@ void etsProxyImpl::invoke_triggerEventUINT8(uint32_t start, uint32_t duration, u
 }
 
 void etsProxyImpl::invoke_triggerEventUINT8Array(uint32_t start, uint32_t duration, uint32_t debounce) {
-    uint32_t triggerEventUINT8Array_ReqArg1;
-    uint32_t triggerEventUINT8Array_ReqArg2;
-    uint32_t triggerEventUINT8Array_ReqArg3;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT8Array_ReqArg1=0;
+    uint32_t triggerEventUINT8Array_ReqArg2=0;
+    uint32_t triggerEventUINT8Array_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     triggerEventUINT8Array_ReqArg1 = start;
@@ -1122,10 +1122,10 @@ void etsProxyImpl::invoke_triggerEventUINT8Array(uint32_t start, uint32_t durati
 }
 
 void etsProxyImpl::invoke_triggerEventUINT8E2E(uint32_t start, uint32_t duration, uint32_t debounce) {
-    uint32_t triggerEventUINT8E2E_ReqArg1;
-    uint32_t triggerEventUINT8E2E_ReqArg2;
-    uint32_t triggerEventUINT8E2E_ReqArg3;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT8E2E_ReqArg1=0;
+    uint32_t triggerEventUINT8E2E_ReqArg2=0;
+    uint32_t triggerEventUINT8E2E_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     triggerEventUINT8E2E_ReqArg1 = start;
@@ -1145,10 +1145,10 @@ void etsProxyImpl::invoke_triggerEventUINT8E2E(uint32_t start, uint32_t duration
 }
 
 void etsProxyImpl::invoke_triggerEventUINT8Multicast(uint32_t start, uint32_t duration, uint32_t debounce) {
-    uint32_t triggerEventUINT8Multicast_ReqArg1;
-    uint32_t triggerEventUINT8Multicast_ReqArg2;
-    uint32_t triggerEventUINT8Multicast_ReqArg3;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT8Multicast_ReqArg1=0;
+    uint32_t triggerEventUINT8Multicast_ReqArg2=0;
+    uint32_t triggerEventUINT8Multicast_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     triggerEventUINT8Multicast_ReqArg1 = start;
@@ -1173,12 +1173,12 @@ void etsProxyImpl::invoke_echoUINT8E2E() {
     uint32_t echoUINT8E2E_ReqArg3 = 0x0;
     uint32_t echoUINT8E2E_ReqArg4 = 0x0;
     uint8_t echoUINT8E2E_ReqArg5 = 0x9a;
-    CommonAPI::CallStatus callStatus;
-    uint16_t echoUINT8E2E_ResArg1;
-    uint16_t echoUINT8E2E_ResArg2;
-    uint32_t echoUINT8E2E_ResArg3;
-    uint32_t echoUINT8E2E_ResArg4;
-    uint8_t echoUINT8E2E_ResArg5;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint16_t echoUINT8E2E_ResArg1=0;
+    uint16_t echoUINT8E2E_ResArg2=0;
+    uint32_t echoUINT8E2E_ResArg3=0;
+    uint32_t echoUINT8E2E_ResArg4=0;
+    uint8_t echoUINT8E2E_ResArg5=0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     if (etsProxy && isAvailable) {
@@ -1204,7 +1204,7 @@ void etsProxyImpl::invoke_echoUINT8E2E() {
 
 void etsProxyImpl::invoke_echoUINT8ArrayLengthTP(int array_length) {
     std::vector<uint8_t> inUINT8Array_ReqArg1 = {};
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::vector<uint8_t> outUINT8Array_ResArg1 = {};
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -1236,8 +1236,8 @@ void etsProxyImpl::invoke_echoUINT8ArrayLengthTP(int array_length) {
 
 void etsProxyImpl::invoke_echoUINT8ArrayLengthInTP(int array_length) {
     std::vector<uint8_t> inUINT8Array_ReqArg1 = {};
-    CommonAPI::CallStatus callStatus;
-    uint32_t outUINT32_ResArg1;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint32_t outUINT32_ResArg1=0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     for (int idx=0; idx<array_length; idx++) {
@@ -1263,7 +1263,7 @@ void etsProxyImpl::invoke_echoUINT8ArrayLengthInTP(int array_length) {
 
 void etsProxyImpl::invoke_echoUINT8ArrayLengthOutTP(int array_length) {
     uint32_t inUINT32_ReqArg1;
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::vector<uint8_t> outUINT8Array_ResArg1 = {};
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
@@ -1293,7 +1293,7 @@ void etsProxyImpl::invoke_echoUINT8ArrayLengthOutTP(int array_length) {
 
 void etsProxyImpl::invoke_triggerEventUINT8ArrayTP(int array_length) {
     std::vector< uint8_t > triggerEventUINT8ArrayTP_ReqArg1;
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     for (int idx=0; idx<array_length; idx++) {
@@ -1315,7 +1315,7 @@ void etsProxyImpl::invoke_triggerEventUINT8ArrayTP(int array_length) {
 
 void etsProxyImpl::invoke_echoUINT8ArrayLengthTPNoResponse(int array_length) {
     std::vector< uint8_t > echoUINT8ArrayLengthTPNoResponse_ReqArg1;
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     for (int idx=0; idx<array_length; idx++) {
@@ -1336,8 +1336,8 @@ void etsProxyImpl::invoke_echoUINT8ArrayLengthTPNoResponse(int array_length) {
 }
 
 void etsProxyImpl::invoke_triggerEventUINT8ArrayTPNoReqTPPayload(int array_length) {
-    uint32_t triggerEventUINT32_ReqArg1;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT32_ReqArg1=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     triggerEventUINT32_ReqArg1 = (uint32_t)array_length;
@@ -1357,8 +1357,8 @@ void etsProxyImpl::invoke_triggerEventUINT8ArrayTPNoReqTPPayload(int array_lengt
 }
 
 void etsProxyImpl::invoke_triggerEventUINT32Periodic(uint32_t event_value) {
-    uint32_t triggerEventUINT32_ReqArg1;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT32_ReqArg1=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     triggerEventUINT32_ReqArg1 = event_value;
@@ -1377,8 +1377,8 @@ void etsProxyImpl::invoke_triggerEventUINT32Periodic(uint32_t event_value) {
 }
 
 void etsProxyImpl::invoke_triggerEventUINT32UpdateOnChange(uint32_t event_value) {
-    uint32_t triggerEventUINT32_ReqArg1;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT32_ReqArg1=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     triggerEventUINT32_ReqArg1 = event_value;
@@ -1675,9 +1675,9 @@ void etsProxyImpl::invoke_array_length_too_short_strips_payload() {
 }
 
 void etsProxyImpl::invoke_burst_test(int no_of_iteration) {
-    uint8_t echoUINT8_ReqArg1;
-    CommonAPI::CallStatus callStatus;
-    uint8_t echoUINT8_ResArg1;
+    uint8_t echoUINT8_ReqArg1=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint8_t echoUINT8_ResArg1=0;
     std::cout << "etsProxyImpl::" << __func__ << "no_of_iteration:" << no_of_iteration << std::endl;
 
     if (etsProxy && isAvailable) {
@@ -6431,10 +6431,10 @@ void etsProxyImpl::invoke_SD_Check_Reboot_Detection_Server_Side(std::string remo
 }
 
 void etsProxyImpl::invoke_SD_Check_subscribe_eventgroup_ttl_expired(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
-    uint32_t triggerEventUINT8_ReqArg1;
-    uint32_t triggerEventUINT8_ReqArg2;
-    uint32_t triggerEventUINT8_ReqArg3;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT8_ReqArg1=0;
+    uint32_t triggerEventUINT8_ReqArg2=0;
+    uint32_t triggerEventUINT8_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     if (etsProxy && isAvailable) {
@@ -6466,10 +6466,10 @@ void etsProxyImpl::invoke_SD_Check_subscribe_eventgroup_ttl_expired(std::string 
 }
 
 void etsProxyImpl::invoke_SD_Deregister_from_Eventgroup(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
-    uint32_t triggerEventUINT8_ReqArg1;
-    uint32_t triggerEventUINT8_ReqArg2;
-    uint32_t triggerEventUINT8_ReqArg3;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT8_ReqArg1=0;
+    uint32_t triggerEventUINT8_ReqArg2=0;
+    uint32_t triggerEventUINT8_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     if (etsProxy && isAvailable) {
@@ -6512,10 +6512,10 @@ void etsProxyImpl::invoke_SD_ResetInterface(std::string remote_address, uint16_t
 
 void etsProxyImpl::invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
     uint8_t recv_buffer[1400] = {0};
-    uint32_t triggerEventUINT8_ReqArg1;
-    uint32_t triggerEventUINT8_ReqArg2;
-    uint32_t triggerEventUINT8_ReqArg3;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT8_ReqArg1=0;
+    uint32_t triggerEventUINT8_ReqArg2=0;
+    uint32_t triggerEventUINT8_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     /* subscribe event group */
@@ -6620,10 +6620,10 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string rem
 
 void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
     uint8_t recv_buffer[1400] = {0};
-    uint32_t triggerEventUINT8Array_ReqArg1;
-    uint32_t triggerEventUINT8Array_ReqArg2;
-    uint32_t triggerEventUINT8Array_ReqArg3;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT8Array_ReqArg1=0;
+    uint32_t triggerEventUINT8Array_ReqArg2=0;
+    uint32_t triggerEventUINT8Array_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     /* subscribe event group */
@@ -6728,10 +6728,10 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::strin
 
 void etsProxyImpl::invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
     uint8_t recv_buffer[1400] = {0};
-    uint32_t triggerEventUINT8E2E_ReqArg1;
-    uint32_t triggerEventUINT8E2E_ReqArg2;
-    uint32_t triggerEventUINT8E2E_ReqArg3;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT8E2E_ReqArg1=0;
+    uint32_t triggerEventUINT8E2E_ReqArg2=0;
+    uint32_t triggerEventUINT8E2E_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     /* subscribe event group */
@@ -6836,10 +6836,10 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string 
 
 void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Multicast_Eventgroup_6(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
     uint8_t recv_buffer[1400] = {0};
-    uint32_t triggerEventUINT8Multicast_ReqArg1;
-    uint32_t triggerEventUINT8Multicast_ReqArg2;
-    uint32_t triggerEventUINT8Multicast_ReqArg3;
-    CommonAPI::CallStatus callStatus;
+    uint32_t triggerEventUINT8Multicast_ReqArg1=0;
+    uint32_t triggerEventUINT8Multicast_ReqArg2=0;
+    uint32_t triggerEventUINT8Multicast_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     /* subscribe event group */
@@ -6944,6 +6944,5 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Multicast_Eventgroup_6(std::s
 
 void etsProxyImpl::invoke_SD_Interface_Version(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
-
     return;
 }
