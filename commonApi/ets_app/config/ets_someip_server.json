@@ -42,6 +42,7 @@
             "service": "257",
             "instance": "1",
             "unreliable": "30515",
+            "reliable": "30517",
             "unicast": "192.168.114.2",
             "someip-tp": {
                 "service-to-client": ["77", "112", "113", "114", "32780", "79"]
@@ -90,17 +91,37 @@
                     "is_field" : "false",
                     "is_reliable" : "false",
                     "update_on_change" : "true"
+                },
+                {
+                    "event" : "32774",
+                    "is_field" : "true",
+                    "is_reliable" : "false"
+                },
+                {
+                    "event" : "32775",
+                    "is_field" : "true",
+                    "is_reliable" : "false"
+                },
+                {
+                    "event" : "32776",
+                    "is_field" : "true",
+                    "is_reliable" : "true"
+                },
+                {
+                    "event" : "32771",
+                    "is_field" : "false",
+                    "is_reliable" : "true"
                 }
             ],
             "eventgroups" :
             [
                 {
                     "eventgroup" : "2",
-                    "events" : [ "32769", "32770", "32772", "32779", "32780" ]
+                    "events" : [ "32769", "32770", "32772", "32779", "32780", "32774", "32775", "32776", "32771" ]
                 },
                 {
                     "eventgroup" : "5",
-                    "events" : [ "32769", "32770", "32772", "32779", "32780" ]
+                    "events" : [ "32769", "32770", "32772", "32779", "32780", "32774", "32775" ]
                 },
                 {
                     "eventgroup" : "6",
@@ -118,6 +139,7 @@
             "service": "258",
             "instance": "244",
             "unreliable": "30516",
+            "reliable": "30518",
             "unicast": "192.168.114.5",
             "multicast" :
             {
@@ -135,6 +157,11 @@
                     "event" : "32902",
                     "is_field" : "false",
                     "is_reliable" : "false"
+                },
+                {
+                    "event" : "32903",
+                    "is_field" : "false",
+                    "is_reliable" : "true"
                 }
             ],
             "eventgroups" :
@@ -148,6 +175,10 @@
                     "threshold" : "1",
                     "is_multicast" : "true",
                     "events" : [ "32902" ]
+                },
+                {
+                    "eventgroup" : "10",
+                    "events" : [ "32903" ]
                 }
             ]
         },

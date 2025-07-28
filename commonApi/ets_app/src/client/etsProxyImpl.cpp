@@ -15,6 +15,7 @@ etsProxyImpl::etsProxyImpl() {
     TestEventUINT8TPsubscription = 0;
     TestEventUINT32Periodicsubscription = 0;
     TestEventUINT32UpdateOnChangesubscription = 0;
+    uINT8ValuesubscriptionReliable = 0;
 }
 
 etsProxyImpl::~etsProxyImpl() {
@@ -517,7 +518,7 @@ void etsProxyImpl::tester_requestTestService(uint32_t service_id, uint32_t insta
 }
 
 void etsProxyImpl::invoke_requestTestServiceMethod(uint32_t service_id, uint32_t instance_id) {
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     uint32_t inUINT32_ReqArg1;
     uint32_t outUINT32_ResArg1;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
@@ -1245,13 +1246,39 @@ void etsProxyImpl::invoke_echoUTF8FIXED() {
 }
 
 void etsProxyImpl::invoke_resetInterface() {
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+    etsProxy->resetInterface(callStatus);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+                std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
 
     return;
 }
 
-void etsProxyImpl::invoke_suspendInterface() {
+void etsProxyImpl::invoke_suspendInterface(uint32_t start, uint32_t duration) {
+    uint32_t suspendInterface_ReqArg1=0;
+    uint32_t suspendInterface_ReqArg2=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    suspendInterface_ReqArg1 = start;
+    suspendInterface_ReqArg2 = duration;
+    if (etsProxy && isAvailable) {
+    etsProxy->suspendInterface(suspendInterface_ReqArg1, suspendInterface_ReqArg2, callStatus);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+                std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
 
     return;
 }
@@ -6555,12 +6582,6 @@ void etsProxyImpl::invoke_Subscribe_using_wrong_SOMEIP_MessageID(std::string rem
     return;
 }
 
-void etsProxyImpl::invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
-    std::cout << "etsProxyImpl::" << __func__ << std::endl;
-
-    return;
-}
-
 void etsProxyImpl::invoke_Eventgroup_EventsAndFieldsUnreliable_5(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
     uint8_t recv_buffer[1400] = {0};
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
@@ -6744,8 +6765,34 @@ void etsProxyImpl::invoke_SD_Deregister_from_Eventgroup(std::string remote_addre
     return;
 }
 
-void etsProxyImpl::invoke_SD_ResetInterface(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
+void etsProxyImpl::invoke_SD_ResetInterface() {
+    uint32_t value = 5;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    tester_get_TestFieldUINT8();
+    sleep(1);
+    tester_set_TestFieldUINT8(value);
+    sleep(1);
+    invoke_resetInterface();
+    sleep(1);
+    tester_get_TestFieldUINT8();
+
+    return;
+}
+
+void etsProxyImpl::invoke_SD_SuspendInterface() {
+    uint32_t start = 1;
+    uint32_t suspend_duration = 4;
+    uint32_t value = 10;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    tester_get_TestFieldUINT8();
+    sleep(1);
+    tester_set_TestFieldUINT8(value);
+    sleep(1);
+    invoke_suspendInterface(start, suspend_duration);
+    sleep(start+suspend_duration+1);
+    tester_get_TestFieldUINT8();
 
     return;
 }
@@ -7188,7 +7235,7 @@ void etsProxyImpl::invoke_SD_Interface_Version(std::string remote_address, uint1
 }
 
 void etsProxyImpl::invoke_activateTestSerivce(uint32_t service_id, uint32_t instance_id) {
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
     if (etsProxy && isAvailable) {
         etsProxy->activateTestSerivce(service_id, instance_id, callStatus);
@@ -7202,7 +7249,7 @@ void etsProxyImpl::invoke_activateTestSerivce(uint32_t service_id, uint32_t inst
 }
 
 void etsProxyImpl::invoke_deactivateTestSerivce(uint32_t service_id, uint32_t instance_id) {
-    CommonAPI::CallStatus callStatus;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
     if (etsProxy && isAvailable) {
         etsProxy->deactivateTestSerivce(service_id, instance_id, callStatus);
@@ -7840,6 +7887,477 @@ void etsProxyImpl::invoke_TP_Verify_DuplicateFrameDuringReception(std::string re
 
         udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
         udp_client_sock.close(err_code);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back() {
+    vsomeip::service_t service_id = 0x101;
+    vsomeip::instance_t instance_id = 0x1;
+    vsomeip::method_t method_id = 0x1;
+    uint32_t value = 15;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    std::shared_ptr<vsomeip::application> _app = vsomeip::runtime::get()->get_application("ets_default_client");
+    if (_app) {
+        _app->register_message_handler(service_id, instance_id, method_id, [&](const std::shared_ptr<vsomeip::message> &_response)
+        {
+            vsomeip::message_type_e msgType = _response->get_message_type();
+            vsomeip::service_t serviceId = _response->get_service();
+            vsomeip::instance_t instanceId = _response->get_instance();
+            vsomeip::method_t methodId = _response->get_method();
+            vsomeip::major_version_t majorVersion = _response->get_interface_version();
+            vsomeip::return_code_e returnCode = _response->get_return_code();
+
+            std::cout << "etsProxyImpl::on_message:[" << std::hex << (uint32_t)serviceId << "."
+                << std::hex << (uint32_t)instanceId << "." << std::hex << (uint32_t)methodId << "."
+                << std::hex << (uint32_t)majorVersion << "] Session:" << _response->get_session()
+                << " Type:" << (uint32_t)msgType << std::endl;
+
+            if (vsomeip::return_code_e::E_OK == returnCode) {
+                std::shared_ptr<vsomeip::payload> payload = _response->get_payload();
+                vsomeip::length_t payload_length = _response->get_payload()->get_length();
+                vsomeip::byte_t* payload_data = _response->get_payload()->get_data();
+                std::cout << "Received[" << (uint32_t)payload_length << "bytes]:" << std::endl;
+                for (uint32_t idx=0; idx<payload_length; idx++) {
+                    std::cout << std::hex << (uint32_t)payload_data[idx];
+                }
+                std::cout << "Done" << std::endl;
+            }
+            std::cout << "Return code:" << std::hex << (uint32_t)returnCode << ":" << returnCodeToString(returnCode) << std::endl;
+            {
+                std::unique_lock<std::mutex> lk(mtx);
+                this->method_response_received = true;
+                cond.notify_one();
+            }
+        });
+
+        if (isAvailable) {
+            method_response_received = false;
+            std::shared_ptr<vsomeip::message> _request = vsomeip::runtime::get()->create_request();
+            _request->set_service(service_id);
+            _request->set_instance(instance_id);
+            _request->set_method(method_id);
+            _request->set_interface_version(0x15);
+            _request->set_reliable(false);
+            _request->set_message_type(vsomeip::message_type_e::MT_REQUEST_NO_RETURN);
+            std::shared_ptr<vsomeip::payload> _payload = vsomeip::runtime::get()->create_payload();
+            std::vector<vsomeip::byte_t> _payload_data;
+            _request->set_payload(_payload);
+
+            tester_get_TestFieldUINT8();
+            sleep(1);
+            tester_set_TestFieldUINT8(value);
+            sleep(1);
+
+            std::cout << "etsProxyImpl::" << __func__ << " Sending payload" << std::endl;
+            _app->send(_request);
+            {
+                std::unique_lock<std::mutex> lk(mtx);
+                cond.wait_for(lk, std::chrono::seconds(5), [&]{
+                    return this->method_response_received;
+                });
+            }
+
+            sleep(1);
+            tester_get_TestFieldUINT8();
+        }
+        else {
+            std::cout << "ETS Service Not Available" << std::endl;
+        }
+
+        _app->unregister_message_handler(service_id, instance_id, method_id);
+    }
+    else {
+        std::cout << "etsProxyImpl::" << __func__ << " ets_default_client app not present" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_subscribe_TestFieldUINT8() {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        TestFieldUINT8subscription = etsProxy->getTestFieldUINT8Attribute().getChangedEvent().subscribe([&](const uint8_t &TestFieldUINT8) {
+            std::cout << "etsProxyImpl::tester_subscribe_TestFieldUINT8 TestFieldUINT8:" << (uint32_t)TestFieldUINT8 << std::endl;
+        });
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_set_TestFieldUINT8(uint32_t value) {
+    uint8_t TestFieldUINT8 = 0;
+    uint8_t TestFieldUINT8Resp = 0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        TestFieldUINT8 = (uint8_t)value;
+        etsProxy->getTestFieldUINT8Attribute().setValue(TestFieldUINT8, callStatus, TestFieldUINT8Resp);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+        else {
+            std::cout << "etsProxyImpl::" << __func__ << " TestFieldUINT8Resp:" << (uint32_t)TestFieldUINT8Resp << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;    
+}
+
+void etsProxyImpl::tester_get_TestFieldUINT8() {
+    uint8_t TestFieldUINT8 = 0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->getTestFieldUINT8Attribute().getValue(callStatus, TestFieldUINT8);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+        else {
+            std::cout << "etsProxyImpl::" << __func__ << " TestFieldUINT8:" << (uint32_t)TestFieldUINT8 << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_unsubscribe_TestFieldUINT8() {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->getTestFieldUINT8Attribute().getChangedEvent().unsubscribe(TestFieldUINT8subscription);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_subscribe_TestFieldUINT8Array() {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        TestFieldUINT8Arraysubscription = etsProxy->getTestFieldUINT8ArrayAttribute().getChangedEvent().subscribe([&](const std::vector< uint8_t > &TestFieldUINT8Array) {
+            std::cout << "etsProxyImpl::tester_subscribe_TestFieldUINT8Array:" << std::endl;
+            for (auto &it : TestFieldUINT8Array) {
+                std::cout << it << " ";
+            }
+            std::cout << std::endl;
+        });
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_set_TestFieldUINT8Array() {
+    std::vector< uint8_t > TestFieldUINT8Array;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    std::vector< uint8_t > TestFieldUINT8ArrayResp;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    for (uint32_t idx=0; idx<5; idx++) {
+        TestFieldUINT8Array.push_back(0xab);
+    }
+
+    if (etsProxy && isAvailable) {
+        etsProxy->getTestFieldUINT8ArrayAttribute().setValue(TestFieldUINT8Array, callStatus, TestFieldUINT8ArrayResp);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+        else {
+            std::cout << "etsProxyImpl::" << __func__ << " TestFieldUINT8ArrayResp:" << std::endl;
+            for (auto &it : TestFieldUINT8ArrayResp) {
+                std::cout << it << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_get_TestFieldUINT8Array() {
+    std::vector< uint8_t > TestFieldUINT8Array;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->getTestFieldUINT8ArrayAttribute().getValue(callStatus, TestFieldUINT8Array);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+        else {
+            std::cout << "etsProxyImpl::" << __func__ << " TestFieldUINT8Array:" << std::endl;
+            for (auto &it : TestFieldUINT8Array) {
+                std::cout << it << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_unsubscribe_TestFieldUINT8Array() {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->getTestFieldUINT8ArrayAttribute().getChangedEvent().unsubscribe(TestFieldUINT8Arraysubscription);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_subscribe_TestFieldUINT8Reliable() {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        TestFieldUINT8Reliablesubscription = etsProxy->getTestFieldUINT8ReliableAttribute().getChangedEvent().subscribe([&](const uint8_t &TestFieldUINT8Reliable) {
+            std::cout << "etsProxyImpl::tester_subscribe_TestFieldUINT8Reliable TestFieldUINT8Reliable:" << TestFieldUINT8Reliable << std::endl;
+        });
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_set_TestFieldUINT8Reliable(uint32_t value) {
+    uint8_t TestFieldUINT8Reliable = 0;
+    uint8_t TestFieldUINT8ReliableResp = 0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    TestFieldUINT8Reliable = (uint8_t)value;
+    if (etsProxy && isAvailable) {
+        etsProxy->getTestFieldUINT8ReliableAttribute().setValue(TestFieldUINT8Reliable, callStatus, TestFieldUINT8ReliableResp);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+        else {
+            std::cout << "etsProxyImpl::" << __func__ << " TestFieldUINT8ReliableResp:" << (uint32_t)TestFieldUINT8ReliableResp << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_get_TestFieldUINT8Reliable() {
+    uint8_t TestFieldUINT8Reliable = 0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->getTestFieldUINT8ReliableAttribute().getValue(callStatus, TestFieldUINT8Reliable);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+        else {
+            std::cout << "etsProxyImpl::" << __func__ << " TestFieldUINT8Reliable:" << (uint32_t)TestFieldUINT8Reliable << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_unsubscribe_TestFieldUINT8Reliable() {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->getTestFieldUINT8ReliableAttribute().getChangedEvent().unsubscribe(TestFieldUINT8Reliablesubscription);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_subscribe_ETSInterfaceVersion() {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        InterfaceVersionsubscription = etsProxy->getETSInterfaceVersionAttribute().getChangedEvent().subscribe([&](const ETS::VersionType &ETSInterfaceVersion) {
+            std::cout << "etsProxyImpl::tester_subscribe_ETSInterfaceVersion ETSInterfaceVersion["
+                << (uint32_t)ETSInterfaceVersion.getMajorVersion() << "." << ETSInterfaceVersion.getMinorVersion() << "]" << std::endl;
+        });
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_get_ETSInterfaceVersion() {
+    ETS::VersionType ETSInterfaceVersion = {};
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->getETSInterfaceVersionAttribute().getValue(callStatus, ETSInterfaceVersion);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+        else {
+            std::cout << "etsProxyImpl::" << __func__ << "ETSInterfaceVersion["
+                << (uint32_t)ETSInterfaceVersion.getMajorVersion() << "." << ETSInterfaceVersion.getMinorVersion() << "]" << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_unsubscribe_ETSInterfaceVersion() {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->getETSInterfaceVersionAttribute().getChangedEvent().unsubscribe(InterfaceVersionsubscription);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::invoke_echoUINT8RELIABLE() {
+    uint8_t echoUINT8RELIABLE_ReqArg1 = 18;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint8_t echoUINT8RELIABLE_ResArg1=0;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->echoUINT8RELIABLE(echoUINT8RELIABLE_ReqArg1, callStatus, echoUINT8RELIABLE_ResArg1);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+        else {
+            std::cout << "etsProxyImpl::" << __func__ << " echoUINT8RELIABLE_ResArg1:"
+                << std::hex << (uint32_t)echoUINT8RELIABLE_ResArg1 << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_subscribe_TestEventUINT8Reliable() {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        uINT8ValuesubscriptionReliable = etsProxy->getTestEventUINT8ReliableEvent().subscribe([&](const uint8_t& uINT8Value) {
+            std::cout << "etsProxyImpl::tester_subscribe_TestEventUINT8Reliable TestEventUINT8Reliable Notification:" << std::hex << (uint32_t)uINT8Value << std::endl;
+        });
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+}
+
+void etsProxyImpl::tester_unsubscribe_TestEventUINT8Reliable() {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->getTestEventUINT8ReliableEvent().unsubscribe(uINT8ValuesubscriptionReliable);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+}
+
+void etsProxyImpl::invoke_triggerEventUINT8Reliable(uint32_t start, uint32_t duration, uint32_t debounce) {
+    uint32_t triggerEventUINT8Reliable_ReqArg1=0;
+    uint32_t triggerEventUINT8Reliable_ReqArg2=0;
+    uint32_t triggerEventUINT8Reliable_ReqArg3=0;
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    triggerEventUINT8Reliable_ReqArg1 = start;
+    triggerEventUINT8Reliable_ReqArg2 = duration;
+    triggerEventUINT8Reliable_ReqArg3 = debounce;
+    if (etsProxy && isAvailable) {
+        etsProxy->triggerEventUINT8Reliable(triggerEventUINT8Reliable_ReqArg1, triggerEventUINT8Reliable_ReqArg2, triggerEventUINT8Reliable_ReqArg3, callStatus);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::tester_send_reliable_event(int eventval) {
+    uint8_t uINT8Value = 0;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (secondaryServiceActive) {
+        uINT8Value = (uint8_t)eventval;
+        std::cout << "etsProxyImpl::" << __func__ << " value:" << std::hex << (uint32_t)uINT8Value << std::endl;
+        secService->fireSecondaryEventUINT8ReliableEvent(uINT8Value);
+    }
+    else {
+        std::cout << "etsProxyImpl::" << __func__ << " Service not yet offered" << std::endl;
+    }
+}
+
+void etsProxyImpl::invoke_clientServiceGetLastValueOfEventTCP() {
+    CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
+    uint8_t clientServiceGetLastValueOfEventTCP_ResArg1=0;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    if (etsProxy && isAvailable) {
+        etsProxy->clientServiceGetLastValueOfEventTCP(callStatus, clientServiceGetLastValueOfEventTCP_ResArg1);
+        if (callStatus != CommonAPI::CallStatus::SUCCESS) {
+            std::cerr << "etsProxyImpl::" << __func__ << " Failed status:" << callstatusToString(callStatus) << std::endl;
+        }
+        else {
+            std::cout << "etsProxyImpl::" << __func__ << " Last TCP Event Value:" << std::hex << (uint32_t)clientServiceGetLastValueOfEventTCP_ResArg1 << std::endl;
+        }
     }
     else {
         std::cout << "ETS Service Not Available" << std::endl;

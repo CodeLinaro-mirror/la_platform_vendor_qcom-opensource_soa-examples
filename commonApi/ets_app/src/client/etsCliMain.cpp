@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
     int local_udp_port = 0;
     std::string multicast_ipaddr;
     int multicast_port = 0;
+    uint32_t fieldval = 0;
 
     if (argc != 2) {
         std::cout << "help:" << std::endl;
@@ -179,6 +180,30 @@ int main(int argc, char *argv[]) {
         std::cout << "Case 132: invoke_TP_Verify_OffsetCalculationDuringReception" << std::endl;
         std::cout << "Case 133: invoke_TP_Verify_MissingFrameDuringReception" << std::endl;
         std::cout << "Case 134: invoke_TP_Verify_DuplicateFrameDuringReception" << std::endl;
+        std::cout << "Case 135: invoke_resetInterface" << std::endl;
+        std::cout << "Case 136: invoke_suspendInterface" << std::endl;
+        std::cout << "Case 137: invoke_SD_SuspendInterface" << std::endl;
+        std::cout << "Case 138: tester_subscribe_TestFieldUINT8" << std::endl;
+        std::cout << "Case 139: tester_set_TestFieldUINT8" << std::endl;
+        std::cout << "Case 140: tester_get_TestFieldUINT8" << std::endl;
+        std::cout << "Case 141: tester_unsubscribe_TestFieldUINT8" << std::endl;
+        std::cout << "Case 142: tester_subscribe_TestFieldUINT8Array" << std::endl;
+        std::cout << "Case 143: tester_set_TestFieldUINT8Array" << std::endl;
+        std::cout << "Case 144: tester_get_TestFieldUINT8Array" << std::endl;
+        std::cout << "Case 145: tester_unsubscribe_TestFieldUINT8Array" << std::endl;
+        std::cout << "Case 146: tester_subscribe_TestFieldUINT8Reliable" << std::endl;
+        std::cout << "Case 147: tester_set_TestFieldUINT8Reliable" << std::endl;
+        std::cout << "Case 148: tester_get_TestFieldUINT8Reliable" << std::endl;
+        std::cout << "Case 149: tester_unsubscribe_TestFieldUINT8Reliable" << std::endl;
+        std::cout << "Case 150: tester_subscribe_ETSInterfaceVersion" << std::endl;
+        std::cout << "Case 151: tester_get_ETSInterfaceVersion" << std::endl;
+        std::cout << "Case 152: tester_unsubscribe_ETSInterfaceVersion" << std::endl;
+        std::cout << "Case 153: invoke_echoUINT8RELIABLE" << std::endl;
+        std::cout << "Case 154: tester_subscribe_TestEventUINT8Reliable" << std::endl;
+        std::cout << "Case 155: invoke_triggerEventUINT8Reliable" << std::endl;
+        std::cout << "Case 156: tester_unsubscribe_TestEventUINT8Reliable" << std::endl;
+        std::cout << "Case 157: tester_send_reliable_event" << std::endl;
+        std::cout << "Case 158: invoke_clientServiceGetLastValueOfEventTCP" << std::endl;
         std::cout << "Enter case no:";
         std::cin >> indx;
         switch(indx) {
@@ -193,7 +218,7 @@ int main(int argc, char *argv[]) {
                 iteration = 100;
                 startTimeout = 2;
                 stopTimeout = 2;
-                subscriptionDuration = 120;
+                subscriptionDuration = 30;
                 std::cout << "Select remote ip: 1->RBVM 2->QNX 3->FVM 4->IVC else Proivde IP" << std::endl;
                 std::cin >> indx;
                 if (1 == indx) {
@@ -587,6 +612,13 @@ int main(int argc, char *argv[]) {
                 proxyPtr->invoke_clientServiceGetLastValueOfEventUDPMulticast();
                 sleep(2);
                 proxyPtr->invoke_clientServiceDeactivate(stopTimeout);
+                sleep(2);
+                proxyPtr->invoke_SD_ResetInterface();
+                sleep(2);
+                proxyPtr->invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back();
+                sleep(2);
+                proxyPtr->invoke_SD_SuspendInterface();
+                sleep(2);
                 break;
             }
             case 1:
@@ -1557,16 +1589,7 @@ int main(int argc, char *argv[]) {
             }
             case 108:
             {
-                std::cout << "invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back" << std::endl;
-                std::cout << "Enter remote unicast ipaddr:";
-                std::cin >> remote_unicast_ipaddr;
-                std::cout << "Enter multicast port:";
-                std::cin >> multicast_port;
-                std::cout << "Enter local unicast ipaddr:";
-                std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
-                std::cin >> local_udp_port;
-                proxyPtr->invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back();
                 break;
             }
             case 109:
@@ -1656,15 +1679,7 @@ int main(int argc, char *argv[]) {
             case 115:
             {
                 std::cout << "invoke_SD_ResetInterface" << std::endl;
-                std::cout << "Enter remote unicast ipaddr:";
-                std::cin >> remote_unicast_ipaddr;
-                std::cout << "Enter multicast port:";
-                std::cin >> multicast_port;
-                std::cout << "Enter local unicast ipaddr:";
-                std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
-                std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_ResetInterface(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_SD_ResetInterface();
                 break;
             }
             case 116:
@@ -1886,6 +1901,163 @@ int main(int argc, char *argv[]) {
                 std::cout << "Enter local port:";
                 std::cin >> local_udp_port;
                 proxyPtr->invoke_TP_Verify_DuplicateFrameDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                break;
+            }
+            case 135:
+            {
+                proxyPtr->invoke_resetInterface();
+                break;
+            }
+            case 136:
+            {
+                std::cout << "Enter Start Timeout value in seconds:";
+                std::cin >> start;
+                std::cout << "Enter trigger event duration in seconds:";
+                std::cin >> duration;
+                proxyPtr->invoke_suspendInterface(start, duration);
+                break;
+            }
+            case 137:
+            {
+                std::cout << "invoke_SD_SuspendInterface" << std::endl;
+                proxyPtr->invoke_SD_SuspendInterface();
+                break;
+            }
+            case 138:
+            {
+                std::cout << "tester_subscribe_TestFieldUINT8" << std::endl;
+                proxyPtr->tester_subscribe_TestFieldUINT8();
+                break;
+            }
+            case 139:
+            {
+                std::cout << "tester_set_TestFieldUINT8" << std::endl;
+                std::cout << "Enter Field value:";
+                std::cin >> fieldval;
+                proxyPtr->tester_set_TestFieldUINT8(fieldval);
+                break;
+            }
+            case 140:
+            {
+                std::cout << "tester_get_TestFieldUINT8" << std::endl;
+                proxyPtr->tester_get_TestFieldUINT8();
+                break;
+            }
+            case 141:
+            {
+                std::cout << "tester_unsubscribe_TestFieldUINT8" << std::endl;
+                proxyPtr->tester_unsubscribe_TestFieldUINT8();
+                break;
+            }
+            case 142:
+            {
+                std::cout << "tester_subscribe_TestFieldUINT8Array" << std::endl;
+                proxyPtr->tester_subscribe_TestFieldUINT8Array();
+                break;
+            }
+            case 143:
+            {
+                std::cout << "tester_set_TestFieldUINT8Array" << std::endl;
+                proxyPtr->tester_set_TestFieldUINT8Array();
+                break;
+            }
+            case 144:
+            {
+                std::cout << "tester_get_TestFieldUINT8Array" << std::endl;
+                proxyPtr->tester_get_TestFieldUINT8Array();
+                break;
+            }
+            case 145:
+            {
+                std::cout << "tester_unsubscribe_TestFieldUINT8Array" << std::endl;
+                proxyPtr->tester_unsubscribe_TestFieldUINT8Array();
+                break;
+            }
+            case 146:
+            {
+                std::cout << "tester_subscribe_TestFieldUINT8Reliable" << std::endl;
+                proxyPtr->tester_subscribe_TestFieldUINT8Reliable();
+                break;
+            }
+            case 147:
+            {
+                std::cout << "tester_set_TestFieldUINT8Reliable" << std::endl;
+                std::cout << "Enter Field value:";
+                std::cin >> fieldval;
+                proxyPtr->tester_set_TestFieldUINT8Reliable(fieldval);
+                break;
+            }
+            case 148:
+            {
+                std::cout << "tester_get_TestFieldUINT8Reliable" << std::endl;
+                proxyPtr->tester_get_TestFieldUINT8Reliable();
+                break;
+            }
+            case 149:
+            {
+                std::cout << "tester_unsubscribe_TestFieldUINT8Reliable" << std::endl;
+                proxyPtr->tester_unsubscribe_TestFieldUINT8Reliable();
+                break;
+            }
+            case 150:
+            {
+                std::cout << "tester_subscribe_ETSInterfaceVersion" << std::endl;
+                proxyPtr->tester_subscribe_ETSInterfaceVersion();
+                break;
+            }
+            case 151:
+            {
+                std::cout << "tester_get_ETSInterfaceVersion" << std::endl;
+                proxyPtr->tester_get_ETSInterfaceVersion();
+                break;
+            }
+            case 152:
+            {
+                std::cout << "tester_unsubscribe_ETSInterfaceVersion" << std::endl;
+                proxyPtr->tester_unsubscribe_ETSInterfaceVersion();
+                break;
+            }
+            case 153:
+            {
+                std::cout << "invoke_echoUINT8RELIABLE" << std::endl;
+                proxyPtr->invoke_echoUINT8RELIABLE();
+                break;
+            }
+            case 154:
+            {
+                std::cout << "tester_subscribe_TestEventUINT8Reliable" << std::endl;
+                proxyPtr->tester_subscribe_TestEventUINT8Reliable();
+                break;
+            }
+            case 155:
+            {
+                std::cout << "invoke_triggerEventUINT8Reliable" << std::endl;
+                std::cout << "Enter Start Timeout value in seconds:";
+                std::cin >> start;
+                std::cout << "Enter trigger event duration in seconds:";
+                std::cin >> duration;
+                std::cout << "Enter debounce time in seconds:";
+                std::cin >> debounce;
+                proxyPtr->invoke_triggerEventUINT8Reliable(start, duration, debounce);
+                break;
+            }
+            case 156:
+            {
+                std::cout << "tester_unsubscribe_TestEventUINT8Reliable" << std::endl;
+                proxyPtr->tester_unsubscribe_TestEventUINT8Reliable();
+                break;
+            }
+            case 157:
+            {
+                std::cout << "Enter Reliable Event value:";
+                std::cin >> eventval;
+                proxyPtr->tester_send_reliable_event(eventval);
+                break;
+            }
+            case 158:
+            {
+                std::cout << "invoke_clientServiceGetLastValueOfEventTCP" << std::endl;
+                proxyPtr->invoke_clientServiceGetLastValueOfEventTCP();
                 break;
             }
             default:

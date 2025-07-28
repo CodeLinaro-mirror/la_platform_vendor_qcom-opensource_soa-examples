@@ -48,13 +48,18 @@ ETSSomeIPProxy::ETSSomeIPProxy(
     const CommonAPI::SomeIP::Address &_address,
     const std::shared_ptr<CommonAPI::SomeIP::ProxyConnection> &_connection)
         : CommonAPI::SomeIP::Proxy(_address, _connection),
+          eTSInterfaceVersion_(*this, CommonAPI::SomeIP::eventgroup_id_t(0x2), CommonAPI::SomeIP::event_id_t(0x8005), CommonAPI::SomeIP::method_id_t(0x25), false, CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, static_cast< ::v1::someip::testability::ETS_::VersionTypeDeployment_t* >(nullptr)),
+          testFieldUINT8_(*this, CommonAPI::SomeIP::eventgroup_id_t(0x2), CommonAPI::SomeIP::event_id_t(0x8006), CommonAPI::SomeIP::method_id_t(0x26), false, CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, CommonAPI::SomeIP::method_id_t(0x27), false, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr)),
+          testFieldUINT8Array_(*this, CommonAPI::SomeIP::eventgroup_id_t(0x2), CommonAPI::SomeIP::event_id_t(0x8007), CommonAPI::SomeIP::method_id_t(0x28), false, CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, CommonAPI::SomeIP::method_id_t(0x29), false, &::v1::someip::testability::ETS_::TestFieldUINT8ArrayDeployment),
+          testFieldUINT8Reliable_(*this, CommonAPI::SomeIP::eventgroup_id_t(0x2), CommonAPI::SomeIP::event_id_t(0x8008), CommonAPI::SomeIP::method_id_t(0x2a), true, CommonAPI::SomeIP::reliability_type_e::RT_RELIABLE, false, CommonAPI::SomeIP::method_id_t(0x2b), true, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr)),
           testEventUINT8_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x8001), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr))),
           testEventUINT8Array_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x8002), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v1::someip::testability::ETS_::TestEventUINT8Array_uINT8ArrayDeployment)),
           testEventUINT8E2E_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x8004), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint16_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr))),
           testEventUINT8Multicast_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x800b), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr))),
           testEventUINT8ArrayTP_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x800c), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v1::someip::testability::ETS_::TestEventUINT8ArrayTP_outUINT8EventArrayDeployment)),
           testEventUINT32Periodic_(*this, 0x7, CommonAPI::SomeIP::event_id_t(0x800d), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr))),
-          testEventUINT32UpdateOnChange_(*this, 0x7, CommonAPI::SomeIP::event_id_t(0x800e), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr)))
+          testEventUINT32UpdateOnChange_(*this, 0x7, CommonAPI::SomeIP::event_id_t(0x800e), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr))),
+          testEventUINT8Reliable_(*this, 0x2, CommonAPI::SomeIP::event_id_t(0x8003), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_RELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr)))
 {
 }
 
@@ -62,6 +67,18 @@ ETSSomeIPProxy::~ETSSomeIPProxy() {
     completed_.set_value();
 }
 
+ETSSomeIPProxy::ETSInterfaceVersionAttribute& ETSSomeIPProxy::getETSInterfaceVersionAttribute() {
+    return eTSInterfaceVersion_;
+}
+ETSSomeIPProxy::TestFieldUINT8Attribute& ETSSomeIPProxy::getTestFieldUINT8Attribute() {
+    return testFieldUINT8_;
+}
+ETSSomeIPProxy::TestFieldUINT8ArrayAttribute& ETSSomeIPProxy::getTestFieldUINT8ArrayAttribute() {
+    return testFieldUINT8Array_;
+}
+ETSSomeIPProxy::TestFieldUINT8ReliableAttribute& ETSSomeIPProxy::getTestFieldUINT8ReliableAttribute() {
+    return testFieldUINT8Reliable_;
+}
 
 ETSSomeIPProxy::TestEventUINT8Event& ETSSomeIPProxy::getTestEventUINT8Event() {
     return testEventUINT8_;
@@ -83,6 +100,9 @@ ETSSomeIPProxy::TestEventUINT32PeriodicEvent& ETSSomeIPProxy::getTestEventUINT32
 }
 ETSSomeIPProxy::TestEventUINT32UpdateOnChangeEvent& ETSSomeIPProxy::getTestEventUINT32UpdateOnChangeEvent() {
     return testEventUINT32UpdateOnChange_;
+}
+ETSSomeIPProxy::TestEventUINT8ReliableEvent& ETSSomeIPProxy::getTestEventUINT8ReliableEvent() {
+    return testEventUINT8Reliable_;
 }
 
 /*
@@ -2373,6 +2393,152 @@ void ETSSomeIPProxy::deactivateTestSerivce(uint32_t _activateTestSerivce_ReqArg1
         false,
         false,
         deploy_activateTestSerivce_ReqArg1, deploy_activateTestSerivce_ReqArg2,
+        _internalCallStatus);
+}
+
+/*
+ * description: 
+ * The method returns the transfered UINT8 value back to the invoker over reliable endpoint.
+ */
+void ETSSomeIPProxy::echoUINT8RELIABLE(uint8_t _echoUINT8RELIABLE_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, uint8_t &_echoUINT8RELIABLE_ResArg1, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_echoUINT8RELIABLE_ReqArg1(_echoUINT8RELIABLE_ReqArg1, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
+    CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_echoUINT8RELIABLE_ResArg1(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
+    CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                uint8_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint8_t>
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                uint8_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint8_t>
+            >
+        >
+    >::callMethodWithReply(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0xa),
+        true,
+        false,
+        (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
+        deploy_echoUINT8RELIABLE_ReqArg1,
+        _internalCallStatus,
+        deploy_echoUINT8RELIABLE_ResArg1);
+    _echoUINT8RELIABLE_ResArg1 = deploy_echoUINT8RELIABLE_ResArg1.getValue();
+}
+
+std::future<CommonAPI::CallStatus> ETSSomeIPProxy::echoUINT8RELIABLEAsync(const uint8_t &_echoUINT8RELIABLE_ReqArg1, EchoUINT8RELIABLEAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_echoUINT8RELIABLE_ReqArg1(_echoUINT8RELIABLE_ReqArg1, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
+    CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_echoUINT8RELIABLE_ResArg1(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
+    return CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                uint8_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint8_t>
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                uint8_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint8_t>
+            >
+        >
+    >::callMethodAsync(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0xa),
+        true,
+        false,
+        (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
+        deploy_echoUINT8RELIABLE_ReqArg1,
+        [_callback] (CommonAPI::CallStatus _internalCallStatus, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> > _echoUINT8RELIABLE_ResArg1) {
+            if (_callback)
+                _callback(_internalCallStatus, _echoUINT8RELIABLE_ResArg1.getValue());
+        },
+        std::make_tuple(deploy_echoUINT8RELIABLE_ResArg1));
+}
+
+/*
+ * description: 
+ * Get last value of TestEventUINT8Reliable.
+ */
+void ETSSomeIPProxy::clientServiceGetLastValueOfEventTCP(CommonAPI::CallStatus &_internalCallStatus, uint8_t &_clientServiceGetLastValueOfEventTCP_ResArg1, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_clientServiceGetLastValueOfEventTCP_ResArg1(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
+    CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                uint8_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint8_t>
+            >
+        >
+    >::callMethodWithReply(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x3b),
+        false,
+        false,
+        (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
+        _internalCallStatus,
+        deploy_clientServiceGetLastValueOfEventTCP_ResArg1);
+    _clientServiceGetLastValueOfEventTCP_ResArg1 = deploy_clientServiceGetLastValueOfEventTCP_ResArg1.getValue();
+}
+
+std::future<CommonAPI::CallStatus> ETSSomeIPProxy::clientServiceGetLastValueOfEventTCPAsync(ClientServiceGetLastValueOfEventTCPAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_clientServiceGetLastValueOfEventTCP_ResArg1(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
+    return CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                uint8_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint8_t>
+            >
+        >
+    >::callMethodAsync(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x3b),
+        false,
+        false,
+        (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
+        [_callback] (CommonAPI::CallStatus _internalCallStatus, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> > _clientServiceGetLastValueOfEventTCP_ResArg1) {
+            if (_callback)
+                _callback(_internalCallStatus, _clientServiceGetLastValueOfEventTCP_ResArg1.getValue());
+        },
+        std::make_tuple(deploy_clientServiceGetLastValueOfEventTCP_ResArg1));
+}
+
+/*
+ * description: 
+ * Requests to trigger an broadcast event of type uint8 over reliable endpoint.
+ */
+void ETSSomeIPProxy::triggerEventUINT8Reliable(uint32_t _triggerEventUINT8Reliable_ReqArg1, uint32_t _triggerEventUINT8Reliable_ReqArg2, uint32_t _triggerEventUINT8Reliable_ReqArg3, CommonAPI::CallStatus &_internalCallStatus) {
+    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_triggerEventUINT8Reliable_ReqArg1(_triggerEventUINT8Reliable_ReqArg1, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_triggerEventUINT8Reliable_ReqArg2(_triggerEventUINT8Reliable_ReqArg2, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+    CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t>> deploy_triggerEventUINT8Reliable_ReqArg3(_triggerEventUINT8Reliable_ReqArg3, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr));
+    CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                uint32_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+            >,
+            CommonAPI::Deployable<
+                uint32_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+            >,
+            CommonAPI::Deployable<
+                uint32_t,
+                CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+        >
+    >::callMethod(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x5),
+        true,
+        false,
+        deploy_triggerEventUINT8Reliable_ReqArg1, deploy_triggerEventUINT8Reliable_ReqArg2, deploy_triggerEventUINT8Reliable_ReqArg3,
         _internalCallStatus);
 }
 

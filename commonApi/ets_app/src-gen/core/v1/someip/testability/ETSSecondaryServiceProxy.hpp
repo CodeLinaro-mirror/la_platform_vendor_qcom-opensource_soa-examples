@@ -93,6 +93,16 @@ public:
     virtual SecondaryMulticastEventUINT8Event& getSecondaryMulticastEventUINT8Event() {
         return delegate_->getSecondaryMulticastEventUINT8Event();
     }
+    /*
+     * description: 
+     * A Reliable type broadcast event to support clientServiceSubscribeEventgroup request.
+     */
+    /**
+     * Returns the wrapper class that provides access to the broadcast SecondaryEventUINT8Reliable.
+     */
+    virtual SecondaryEventUINT8ReliableEvent& getSecondaryEventUINT8ReliableEvent() {
+        return delegate_->getSecondaryEventUINT8ReliableEvent();
+    }
 
 
 

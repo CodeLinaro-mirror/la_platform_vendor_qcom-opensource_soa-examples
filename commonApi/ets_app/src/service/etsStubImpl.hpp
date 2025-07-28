@@ -22,11 +22,14 @@ using namespace ::v1::someip::testability;
 
 class etsStubImpl: public ETSStubDefault {
     private:
+        static std::mutex etsServiceMtx;
+        static std::shared_ptr<etsStubImpl> etsServicePtr;
         std::vector<std::thread> appThreadPool;
         bool secondaryClientActive;
         std::shared_ptr<ETSSecondaryServiceProxy<>> secProxy;
         uint32_t clientServiceUnicastEventSubscrptionStatus;
         uint32_t clientServiceMulticastEventSubscrptionStatus;
+        uint32_t clientServiceReliableEventSubscrptionStatus;
         bool isAvailableSecondary;
         uint8_t lastUnicastuINT8Value;
         uint8_t lastMulticastuINT8Value;
@@ -36,9 +39,12 @@ class etsStubImpl: public ETSStubDefault {
         bool TestService1Context1Registered;
         bool TestService1Context2Registered;
         bool TestService2Context1Registered;
+        uint8_t lastuINT8ValueReliable;
     public:
         etsStubImpl();
         ~etsStubImpl();
+        etsStubImpl(const etsStubImpl &obj) = delete;
+        static std::shared_ptr<etsStubImpl> getEtsServiceInstance();
         void checkByteOrder(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _checkByteOrder_ReqArg1, uint16_t _checkByteOrder_ReqArg2, checkByteOrderReply_t _reply) override;    
         void clientServiceActivate(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _clientServiceActivate_ReqArg1) override;    
         void clientServiceDeactivate(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _clientServiceDeactivate_ReqArg1) override;    
@@ -78,6 +84,9 @@ class etsStubImpl: public ETSStubDefault {
         void triggerEventUINT32UpdateOnChange(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT32_ReqArg1) override;
         void activateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2);
         void deactivateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2);
+        void echoUINT8RELIABLE(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _echoUINT8RELIABLE_ReqArg1, echoUINT8RELIABLEReply_t _reply);
+        void triggerEventUINT8Reliable(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT8Reliable_ReqArg1, uint32_t _triggerEventUINT8Reliable_ReqArg2, uint32_t _triggerEventUINT8Reliable_ReqArg3);
+        void clientServiceGetLastValueOfEventTCP(const std::shared_ptr<CommonAPI::ClientId> _client, clientServiceGetLastValueOfEventTCPReply_t _reply);
 };
 
 class etsStubImplService1: public ETSTestService1StubDefault {

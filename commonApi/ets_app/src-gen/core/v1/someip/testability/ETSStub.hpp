@@ -23,12 +23,15 @@
 #define HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE
 #endif
 
+#include <CommonAPI/Deployment.hpp>
 #include <CommonAPI/InputStream.hpp>
 #include <CommonAPI/OutputStream.hpp>
+#include <CommonAPI/Struct.hpp>
 #include <cstdint>
 #include <unordered_set>
 #include <vector>
 
+#include <mutex>
 
 #include <CommonAPI/Stub.hpp>
 
@@ -86,16 +89,61 @@ class ETSStubAdapter
     * Instead, the "fire<broadcastName>Event" methods of the stub should be used.
     */
     virtual void fireTestEventUINT32UpdateOnChangeEvent(const uint32_t &_uINT32Value) = 0;
+    ///Notifies all remote listeners about a change of value of the attribute ETSInterfaceVersion.
+    virtual void fireETSInterfaceVersionAttributeChanged(const ::v1::someip::testability::ETS::VersionType &ETSInterfaceVersion) = 0;
+    ///Notifies all remote listeners about a change of value of the attribute TestFieldUINT8.
+    virtual void fireTestFieldUINT8AttributeChanged(const uint8_t &TestFieldUINT8) = 0;
+    ///Notifies all remote listeners about a change of value of the attribute TestFieldUINT8Array.
+    virtual void fireTestFieldUINT8ArrayAttributeChanged(const std::vector< uint8_t > &TestFieldUINT8Array) = 0;
+    ///Notifies all remote listeners about a change of value of the attribute TestFieldUINT8Reliable.
+    virtual void fireTestFieldUINT8ReliableAttributeChanged(const uint8_t &TestFieldUINT8Reliable) = 0;
+    /**
+    * Sends a broadcast event for TestEventUINT8Reliable. Should not be called directly.
+    * Instead, the "fire<broadcastName>Event" methods of the stub should be used.
+    */
+    virtual void fireTestEventUINT8ReliableEvent(const uint8_t &_uINT8Value) = 0;
 
 
     virtual void deactivateManagedInstances() = 0;
 
+    void lockETSInterfaceVersionAttribute(bool _lockAccess) {
+        if (_lockAccess) {
+            eTSInterfaceVersionMutex_.lock();
+        } else {
+            eTSInterfaceVersionMutex_.unlock();
+        }
+    }
+    void lockTestFieldUINT8Attribute(bool _lockAccess) {
+        if (_lockAccess) {
+            testFieldUINT8Mutex_.lock();
+        } else {
+            testFieldUINT8Mutex_.unlock();
+        }
+    }
+    void lockTestFieldUINT8ArrayAttribute(bool _lockAccess) {
+        if (_lockAccess) {
+            testFieldUINT8ArrayMutex_.lock();
+        } else {
+            testFieldUINT8ArrayMutex_.unlock();
+        }
+    }
+    void lockTestFieldUINT8ReliableAttribute(bool _lockAccess) {
+        if (_lockAccess) {
+            testFieldUINT8ReliableMutex_.lock();
+        } else {
+            testFieldUINT8ReliableMutex_.unlock();
+        }
+    }
 
 protected:
     /**
      * Defines properties for storing the ClientIds of clients / proxies that have
      * subscribed to the selective broadcasts
      */
+    std::recursive_mutex eTSInterfaceVersionMutex_;
+    std::recursive_mutex testFieldUINT8Mutex_;
+    std::recursive_mutex testFieldUINT8ArrayMutex_;
+    std::recursive_mutex testFieldUINT8ReliableMutex_;
 
 };
 
@@ -116,6 +164,18 @@ class ETSStubRemoteEvent
 public:
     virtual ~ETSStubRemoteEvent() { }
 
+    /// Verification callback for remote set requests on the attribute TestFieldUINT8
+    virtual bool onRemoteSetTestFieldUINT8Attribute(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _value) = 0;
+    /// Action callback for remote set requests on the attribute TestFieldUINT8
+    virtual void onRemoteTestFieldUINT8AttributeChanged() = 0;
+    /// Verification callback for remote set requests on the attribute TestFieldUINT8Array
+    virtual bool onRemoteSetTestFieldUINT8ArrayAttribute(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _value) = 0;
+    /// Action callback for remote set requests on the attribute TestFieldUINT8Array
+    virtual void onRemoteTestFieldUINT8ArrayAttributeChanged() = 0;
+    /// Verification callback for remote set requests on the attribute TestFieldUINT8Reliable
+    virtual bool onRemoteSetTestFieldUINT8ReliableAttribute(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _value) = 0;
+    /// Action callback for remote set requests on the attribute TestFieldUINT8Reliable
+    virtual void onRemoteTestFieldUINT8ReliableAttributeChanged() = 0;
 };
 
 /**
@@ -151,11 +211,13 @@ public:
     typedef std::function<void (std::vector< uint8_t > _outUINT8Array_ResArg1)> echoUINT8ArrayLengthTPReply_t;
     typedef std::function<void (uint32_t _outUINT32_ResArg1)> echoUINT8ArrayLengthInTPReply_t;
     typedef std::function<void (std::vector< uint8_t > _outUINT8Array_ResArg1)> echoUINT8ArrayLengthOutTPReply_t;
+    typedef std::function<void (uint8_t _echoUINT8RELIABLE_ResArg1)> echoUINT8RELIABLEReply_t;
+    typedef std::function<void (uint8_t _clientServiceGetLastValueOfEventTCP_ResArg1)> clientServiceGetLastValueOfEventTCPReply_t;
 
     virtual ~ETSStub() {}
     void lockInterfaceVersionAttribute(bool _lockAccess) { static_cast<void>(_lockAccess); }
     bool hasElement(const uint32_t _id) const {
-        return (_id < 46);
+        return (_id < 54);
     }
     virtual const CommonAPI::Version& getInterfaceVersion(std::shared_ptr<CommonAPI::ClientId> _client) = 0;
 
@@ -463,6 +525,102 @@ public:
      */
     /// This is the method that will be called on remote calls on the method deactivateTestSerivce.
     virtual void deactivateTestSerivce(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2) = 0;
+    /*
+     * description: 
+     * A field for notifying version information.
+     */
+    /// Provides getter access to the attribute ETSInterfaceVersion
+    virtual const ::v1::someip::testability::ETS::VersionType &getETSInterfaceVersionAttribute(const std::shared_ptr<CommonAPI::ClientId> _client) = 0;
+    /// sets attribute with the given value and propagates it to the adapter
+    virtual void fireETSInterfaceVersionAttributeChanged(::v1::someip::testability::ETS::VersionType _value) {
+    auto stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+    if (stubAdapter)
+        stubAdapter->fireETSInterfaceVersionAttributeChanged(_value);
+    }
+    void lockETSInterfaceVersionAttribute(bool _lockAccess) {
+        auto stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+        if (stubAdapter)
+            stubAdapter->lockETSInterfaceVersionAttribute(_lockAccess);
+    }
+    /*
+     * description: 
+     * A field of UINT8 type.
+     */
+    /// Provides getter access to the attribute TestFieldUINT8
+    virtual const uint8_t &getTestFieldUINT8Attribute(const std::shared_ptr<CommonAPI::ClientId> _client) = 0;
+    /// sets attribute with the given value and propagates it to the adapter
+    virtual void fireTestFieldUINT8AttributeChanged(uint8_t _value) {
+    auto stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+    if (stubAdapter)
+        stubAdapter->fireTestFieldUINT8AttributeChanged(_value);
+    }
+    void lockTestFieldUINT8Attribute(bool _lockAccess) {
+        auto stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+        if (stubAdapter)
+            stubAdapter->lockTestFieldUINT8Attribute(_lockAccess);
+    }
+    /*
+     * description: 
+     * A field of UINT8 array.
+     */
+    /// Provides getter access to the attribute TestFieldUINT8Array
+    virtual const std::vector< uint8_t > &getTestFieldUINT8ArrayAttribute(const std::shared_ptr<CommonAPI::ClientId> _client) = 0;
+    /// sets attribute with the given value and propagates it to the adapter
+    virtual void fireTestFieldUINT8ArrayAttributeChanged(std::vector< uint8_t > _value) {
+    auto stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+    if (stubAdapter)
+        stubAdapter->fireTestFieldUINT8ArrayAttributeChanged(_value);
+    }
+    void lockTestFieldUINT8ArrayAttribute(bool _lockAccess) {
+        auto stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+        if (stubAdapter)
+            stubAdapter->lockTestFieldUINT8ArrayAttribute(_lockAccess);
+    }
+    /*
+     * description: 
+     * A field of UINT8 type over reliable endpoint.
+     */
+    /// Provides getter access to the attribute TestFieldUINT8Reliable
+    virtual const uint8_t &getTestFieldUINT8ReliableAttribute(const std::shared_ptr<CommonAPI::ClientId> _client) = 0;
+    /// sets attribute with the given value and propagates it to the adapter
+    virtual void fireTestFieldUINT8ReliableAttributeChanged(uint8_t _value) {
+    auto stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+    if (stubAdapter)
+        stubAdapter->fireTestFieldUINT8ReliableAttributeChanged(_value);
+    }
+    void lockTestFieldUINT8ReliableAttribute(bool _lockAccess) {
+        auto stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+        if (stubAdapter)
+            stubAdapter->lockTestFieldUINT8ReliableAttribute(_lockAccess);
+    }
+    /*
+     * description: 
+     * The method returns the transfered UINT8 value back to the invoker over reliable endpoint.
+     */
+    /// This is the method that will be called on remote calls on the method echoUINT8RELIABLE.
+    virtual void echoUINT8RELIABLE(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _echoUINT8RELIABLE_ReqArg1, echoUINT8RELIABLEReply_t _reply) = 0;
+    /*
+     * description: 
+     * A broadcast event of type uint8 triggered on triggerEventUINT8Reliable method request over tcp endpoint.
+     */
+    /// Sends a broadcast event for TestEventUINT8Reliable.
+    virtual void fireTestEventUINT8ReliableEvent(const uint8_t &_uINT8Value) {
+        auto stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+        if (stubAdapter)
+            stubAdapter->fireTestEventUINT8ReliableEvent(_uINT8Value);
+    }
+    /*
+     * description: 
+     * Get last value of TestEventUINT8Reliable.
+     */
+    /// This is the method that will be called on remote calls on the method clientServiceGetLastValueOfEventTCP.
+    virtual void clientServiceGetLastValueOfEventTCP(const std::shared_ptr<CommonAPI::ClientId> _client, clientServiceGetLastValueOfEventTCPReply_t _reply) = 0;
+    /*
+     * description: 
+     * Requests to trigger an broadcast event of type uint8 over reliable endpoint.
+     */
+    /// This is the method that will be called on remote calls on the method triggerEventUINT8Reliable.
+    virtual void triggerEventUINT8Reliable(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT8Reliable_ReqArg1, uint32_t _triggerEventUINT8Reliable_ReqArg2, uint32_t _triggerEventUINT8Reliable_ReqArg3) = 0;
 
 
     using CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::initStubAdapter;

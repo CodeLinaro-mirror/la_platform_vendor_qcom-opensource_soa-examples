@@ -21,6 +21,7 @@
 #include <CommonAPI/SomeIP/Factory.hpp>
 #include <CommonAPI/SomeIP/Proxy.hpp>
 #include <CommonAPI/SomeIP/Types.hpp>
+#include <CommonAPI/SomeIP/Attribute.hpp>
 #include <CommonAPI/SomeIP/Event.hpp>
 
 #if defined (HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE)
@@ -56,6 +57,14 @@ public:
 
     virtual ~ETSSomeIPProxy();
 
+    virtual ETSInterfaceVersionAttribute& getETSInterfaceVersionAttribute();
+
+    virtual TestFieldUINT8Attribute& getTestFieldUINT8Attribute();
+
+    virtual TestFieldUINT8ArrayAttribute& getTestFieldUINT8ArrayAttribute();
+
+    virtual TestFieldUINT8ReliableAttribute& getTestFieldUINT8ReliableAttribute();
+
     virtual TestEventUINT8Event& getTestEventUINT8Event();
 
     virtual TestEventUINT8ArrayEvent& getTestEventUINT8ArrayEvent();
@@ -69,6 +78,8 @@ public:
     virtual TestEventUINT32PeriodicEvent& getTestEventUINT32PeriodicEvent();
 
     virtual TestEventUINT32UpdateOnChangeEvent& getTestEventUINT32UpdateOnChangeEvent();
+
+    virtual TestEventUINT8ReliableEvent& getTestEventUINT8ReliableEvent();
 
     /*
      * description: 
@@ -350,11 +361,37 @@ public:
      */
     virtual void deactivateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus);
 
+    /*
+     * description: 
+     * The method returns the transfered UINT8 value back to the invoker over reliable endpoint.
+     */
+    virtual void echoUINT8RELIABLE(uint8_t _echoUINT8RELIABLE_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, uint8_t &_echoUINT8RELIABLE_ResArg1, const CommonAPI::CallInfo *_info);
+
+    virtual std::future<CommonAPI::CallStatus> echoUINT8RELIABLEAsync(const uint8_t &_echoUINT8RELIABLE_ReqArg1, EchoUINT8RELIABLEAsyncCallback _callback, const CommonAPI::CallInfo *_info);
+
+    /*
+     * description: 
+     * Get last value of TestEventUINT8Reliable.
+     */
+    virtual void clientServiceGetLastValueOfEventTCP(CommonAPI::CallStatus &_internalCallStatus, uint8_t &_clientServiceGetLastValueOfEventTCP_ResArg1, const CommonAPI::CallInfo *_info);
+
+    virtual std::future<CommonAPI::CallStatus> clientServiceGetLastValueOfEventTCPAsync(ClientServiceGetLastValueOfEventTCPAsyncCallback _callback, const CommonAPI::CallInfo *_info);
+
+    /*
+     * description: 
+     * Requests to trigger an broadcast event of type uint8 over reliable endpoint.
+     */
+    virtual void triggerEventUINT8Reliable(uint32_t _triggerEventUINT8Reliable_ReqArg1, uint32_t _triggerEventUINT8Reliable_ReqArg2, uint32_t _triggerEventUINT8Reliable_ReqArg3, CommonAPI::CallStatus &_internalCallStatus);
+
     virtual void getOwnVersion(uint16_t &_major, uint16_t &_minor) const;
 
     virtual std::future<void> getCompletionFuture();
 
 private:
+    CommonAPI::SomeIP::ObservableAttribute<CommonAPI::SomeIP::ReadonlyAttribute<ETSInterfaceVersionAttribute, ::v1::someip::testability::ETS_::VersionTypeDeployment_t>> eTSInterfaceVersion_;
+    CommonAPI::SomeIP::ObservableAttribute<CommonAPI::SomeIP::Attribute<TestFieldUINT8Attribute, CommonAPI::SomeIP::IntegerDeployment<uint8_t>>> testFieldUINT8_;
+    CommonAPI::SomeIP::ObservableAttribute<CommonAPI::SomeIP::Attribute<TestFieldUINT8ArrayAttribute, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> >>> testFieldUINT8Array_;
+    CommonAPI::SomeIP::ObservableAttribute<CommonAPI::SomeIP::Attribute<TestFieldUINT8ReliableAttribute, CommonAPI::SomeIP::IntegerDeployment<uint8_t>>> testFieldUINT8Reliable_;
     CommonAPI::SomeIP::Event<TestEventUINT8Event, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> testEventUINT8_;
     CommonAPI::SomeIP::Event<TestEventUINT8ArrayEvent, CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > >> testEventUINT8Array_;
     CommonAPI::SomeIP::Event<TestEventUINT8E2EEvent, CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t> >, CommonAPI::Deployable< uint16_t, CommonAPI::SomeIP::IntegerDeployment<uint16_t> >, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> >, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> >, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> testEventUINT8E2E_;
@@ -362,6 +399,7 @@ private:
     CommonAPI::SomeIP::Event<TestEventUINT8ArrayTPEvent, CommonAPI::Deployable< std::vector< uint8_t >, CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > >> testEventUINT8ArrayTP_;
     CommonAPI::SomeIP::Event<TestEventUINT32PeriodicEvent, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> >> testEventUINT32Periodic_;
     CommonAPI::SomeIP::Event<TestEventUINT32UpdateOnChangeEvent, CommonAPI::Deployable< uint32_t, CommonAPI::SomeIP::IntegerDeployment<uint32_t> >> testEventUINT32UpdateOnChange_;
+    CommonAPI::SomeIP::Event<TestEventUINT8ReliableEvent, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> testEventUINT8Reliable_;
 
     std::promise<void> completed_;
 };

@@ -79,6 +79,13 @@ public:
     COMMONAPI_EXPORT virtual void fireSecondaryMulticastEventUINT8Event(const uint8_t &_uINT8Value) {
         ETSSecondaryServiceStub::fireSecondaryMulticastEventUINT8Event(_uINT8Value);
     }
+    /*
+     * description: 
+     * A Reliable type broadcast event to support clientServiceSubscribeEventgroup request.
+     */
+    COMMONAPI_EXPORT virtual void fireSecondaryEventUINT8ReliableEvent(const uint8_t &_uINT8ValueReliable) {
+        ETSSecondaryServiceStub::fireSecondaryEventUINT8ReliableEvent(_uINT8ValueReliable);
+    }
 
 
 protected:

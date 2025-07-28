@@ -52,6 +52,11 @@ class etsProxyImpl {
         uint32_t TestEventUINT8TPsubscription;
         uint32_t TestEventUINT32Periodicsubscription;
         uint32_t TestEventUINT32UpdateOnChangesubscription;
+        uint32_t InterfaceVersionsubscription;
+        uint32_t TestFieldUINT8subscription;
+        uint32_t TestFieldUINT8Arraysubscription;
+        uint32_t TestFieldUINT8Reliablesubscription;
+        uint32_t uINT8ValuesubscriptionReliable;
     public:
         etsProxyImpl();
         ~etsProxyImpl();
@@ -105,7 +110,7 @@ class etsProxyImpl {
         void invoke_echoUTF8DYNAMIC();
         void invoke_echoUTF8FIXED();
         void invoke_resetInterface();
-        void invoke_suspendInterface();
+        void invoke_suspendInterface(uint32_t start, uint32_t duration);
         void invoke_triggerEventUINT8(uint32_t start, uint32_t duration, uint32_t debounce);
         void invoke_triggerEventUINT8Array(uint32_t start, uint32_t duration, uint32_t debounce);
         void invoke_triggerEventUINT8Multicast(uint32_t start, uint32_t duration, uint32_t debounce);
@@ -177,14 +182,14 @@ class etsProxyImpl {
         void invoke_SD_Unused_data_after_Options_Array(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Unused_data_after_Options_Array_wrong_length(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_Subscribe_using_wrong_SOMEIP_MessageID(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
-        void invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_Eventgroup_EventsAndFieldsUnreliable_5(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Calling_same_ports_before_and_after_suspendInterface(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Check_Reboot_Detection_separate_multicast_and_unicast(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Check_Reboot_Detection_Server_Side(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Check_subscribe_eventgroup_ttl_expired(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Deregister_from_Eventgroup(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
-        void invoke_SD_ResetInterface(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_ResetInterface();
+        void invoke_SD_SuspendInterface();
         void invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
@@ -197,6 +202,28 @@ class etsProxyImpl {
         void invoke_TP_Verify_OffsetCalculationDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_TP_Verify_MissingFrameDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_TP_Verify_DuplicateFrameDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
+        void invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back();
+        void tester_subscribe_TestFieldUINT8();
+        void tester_set_TestFieldUINT8(uint32_t value);
+        void tester_get_TestFieldUINT8();
+        void tester_unsubscribe_TestFieldUINT8();
+        void tester_subscribe_TestFieldUINT8Array();
+        void tester_set_TestFieldUINT8Array();
+        void tester_get_TestFieldUINT8Array();
+        void tester_unsubscribe_TestFieldUINT8Array();
+        void tester_subscribe_TestFieldUINT8Reliable();
+        void tester_set_TestFieldUINT8Reliable(uint32_t value);
+        void tester_get_TestFieldUINT8Reliable();
+        void tester_unsubscribe_TestFieldUINT8Reliable();
+        void tester_subscribe_ETSInterfaceVersion();
+        void tester_get_ETSInterfaceVersion();
+        void tester_unsubscribe_ETSInterfaceVersion();
+        void invoke_echoUINT8RELIABLE();
+        void tester_subscribe_TestEventUINT8Reliable();
+        void tester_unsubscribe_TestEventUINT8Reliable();
+        void invoke_triggerEventUINT8Reliable(uint32_t start, uint32_t duration, uint32_t debounce);
+        void tester_send_reliable_event(int eventval);
+        void invoke_clientServiceGetLastValueOfEventTCP();
 };
 
 #endif
