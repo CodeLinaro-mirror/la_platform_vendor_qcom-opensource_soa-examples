@@ -18,8 +18,10 @@
 #define HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE
 #endif
 
+#include <CommonAPI/Deployment.hpp>
 #include <CommonAPI/InputStream.hpp>
 #include <CommonAPI/OutputStream.hpp>
+#include <CommonAPI/Struct.hpp>
 #include <CommonAPI/Types.hpp>
 #include <cstdint>
 #include <vector>
@@ -93,6 +95,30 @@ public:
             default: return "UNDEFINED";
             }
         }
+    };
+    struct VersionType : CommonAPI::Struct< uint8_t, uint32_t> {
+    
+        VersionType()
+        {
+            std::get< 0>(values_) = 0u;
+            std::get< 1>(values_) = 0ul;
+        }
+        VersionType(const uint8_t &_majorVersion, const uint32_t &_minorVersion)
+        {
+            std::get< 0>(values_) = _majorVersion;
+            std::get< 1>(values_) = _minorVersion;
+        }
+        inline const uint8_t &getMajorVersion() const { return std::get< 0>(values_); }
+        inline void setMajorVersion(const uint8_t &_value) { std::get< 0>(values_) = _value; }
+        inline const uint32_t &getMinorVersion() const { return std::get< 1>(values_); }
+        inline void setMinorVersion(const uint32_t &_value) { std::get< 1>(values_) = _value; }
+        inline bool operator==(const VersionType& _other) const {
+        return (getMajorVersion() == _other.getMajorVersion() && getMinorVersion() == _other.getMinorVersion());
+        }
+        inline bool operator!=(const VersionType &_other) const {
+            return !((*this) == _other);
+        }
+    
     };
     typedef std::vector< uint8_t> uint8ArrayArray;
     typedef std::vector< uint8_t> uint8ArrayReturnArray;

@@ -5,10 +5,14 @@
 
 #include "etsStubImpl.hpp"
 
+std::mutex etsStubImpl::etsServiceMtx;
+std::shared_ptr<etsStubImpl> etsStubImpl::etsServicePtr = nullptr;
+
 etsStubImpl::etsStubImpl() {
     secondaryClientActive = false;
     clientServiceUnicastEventSubscrptionStatus = 0;
     clientServiceMulticastEventSubscrptionStatus = 0;
+    clientServiceReliableEventSubscrptionStatus = 0;
     isAvailableSecondary = 0;
     lastUnicastuINT8Value = 0;
     lastMulticastuINT8Value = 0;
@@ -18,12 +22,25 @@ etsStubImpl::etsStubImpl() {
     TestService1Context1Registered = false;
     TestService1Context2Registered = false;
     TestService2Context1Registered = false;
+    lastuINT8ValueReliable = 0;
 }
 
 etsStubImpl::~etsStubImpl() {
     for (auto& thread : appThreadPool) {
         thread.join();
     }
+}
+
+std::shared_ptr<etsStubImpl> etsStubImpl::getEtsServiceInstance() {
+    if (nullptr == etsServicePtr) {
+        etsServiceMtx.lock();
+        if (nullptr == etsServicePtr) {
+            etsServicePtr = std::make_shared<etsStubImpl>();
+        }
+        etsServiceMtx.unlock();
+    }
+
+    return etsServicePtr;
 }
 
 void etsStubImpl::checkByteOrder(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _checkByteOrder_ReqArg1, uint16_t _checkByteOrder_ReqArg2, checkByteOrderReply_t _reply) {
@@ -96,7 +113,10 @@ void etsStubImpl::clientServiceDeactivate(const std::shared_ptr<CommonAPI::Clien
         std::cout << "etsStubImpl::clientServiceDeactivate -> Send stop subscribe for unicast event" << std::endl;
         secProxy->getSecondaryEventUINT8Event().unsubscribe(clientServiceUnicastEventSubscrptionStatus);
         std::cout << "etsStubImpl::clientServiceDeactivate -> Send stop subscribe for multicast event" << std::endl;
-        secProxy->getSecondaryEventUINT8Event().unsubscribe(clientServiceMulticastEventSubscrptionStatus);
+        secProxy->getSecondaryMulticastEventUINT8Event().unsubscribe(clientServiceMulticastEventSubscrptionStatus);
+        std::cout << "etsStubImpl::clientServiceDeactivate -> Send stop subscribe for reliable event" << std::endl;
+        secProxy->getSecondaryEventUINT8ReliableEvent().unsubscribe(clientServiceReliableEventSubscrptionStatus);
+
     }
     else {
         std::cout << "etsStubImpl::" << __func__ << " Client service not yet active" << std::endl;
@@ -148,6 +168,11 @@ void etsStubImpl::clientServiceSubscribeEventgroup(const std::shared_ptr<CommonA
             lastMulticastuINT8Value = uINT8Value;
         });
 
+        clientServiceReliableEventSubscrptionStatus = secProxy->getSecondaryEventUINT8ReliableEvent().subscribe([&](const uint8_t& uINT8ValueReliable) {
+            std::cout << "etsStubImpl::clientServiceSubscribeEventgroup SecondaryEventUINT8Reliable Notification:" << std::hex << (uint32_t)uINT8ValueReliable << std::endl;
+            lastuINT8ValueReliable = uINT8ValueReliable;
+        });
+
         std::cout << "etsStubImpl::clientServiceSubscribeEventgroup duration timeout value:" << duration << std::endl;
         while (duration > 0) {
             std::cout << "etsStubImpl::clientServiceSubscribeEventgroup wait for duration timeout" << std::endl;
@@ -159,7 +184,9 @@ void etsStubImpl::clientServiceSubscribeEventgroup(const std::shared_ptr<CommonA
         std::cout << "etsStubImpl::clientServiceSubscribeEventgroup -> Send stop subscribe for unicast event" << std::endl;
         secProxy->getSecondaryEventUINT8Event().unsubscribe(clientServiceUnicastEventSubscrptionStatus);
         std::cout << "etsStubImpl::clientServiceSubscribeEventgroup -> Send stop subscribe for multicast event" << std::endl;
-        secProxy->getSecondaryEventUINT8Event().unsubscribe(clientServiceMulticastEventSubscrptionStatus);
+        secProxy->getSecondaryMulticastEventUINT8Event().unsubscribe(clientServiceMulticastEventSubscrptionStatus);
+        std::cout << "etsStubImpl::clientServiceSubscribeEventgroup -> Send stop subscribe for reliable event" << std::endl;
+        secProxy->getSecondaryEventUINT8ReliableEvent().unsubscribe(clientServiceReliableEventSubscrptionStatus);
     });
 
     return;
@@ -348,12 +375,71 @@ void etsStubImpl::echoUTF8FIXED(const std::shared_ptr<CommonAPI::ClientId> _clie
 }
 
 void etsStubImpl::resetInterface(const std::shared_ptr<CommonAPI::ClientId> _client) {
+    uint8_t TestFieldUINT8 = 0;
     std::cout << "etsStubImpl::" << __func__ << std::endl;
+    setTestFieldUINT8Attribute(TestFieldUINT8);
     return;
 }
 
 void etsStubImpl::suspendInterface(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _suspendInterface_ReqArg1, uint32_t _suspendInterface_ReqArg2) {
     std::cout << "etsStubImpl::" << __func__ << std::endl;
+    startTimeout = _suspendInterface_ReqArg1;
+    durationTimeout = _suspendInterface_ReqArg2;
+
+    appThreadPool.emplace_back([&]{
+        uint32_t start = startTimeout;
+        uint32_t duration = durationTimeout;
+        int retry_counter = 0;
+        std::string domain = "local";
+        std::string instance = "someip.testability.ETS";
+        std::string connection = "ets_default_service";
+        std::shared_ptr<etsStubImpl> etsService = etsStubImpl::getEtsServiceInstance();
+        std::cout << "etsStubImpl::suspendInterface start timeout:" << start << std::endl;
+        while (start > 0) {
+            std::cout << "etsStubImpl::suspendInterface wait for start timeout " << start << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            start = start-1;
+        }
+
+        /* Unregister Service */
+        bool successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETS::getInterface(), instance);
+        while (!successfullydeRegistered && retry_counter<10) {
+            std::cout << "etsStubImpl::" << __func__ << "Service Deregistration failed, trying again in 100 milliseconds..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETS::getInterface(), instance);
+            ++retry_counter;
+        }
+        if (retry_counter<10) {
+            std::cout << "etsStubImpl::" << __func__ << "Successfully DeRegistered ETS Service!" << std::endl;
+            while (duration > 0) {
+                std::cout << "etsStubImpl::suspendInterface wait for duration timeout " << duration << std::endl;
+                duration = duration-1;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+
+            /* Register Service */
+            retry_counter = 0;
+            uint8_t TestFieldUINT8 = 0;
+            setTestFieldUINT8Attribute(TestFieldUINT8);
+            successfullydeRegistered = CommonAPI::Runtime::get()->registerService(domain, instance, etsService, connection);
+            while (!successfullydeRegistered && retry_counter<10) {
+                std::cout << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                successfullydeRegistered = CommonAPI::Runtime::get()->registerService(domain, instance, etsService, connection);
+                ++retry_counter;
+            }
+            if (retry_counter<10) {
+                std::cout << "etsStubImpl::" << __func__ << "Successfully Registered ETS Service" << std::endl;
+            }
+            else {
+                std::cout << "etsStubImpl::" << __func__ << "Registration Of ETS Service Failed" << std::endl;
+            }
+        }
+        else {
+            std::cout << "etsStubImpl::" << __func__ << "DeRegistration Of ETS Service Failed!" << std::endl;
+        }
+    });
+
     return;
 }
 
@@ -368,7 +454,7 @@ void etsStubImpl::triggerEventUINT8(const std::shared_ptr<CommonAPI::ClientId> _
         uint32_t start = startTimeout;
         uint32_t duration = durationTimeout;
         uint32_t debounce = debounceTimeout;
-        uint8_t counter = 5;
+        uint8_t testEventUINT8Val = 0;
         std::cout << "etsStubImpl::triggerEventUINT8 start timeout:" << start << std::endl;
         while (start > 0) {
             std::cout << "etsStubImpl::triggerEventUINT8 wait for start timeout " << start << std::endl;
@@ -377,10 +463,10 @@ void etsStubImpl::triggerEventUINT8(const std::shared_ptr<CommonAPI::ClientId> _
         }
 
         while (duration > 0) {
-            std::cout << "etsStubImpl::triggerEventUINT8:" << (uint32_t)counter << std::endl;
-            fireTestEventUINT8Event(counter);
+            std::cout << "etsStubImpl::triggerEventUINT8:" << (uint32_t)testEventUINT8Val << std::endl;
+            fireTestEventUINT8Event(testEventUINT8Val);
             duration = duration-debounce;
-            counter = counter+1;
+            testEventUINT8Val = testEventUINT8Val+(uint8_t)1;
             std::this_thread::sleep_for(std::chrono::seconds(debounce));
         }
     });
@@ -591,7 +677,7 @@ void etsStubImpl::activateTestSerivce(const std::shared_ptr<CommonAPI::ClientId>
             TestService1Context1Registered = CommonAPI::Runtime::get()->registerService(domain, instance, testService, connection);
             ++retry_counter;
         }
-        if (retry_counter < 5) {
+        if (retry_counter<10) {
             std::cout << "etsStubImpl::" << __func__ << "Successfully Registered ETSTestService1 Service for Context1!" << std::endl;
         }
         else {
@@ -609,7 +695,7 @@ void etsStubImpl::activateTestSerivce(const std::shared_ptr<CommonAPI::ClientId>
             TestService1Context2Registered = CommonAPI::Runtime::get()->registerService(domain, instance, testService, connection);
             ++retry_counter;
         }
-        if (retry_counter < 5) {
+        if (retry_counter<10) {
             std::cout << "etsStubImpl::" << __func__ << "Successfully Registered ETSTestService1 Service for Context2!" << std::endl;
         }
         else {
@@ -627,7 +713,7 @@ void etsStubImpl::activateTestSerivce(const std::shared_ptr<CommonAPI::ClientId>
             TestService2Context1Registered = CommonAPI::Runtime::get()->registerService(domain, instance, testService, connection);
             ++retry_counter;
         }
-        if (retry_counter < 5) {
+        if (retry_counter<10) {
             std::cout << "etsStubImpl::" << __func__ << "Successfully Registered ETSTestService2 Service!" << std::endl;
         }
         else {
@@ -649,12 +735,12 @@ void etsStubImpl::deactivateTestSerivce(const std::shared_ptr<CommonAPI::ClientI
         std::string connection = "TestService1Context1";
         bool successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService1::getInterface(), instance);
         while (!successfullydeRegistered && retry_counter<10) {
-            std::cout << "etsStubImpl::" << __func__ << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
+            std::cout << "etsStubImpl::" << __func__ << "Service Deregistration failed, trying again in 100 milliseconds..." << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService1::getInterface(), instance);
             ++retry_counter;
         }
-        if (retry_counter < 5) {
+        if (retry_counter<10) {
             std::cout << "etsStubImpl::" << __func__ << "Successfully DeRegistered ETSTestService1 Service!" << std::endl;
             TestService1Context1Registered = false;
         }
@@ -667,12 +753,12 @@ void etsStubImpl::deactivateTestSerivce(const std::shared_ptr<CommonAPI::ClientI
         std::string connection = "TestService1Context2";
         bool successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService1::getInterface(), instance);
         while (!successfullydeRegistered && retry_counter<10) {
-            std::cout << "etsStubImpl::" << __func__ << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
+            std::cout << "etsStubImpl::" << __func__ << "Service Deregistration failed, trying again in 100 milliseconds..." << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService1::getInterface(), instance);
             ++retry_counter;
         }
-        if (retry_counter < 5) {
+        if (retry_counter<10) {
             std::cout << "etsStubImpl::" << __func__ << "Successfully DeRegistered ETSTestService1 Service!" << std::endl;
             TestService1Context2Registered = false;
         }
@@ -685,12 +771,12 @@ void etsStubImpl::deactivateTestSerivce(const std::shared_ptr<CommonAPI::ClientI
         std::string connection = "TestService2Context1";
         bool successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService2::getInterface(), instance);
         while (!successfullydeRegistered && retry_counter<10) {
-            std::cout << "etsStubImpl::" << __func__ << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
+            std::cout << "etsStubImpl::" << __func__ << "Service Deregistration failed, trying again in 100 milliseconds..." << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             successfullydeRegistered = CommonAPI::Runtime::get()->unregisterService(domain, ETSTestService2::getInterface(), instance);
             ++retry_counter;
         }
-        if (retry_counter < 5) {
+        if (retry_counter<10) {
             std::cout << "etsStubImpl::" << __func__ << "Successfully DeRegistered ETSTestService2 Service!" << std::endl;
             TestService2Context1Registered = false;
         }
@@ -712,5 +798,49 @@ void etsStubImplService1::echoUINT32(const std::shared_ptr<CommonAPI::ClientId> 
 void etsStubImplService2::echoUINT32(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _inUINT32_ReqArg1, echoUINT32Reply_t _reply) {
     std::cout << "etsStubImplService2::" << __func__ << " _inUINT32_ReqArg1:" << _inUINT32_ReqArg1 << std::endl;
     _reply(_inUINT32_ReqArg1);
+    return;
+}
+
+void etsStubImpl::echoUINT8RELIABLE(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _echoUINT8RELIABLE_ReqArg1, echoUINT8RELIABLEReply_t _reply) {
+    std::cout << "etsStubImpl::" << __func__ << std::endl;
+    uint8_t _echoUINT8RELIABLE_ResArg1 = _echoUINT8RELIABLE_ReqArg1;
+    _reply(_echoUINT8RELIABLE_ResArg1);
+    return;
+}
+
+void etsStubImpl::triggerEventUINT8Reliable(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT8Reliable_ReqArg1, uint32_t _triggerEventUINT8Reliable_ReqArg2, uint32_t _triggerEventUINT8Reliable_ReqArg3) {
+    std::cout << "etsStubImpl::" << __func__ << std::endl;
+    startTimeout = _triggerEventUINT8Reliable_ReqArg1;
+    durationTimeout = _triggerEventUINT8Reliable_ReqArg2;
+    debounceTimeout = _triggerEventUINT8Reliable_ReqArg3;
+
+    appThreadPool.emplace_back([&]{
+        uint32_t start = startTimeout;
+        uint32_t duration = durationTimeout;
+        uint32_t debounce = debounceTimeout;
+        uint8_t testEventUINT8Val = 0;
+        std::cout << "etsStubImpl::triggerEventUINT8Reliable start timeout:" << start << std::endl;
+        while (start > 0) {
+            std::cout << "etsStubImpl::triggerEventUINT8Reliable wait for start timeout " << start << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            start = start-1;
+        }
+
+        while (duration > 0) {
+            std::cout << "etsStubImpl::triggerEventUINT8Reliable:" << (uint32_t)testEventUINT8Val << std::endl;
+            fireTestEventUINT8ReliableEvent(testEventUINT8Val);
+            duration = duration-debounce;
+            testEventUINT8Val = testEventUINT8Val+(uint8_t)1;
+            std::this_thread::sleep_for(std::chrono::seconds(debounce));
+        }
+    });
+
+    return;
+}
+
+void etsStubImpl::clientServiceGetLastValueOfEventTCP(const std::shared_ptr<CommonAPI::ClientId> _client, clientServiceGetLastValueOfEventTCPReply_t _reply) {
+    std::cout << "etsStubImpl::" << __func__ << " lastuINT8ValueReliable:" << std::hex << (uint32_t)lastuINT8ValueReliable << std::endl;
+    uint8_t lastval = lastuINT8ValueReliable;
+    _reply(lastval);
     return;
 }

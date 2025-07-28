@@ -63,6 +63,8 @@ public:
 
     virtual SecondaryMulticastEventUINT8Event& getSecondaryMulticastEventUINT8Event();
 
+    virtual SecondaryEventUINT8ReliableEvent& getSecondaryEventUINT8ReliableEvent();
+
     virtual void getOwnVersion(uint16_t &_major, uint16_t &_minor) const;
 
     virtual std::future<void> getCompletionFuture();
@@ -70,6 +72,7 @@ public:
 private:
     CommonAPI::SomeIP::Event<SecondaryEventUINT8Event, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> secondaryEventUINT8_;
     CommonAPI::SomeIP::Event<SecondaryMulticastEventUINT8Event, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> secondaryMulticastEventUINT8_;
+    CommonAPI::SomeIP::Event<SecondaryEventUINT8ReliableEvent, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> secondaryEventUINT8Reliable_;
 
     std::promise<void> completed_;
 };

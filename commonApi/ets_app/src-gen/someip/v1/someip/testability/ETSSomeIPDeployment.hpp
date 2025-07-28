@@ -29,6 +29,10 @@ namespace ETS_ {
 
 // Interface-specific deployment types
 typedef CommonAPI::SomeIP::EnumerationDeployment<uint8_t> EnumDeployment_t;
+typedef CommonAPI::SomeIP::StructDeployment<
+    CommonAPI::SomeIP::IntegerDeployment<uint8_t>,
+    CommonAPI::SomeIP::IntegerDeployment<uint32_t>
+> VersionTypeDeployment_t;
 typedef CommonAPI::SomeIP::ArrayDeployment<
     CommonAPI::SomeIP::IntegerDeployment<uint8_t>
 > uint8ArrayArrayDeployment_t;
@@ -41,6 +45,7 @@ COMMONAPI_EXPORT extern ::v1::someip::testability::ETS_::uint8ArrayArrayDeployme
 COMMONAPI_EXPORT extern ::v1::someip::testability::ETS_::uint8ArrayReturnArrayDeployment_t uint8ArrayReturnArrayDeployment;
 
 // Attribute-specific deployments
+COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > TestFieldUINT8ArrayDeployment;
 
 // Argument-specific deployment
 COMMONAPI_EXPORT extern CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoStaticUINT8Array_echoStaticUINT8Array_ReqArg1Deployment;

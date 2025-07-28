@@ -63,6 +63,12 @@ public:
      */
     void fireSecondaryMulticastEventUINT8Event(const uint8_t &_uINT8Value);
 
+    /*
+     * description: 
+     * A Reliable type broadcast event to support clientServiceSubscribeEventgroup request.
+     */
+    void fireSecondaryEventUINT8ReliableEvent(const uint8_t &_uINT8ValueReliable);
+
     void deactivateManagedInstances() {}
     
     CommonAPI::SomeIP::GetAttributeStubDispatcher<
@@ -91,6 +97,11 @@ public:
             std::set<CommonAPI::SomeIP::eventgroup_id_t> itsEventGroups;
             itsEventGroups.insert(CommonAPI::SomeIP::eventgroup_id_t(0x9));
             CommonAPI::SomeIP::StubAdapter::registerEvent(CommonAPI::SomeIP::event_id_t(0x8086), itsEventGroups, CommonAPI::SomeIP::event_type_e::ET_EVENT, CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE);
+        }
+        {
+            std::set<CommonAPI::SomeIP::eventgroup_id_t> itsEventGroups;
+            itsEventGroups.insert(CommonAPI::SomeIP::eventgroup_id_t(0xa));
+            CommonAPI::SomeIP::StubAdapter::registerEvent(CommonAPI::SomeIP::event_id_t(0x8087), itsEventGroups, CommonAPI::SomeIP::event_type_e::ET_EVENT, CommonAPI::SomeIP::reliability_type_e::RT_RELIABLE);
         }
     }
 
@@ -131,6 +142,23 @@ void ETSSecondaryServiceSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireSeconda
             CommonAPI::SomeIP::event_id_t(0x8086),
             false,
              deployed_uINT8Value 
+    );
+}
+
+/*
+ * description: 
+ * A Reliable type broadcast event to support clientServiceSubscribeEventgroup request.
+ */
+template <typename _Stub, typename... _Stubs>
+void ETSSecondaryServiceSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireSecondaryEventUINT8ReliableEvent(const uint8_t &_uINT8ValueReliable) {
+    CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deployed_uINT8ValueReliable(_uINT8ValueReliable, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
+    CommonAPI::SomeIP::StubEventHelper<CommonAPI::SomeIP::SerializableArguments<  CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> > 
+    >>
+        ::sendEvent(
+            *this,
+            CommonAPI::SomeIP::event_id_t(0x8087),
+            false,
+             deployed_uINT8ValueReliable 
     );
 }
 

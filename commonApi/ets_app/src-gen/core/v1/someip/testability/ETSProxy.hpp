@@ -18,6 +18,8 @@
 #define HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE
 #endif
 
+#include <CommonAPI/AttributeExtension.hpp>
+#include <CommonAPI/Factory.hpp>
 
 #if defined (HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE)
 #undef COMMONAPI_INTERNAL_COMPILATION
@@ -841,6 +843,112 @@ public:
      * will be set.
      */
     virtual void deactivateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus);
+    /*
+     * description: 
+     * A field for notifying version information.
+     */
+    /**
+     * Returns the wrapper class that provides access to the attribute ETSInterfaceVersion.
+     */
+    virtual ETSInterfaceVersionAttribute& getETSInterfaceVersionAttribute() {
+        return delegate_->getETSInterfaceVersionAttribute();
+    }
+    /*
+     * description: 
+     * A field of UINT8 type.
+     */
+    /**
+     * Returns the wrapper class that provides access to the attribute TestFieldUINT8.
+     */
+    virtual TestFieldUINT8Attribute& getTestFieldUINT8Attribute() {
+        return delegate_->getTestFieldUINT8Attribute();
+    }
+    /*
+     * description: 
+     * A field of UINT8 array.
+     */
+    /**
+     * Returns the wrapper class that provides access to the attribute TestFieldUINT8Array.
+     */
+    virtual TestFieldUINT8ArrayAttribute& getTestFieldUINT8ArrayAttribute() {
+        return delegate_->getTestFieldUINT8ArrayAttribute();
+    }
+    /*
+     * description: 
+     * A field of UINT8 type over reliable endpoint.
+     */
+    /**
+     * Returns the wrapper class that provides access to the attribute TestFieldUINT8Reliable.
+     */
+    virtual TestFieldUINT8ReliableAttribute& getTestFieldUINT8ReliableAttribute() {
+        return delegate_->getTestFieldUINT8ReliableAttribute();
+    }
+    /**
+     * description: 
+     * The method returns the transfered UINT8 value back to the invoker over reliable endpoint.
+     * Calls echoUINT8RELIABLE with synchronous semantics.
+     *
+     * All const parameters are input parameters to this method.
+     * All non-const parameters will be filled with the returned values.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
+     */
+    virtual void echoUINT8RELIABLE(uint8_t _echoUINT8RELIABLE_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, uint8_t &_echoUINT8RELIABLE_ResArg1, const CommonAPI::CallInfo *_info = nullptr);
+    /**
+     * Calls echoUINT8RELIABLE with asynchronous semantics.
+     *
+     * The provided callback will be called when the reply to this call arrives or
+     * an error occurs during the call. The CallStatus will indicate either "SUCCESS"
+     * or which type of error has occurred. In case of any error, ONLY the CallStatus
+     * will have a defined value.
+     * The std::future returned by this method will be fulfilled at arrival of the reply.
+     * It will provide the same value for CallStatus as will be handed to the callback.
+     */
+    virtual std::future<CommonAPI::CallStatus> echoUINT8RELIABLEAsync(const uint8_t &_echoUINT8RELIABLE_ReqArg1, EchoUINT8RELIABLEAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
+    /*
+     * description: 
+     * A broadcast event of type uint8 triggered on triggerEventUINT8Reliable method request over tcp endpoint.
+     */
+    /**
+     * Returns the wrapper class that provides access to the broadcast TestEventUINT8Reliable.
+     */
+    virtual TestEventUINT8ReliableEvent& getTestEventUINT8ReliableEvent() {
+        return delegate_->getTestEventUINT8ReliableEvent();
+    }
+    /**
+     * description: 
+     * Get last value of TestEventUINT8Reliable.
+     * Calls clientServiceGetLastValueOfEventTCP with synchronous semantics.
+     *
+     * All non-const parameters will be filled with the returned values.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
+     */
+    virtual void clientServiceGetLastValueOfEventTCP(CommonAPI::CallStatus &_internalCallStatus, uint8_t &_clientServiceGetLastValueOfEventTCP_ResArg1, const CommonAPI::CallInfo *_info = nullptr);
+    /**
+     * Calls clientServiceGetLastValueOfEventTCP with asynchronous semantics.
+     *
+     * The provided callback will be called when the reply to this call arrives or
+     * an error occurs during the call. The CallStatus will indicate either "SUCCESS"
+     * or which type of error has occurred. In case of any error, ONLY the CallStatus
+     * will have a defined value.
+     * The std::future returned by this method will be fulfilled at arrival of the reply.
+     * It will provide the same value for CallStatus as will be handed to the callback.
+     */
+    virtual std::future<CommonAPI::CallStatus> clientServiceGetLastValueOfEventTCPAsync(ClientServiceGetLastValueOfEventTCPAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
+    /**
+     * description: 
+     * Requests to trigger an broadcast event of type uint8 over reliable endpoint.
+     * Calls triggerEventUINT8Reliable with Fire&Forget semantics.
+     *
+     * All const parameters are input parameters to this method.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
+     */
+    virtual void triggerEventUINT8Reliable(uint32_t _triggerEventUINT8Reliable_ReqArg1, uint32_t _triggerEventUINT8Reliable_ReqArg2, uint32_t _triggerEventUINT8Reliable_ReqArg3, CommonAPI::CallStatus &_internalCallStatus);
 
 
 
@@ -850,6 +958,100 @@ public:
 
 typedef ETSProxy<> ETSProxyDefault;
 
+namespace ETSExtensions {
+    /*
+     * description: 
+     * A field for notifying version information.
+     */
+    template <template <typename > class _ExtensionType>
+    class ETSInterfaceVersionAttributeExtension {
+     public:
+        typedef _ExtensionType< ETSProxyBase::ETSInterfaceVersionAttribute> extension_type;
+    
+        static_assert(std::is_base_of<typename CommonAPI::AttributeExtension< ETSProxyBase::ETSInterfaceVersionAttribute>, extension_type>::value,
+                      "Not CommonAPI Attribute Extension!");
+    
+        ETSInterfaceVersionAttributeExtension(ETSProxyBase& proxy): attributeExtension_(proxy.getETSInterfaceVersionAttribute()) {
+        }
+    
+        inline extension_type& getETSInterfaceVersionAttributeExtension() {
+            return attributeExtension_;
+        }
+    
+     private:
+        extension_type attributeExtension_;
+    };
+
+    /*
+     * description: 
+     * A field of UINT8 type.
+     */
+    template <template <typename > class _ExtensionType>
+    class TestFieldUINT8AttributeExtension {
+     public:
+        typedef _ExtensionType< ETSProxyBase::TestFieldUINT8Attribute> extension_type;
+    
+        static_assert(std::is_base_of<typename CommonAPI::AttributeExtension< ETSProxyBase::TestFieldUINT8Attribute>, extension_type>::value,
+                      "Not CommonAPI Attribute Extension!");
+    
+        TestFieldUINT8AttributeExtension(ETSProxyBase& proxy): attributeExtension_(proxy.getTestFieldUINT8Attribute()) {
+        }
+    
+        inline extension_type& getTestFieldUINT8AttributeExtension() {
+            return attributeExtension_;
+        }
+    
+     private:
+        extension_type attributeExtension_;
+    };
+
+    /*
+     * description: 
+     * A field of UINT8 array.
+     */
+    template <template <typename > class _ExtensionType>
+    class TestFieldUINT8ArrayAttributeExtension {
+     public:
+        typedef _ExtensionType< ETSProxyBase::TestFieldUINT8ArrayAttribute> extension_type;
+    
+        static_assert(std::is_base_of<typename CommonAPI::AttributeExtension< ETSProxyBase::TestFieldUINT8ArrayAttribute>, extension_type>::value,
+                      "Not CommonAPI Attribute Extension!");
+    
+        TestFieldUINT8ArrayAttributeExtension(ETSProxyBase& proxy): attributeExtension_(proxy.getTestFieldUINT8ArrayAttribute()) {
+        }
+    
+        inline extension_type& getTestFieldUINT8ArrayAttributeExtension() {
+            return attributeExtension_;
+        }
+    
+     private:
+        extension_type attributeExtension_;
+    };
+
+    /*
+     * description: 
+     * A field of UINT8 type over reliable endpoint.
+     */
+    template <template <typename > class _ExtensionType>
+    class TestFieldUINT8ReliableAttributeExtension {
+     public:
+        typedef _ExtensionType< ETSProxyBase::TestFieldUINT8ReliableAttribute> extension_type;
+    
+        static_assert(std::is_base_of<typename CommonAPI::AttributeExtension< ETSProxyBase::TestFieldUINT8ReliableAttribute>, extension_type>::value,
+                      "Not CommonAPI Attribute Extension!");
+    
+        TestFieldUINT8ReliableAttributeExtension(ETSProxyBase& proxy): attributeExtension_(proxy.getTestFieldUINT8ReliableAttribute()) {
+        }
+    
+        inline extension_type& getTestFieldUINT8ReliableAttributeExtension() {
+            return attributeExtension_;
+        }
+    
+     private:
+        extension_type attributeExtension_;
+    };
+
+} // namespace ETSExtensions
 
 //
 // ETSProxy Implementation
@@ -1302,6 +1504,40 @@ template <typename ... _AttributeExtensions>
 void ETSProxy<_AttributeExtensions...>::deactivateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus) {
     delegate_->deactivateTestSerivce(_activateTestSerivce_ReqArg1, _activateTestSerivce_ReqArg2, _internalCallStatus);
 }
+/*
+ * description: 
+ * The method returns the transfered UINT8 value back to the invoker over reliable endpoint.
+ */
+template <typename ... _AttributeExtensions>
+void ETSProxy<_AttributeExtensions...>::echoUINT8RELIABLE(uint8_t _echoUINT8RELIABLE_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, uint8_t &_echoUINT8RELIABLE_ResArg1, const CommonAPI::CallInfo *_info) {
+    delegate_->echoUINT8RELIABLE(_echoUINT8RELIABLE_ReqArg1, _internalCallStatus, _echoUINT8RELIABLE_ResArg1, _info);
+}
+
+template <typename ... _AttributeExtensions>
+std::future<CommonAPI::CallStatus> ETSProxy<_AttributeExtensions...>::echoUINT8RELIABLEAsync(const uint8_t &_echoUINT8RELIABLE_ReqArg1, EchoUINT8RELIABLEAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    return delegate_->echoUINT8RELIABLEAsync(_echoUINT8RELIABLE_ReqArg1, _callback, _info);
+}
+/*
+ * description: 
+ * Get last value of TestEventUINT8Reliable.
+ */
+template <typename ... _AttributeExtensions>
+void ETSProxy<_AttributeExtensions...>::clientServiceGetLastValueOfEventTCP(CommonAPI::CallStatus &_internalCallStatus, uint8_t &_clientServiceGetLastValueOfEventTCP_ResArg1, const CommonAPI::CallInfo *_info) {
+    delegate_->clientServiceGetLastValueOfEventTCP(_internalCallStatus, _clientServiceGetLastValueOfEventTCP_ResArg1, _info);
+}
+
+template <typename ... _AttributeExtensions>
+std::future<CommonAPI::CallStatus> ETSProxy<_AttributeExtensions...>::clientServiceGetLastValueOfEventTCPAsync(ClientServiceGetLastValueOfEventTCPAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    return delegate_->clientServiceGetLastValueOfEventTCPAsync(_callback, _info);
+}
+/*
+ * description: 
+ * Requests to trigger an broadcast event of type uint8 over reliable endpoint.
+ */
+template <typename ... _AttributeExtensions>
+void ETSProxy<_AttributeExtensions...>::triggerEventUINT8Reliable(uint32_t _triggerEventUINT8Reliable_ReqArg1, uint32_t _triggerEventUINT8Reliable_ReqArg2, uint32_t _triggerEventUINT8Reliable_ReqArg3, CommonAPI::CallStatus &_internalCallStatus) {
+    delegate_->triggerEventUINT8Reliable(_triggerEventUINT8Reliable_ReqArg1, _triggerEventUINT8Reliable_ReqArg2, _triggerEventUINT8Reliable_ReqArg3, _internalCallStatus);
+}
 
 template <typename ... _AttributeExtensions>
 const CommonAPI::Address &ETSProxy<_AttributeExtensions...>::getAddress() const {
@@ -1338,6 +1574,18 @@ std::future<void> ETSProxy<_AttributeExtensions...>::getCompletionFuture() {
 } // namespace someip
 } // namespace v1
 
+namespace CommonAPI {
+template<template<typename > class _AttributeExtension>
+struct DefaultAttributeProxyHelper< ::v1::someip::testability::ETSProxy,
+    _AttributeExtension> {
+    typedef typename ::v1::someip::testability::ETSProxy<
+            ::v1::someip::testability::ETSExtensions::ETSInterfaceVersionAttributeExtension<_AttributeExtension>, 
+            ::v1::someip::testability::ETSExtensions::TestFieldUINT8AttributeExtension<_AttributeExtension>, 
+            ::v1::someip::testability::ETSExtensions::TestFieldUINT8ArrayAttributeExtension<_AttributeExtension>, 
+            ::v1::someip::testability::ETSExtensions::TestFieldUINT8ReliableAttributeExtension<_AttributeExtension>
+    > class_t;
+};
+}
 
 
 // Compatibility

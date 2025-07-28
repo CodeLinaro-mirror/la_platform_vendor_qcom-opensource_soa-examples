@@ -523,9 +523,222 @@ public:
         (void)_activateTestSerivce_ReqArg1;
         (void)_activateTestSerivce_ReqArg2;
     }
+    COMMONAPI_EXPORT virtual const ::v1::someip::testability::ETS::VersionType &getETSInterfaceVersionAttribute() {
+        return eTSInterfaceVersionAttributeValue_;
+    }
+    COMMONAPI_EXPORT virtual const ::v1::someip::testability::ETS::VersionType &getETSInterfaceVersionAttribute(const std::shared_ptr<CommonAPI::ClientId> _client) {
+        (void)_client;
+        return getETSInterfaceVersionAttribute();
+    }
+    COMMONAPI_EXPORT virtual void setETSInterfaceVersionAttribute(::v1::someip::testability::ETS::VersionType _value) {
+        const bool valueChanged = trySetETSInterfaceVersionAttribute(std::move(_value));
+        if (valueChanged) {
+            fireETSInterfaceVersionAttributeChanged(eTSInterfaceVersionAttributeValue_);
+        }
+    }
+    COMMONAPI_EXPORT virtual const uint8_t &getTestFieldUINT8Attribute() {
+        return testFieldUINT8AttributeValue_;
+    }
+    COMMONAPI_EXPORT virtual const uint8_t &getTestFieldUINT8Attribute(const std::shared_ptr<CommonAPI::ClientId> _client) {
+        (void)_client;
+        return getTestFieldUINT8Attribute();
+    }
+    COMMONAPI_EXPORT virtual void setTestFieldUINT8Attribute(uint8_t _value) {
+        const bool valueChanged = trySetTestFieldUINT8Attribute(std::move(_value));
+        if (valueChanged) {
+            fireTestFieldUINT8AttributeChanged(testFieldUINT8AttributeValue_);
+        }
+    }
+    COMMONAPI_EXPORT virtual void setTestFieldUINT8Attribute(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _value) {
+        (void)_client;
+        setTestFieldUINT8Attribute(_value);
+    }
+    COMMONAPI_EXPORT virtual const std::vector< uint8_t > &getTestFieldUINT8ArrayAttribute() {
+        return testFieldUINT8ArrayAttributeValue_;
+    }
+    COMMONAPI_EXPORT virtual const std::vector< uint8_t > &getTestFieldUINT8ArrayAttribute(const std::shared_ptr<CommonAPI::ClientId> _client) {
+        (void)_client;
+        return getTestFieldUINT8ArrayAttribute();
+    }
+    COMMONAPI_EXPORT virtual void setTestFieldUINT8ArrayAttribute(std::vector< uint8_t > _value) {
+        const bool valueChanged = trySetTestFieldUINT8ArrayAttribute(std::move(_value));
+        if (valueChanged) {
+            fireTestFieldUINT8ArrayAttributeChanged(testFieldUINT8ArrayAttributeValue_);
+        }
+    }
+    COMMONAPI_EXPORT virtual void setTestFieldUINT8ArrayAttribute(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _value) {
+        (void)_client;
+        setTestFieldUINT8ArrayAttribute(_value);
+    }
+    COMMONAPI_EXPORT virtual const uint8_t &getTestFieldUINT8ReliableAttribute() {
+        return testFieldUINT8ReliableAttributeValue_;
+    }
+    COMMONAPI_EXPORT virtual const uint8_t &getTestFieldUINT8ReliableAttribute(const std::shared_ptr<CommonAPI::ClientId> _client) {
+        (void)_client;
+        return getTestFieldUINT8ReliableAttribute();
+    }
+    COMMONAPI_EXPORT virtual void setTestFieldUINT8ReliableAttribute(uint8_t _value) {
+        const bool valueChanged = trySetTestFieldUINT8ReliableAttribute(std::move(_value));
+        if (valueChanged) {
+            fireTestFieldUINT8ReliableAttributeChanged(testFieldUINT8ReliableAttributeValue_);
+        }
+    }
+    COMMONAPI_EXPORT virtual void setTestFieldUINT8ReliableAttribute(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _value) {
+        (void)_client;
+        setTestFieldUINT8ReliableAttribute(_value);
+    }
+    /*
+     * description: 
+     * The method returns the transfered UINT8 value back to the invoker over reliable endpoint.
+     */
+    COMMONAPI_EXPORT virtual void echoUINT8RELIABLE(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _echoUINT8RELIABLE_ReqArg1, echoUINT8RELIABLEReply_t _reply) {
+        (void)_client;
+        (void)_echoUINT8RELIABLE_ReqArg1;
+        uint8_t echoUINT8RELIABLE_ResArg1 = 0u;
+        _reply(echoUINT8RELIABLE_ResArg1);
+    }
+    /*
+     * description: 
+     * A broadcast event of type uint8 triggered on triggerEventUINT8Reliable method request over tcp endpoint.
+     */
+    COMMONAPI_EXPORT virtual void fireTestEventUINT8ReliableEvent(const uint8_t &_uINT8Value) {
+        ETSStub::fireTestEventUINT8ReliableEvent(_uINT8Value);
+    }
+    /*
+     * description: 
+     * Get last value of TestEventUINT8Reliable.
+     */
+    COMMONAPI_EXPORT virtual void clientServiceGetLastValueOfEventTCP(const std::shared_ptr<CommonAPI::ClientId> _client, clientServiceGetLastValueOfEventTCPReply_t _reply) {
+        (void)_client;
+        uint8_t clientServiceGetLastValueOfEventTCP_ResArg1 = 0u;
+        _reply(clientServiceGetLastValueOfEventTCP_ResArg1);
+    }
+    /*
+     * description: 
+     * Requests to trigger an broadcast event of type uint8 over reliable endpoint.
+     */
+    COMMONAPI_EXPORT virtual void triggerEventUINT8Reliable(const std::shared_ptr<CommonAPI::ClientId> _client, uint32_t _triggerEventUINT8Reliable_ReqArg1, uint32_t _triggerEventUINT8Reliable_ReqArg2, uint32_t _triggerEventUINT8Reliable_ReqArg3) {
+        (void)_client;
+        (void)_triggerEventUINT8Reliable_ReqArg1;
+        (void)_triggerEventUINT8Reliable_ReqArg2;
+        (void)_triggerEventUINT8Reliable_ReqArg3;
+    }
 
 
 protected:
+    /*
+     * description: 
+     * A field for notifying version information.
+     */
+    COMMONAPI_EXPORT virtual bool trySetETSInterfaceVersionAttribute(::v1::someip::testability::ETS::VersionType _value) {
+        if (!validateETSInterfaceVersionAttributeRequestedValue(_value))
+            return false;
+
+        bool valueChanged;
+        std::shared_ptr<ETSStubAdapter> stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+        if(stubAdapter) {
+            stubAdapter->lockETSInterfaceVersionAttribute(true);
+            valueChanged = (eTSInterfaceVersionAttributeValue_ != _value);
+            eTSInterfaceVersionAttributeValue_ = std::move(_value);
+            stubAdapter->lockETSInterfaceVersionAttribute(false);
+        } else {
+            valueChanged = (eTSInterfaceVersionAttributeValue_ != _value);
+            eTSInterfaceVersionAttributeValue_ = std::move(_value);
+        }
+
+       return valueChanged;
+    }
+    COMMONAPI_EXPORT virtual bool validateETSInterfaceVersionAttributeRequestedValue(const ::v1::someip::testability::ETS::VersionType &_value) {
+        (void)_value;
+        return true;
+    }
+    /*
+     * description: 
+     * A field of UINT8 type.
+     */
+    COMMONAPI_EXPORT virtual bool trySetTestFieldUINT8Attribute(uint8_t _value) {
+        if (!validateTestFieldUINT8AttributeRequestedValue(_value))
+            return false;
+
+        bool valueChanged;
+        std::shared_ptr<ETSStubAdapter> stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+        if(stubAdapter) {
+            stubAdapter->lockTestFieldUINT8Attribute(true);
+            valueChanged = (testFieldUINT8AttributeValue_ != _value);
+            testFieldUINT8AttributeValue_ = std::move(_value);
+            stubAdapter->lockTestFieldUINT8Attribute(false);
+        } else {
+            valueChanged = (testFieldUINT8AttributeValue_ != _value);
+            testFieldUINT8AttributeValue_ = std::move(_value);
+        }
+
+       return valueChanged;
+    }
+    COMMONAPI_EXPORT virtual bool validateTestFieldUINT8AttributeRequestedValue(const uint8_t &_value) {
+        (void)_value;
+        return true;
+    }
+    COMMONAPI_EXPORT virtual void onRemoteTestFieldUINT8AttributeChanged() {
+        // No operation in default
+    }
+    /*
+     * description: 
+     * A field of UINT8 array.
+     */
+    COMMONAPI_EXPORT virtual bool trySetTestFieldUINT8ArrayAttribute(std::vector< uint8_t > _value) {
+        if (!validateTestFieldUINT8ArrayAttributeRequestedValue(_value))
+            return false;
+
+        bool valueChanged;
+        std::shared_ptr<ETSStubAdapter> stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+        if(stubAdapter) {
+            stubAdapter->lockTestFieldUINT8ArrayAttribute(true);
+            valueChanged = (testFieldUINT8ArrayAttributeValue_ != _value);
+            testFieldUINT8ArrayAttributeValue_ = std::move(_value);
+            stubAdapter->lockTestFieldUINT8ArrayAttribute(false);
+        } else {
+            valueChanged = (testFieldUINT8ArrayAttributeValue_ != _value);
+            testFieldUINT8ArrayAttributeValue_ = std::move(_value);
+        }
+
+       return valueChanged;
+    }
+    COMMONAPI_EXPORT virtual bool validateTestFieldUINT8ArrayAttributeRequestedValue(const std::vector< uint8_t > &_value) {
+        (void)_value;
+        return true;
+    }
+    COMMONAPI_EXPORT virtual void onRemoteTestFieldUINT8ArrayAttributeChanged() {
+        // No operation in default
+    }
+    /*
+     * description: 
+     * A field of UINT8 type over reliable endpoint.
+     */
+    COMMONAPI_EXPORT virtual bool trySetTestFieldUINT8ReliableAttribute(uint8_t _value) {
+        if (!validateTestFieldUINT8ReliableAttributeRequestedValue(_value))
+            return false;
+
+        bool valueChanged;
+        std::shared_ptr<ETSStubAdapter> stubAdapter = CommonAPI::Stub<ETSStubAdapter, ETSStubRemoteEvent>::stubAdapter_.lock();
+        if(stubAdapter) {
+            stubAdapter->lockTestFieldUINT8ReliableAttribute(true);
+            valueChanged = (testFieldUINT8ReliableAttributeValue_ != _value);
+            testFieldUINT8ReliableAttributeValue_ = std::move(_value);
+            stubAdapter->lockTestFieldUINT8ReliableAttribute(false);
+        } else {
+            valueChanged = (testFieldUINT8ReliableAttributeValue_ != _value);
+            testFieldUINT8ReliableAttributeValue_ = std::move(_value);
+        }
+
+       return valueChanged;
+    }
+    COMMONAPI_EXPORT virtual bool validateTestFieldUINT8ReliableAttributeRequestedValue(const uint8_t &_value) {
+        (void)_value;
+        return true;
+    }
+    COMMONAPI_EXPORT virtual void onRemoteTestFieldUINT8ReliableAttributeChanged() {
+        // No operation in default
+    }
     class COMMONAPI_EXPORT_CLASS_EXPLICIT RemoteEventHandler: public virtual ETSStubRemoteEvent {
     public:
         COMMONAPI_EXPORT RemoteEventHandler(ETSStubDefault *_defaultStub)
@@ -533,6 +746,64 @@ protected:
               defaultStub_(_defaultStub) {
         }
 
+        /*
+         * description: 
+         * A field for notifying version information.
+         */
+        /*
+         * description: 
+         * A field of UINT8 type.
+         */
+        COMMONAPI_EXPORT virtual void onRemoteTestFieldUINT8AttributeChanged() {
+            assert(defaultStub_ !=NULL);
+            defaultStub_->onRemoteTestFieldUINT8AttributeChanged();
+        }
+
+        COMMONAPI_EXPORT virtual bool onRemoteSetTestFieldUINT8Attribute(uint8_t _value) {
+            assert(defaultStub_ !=NULL);
+            return defaultStub_->trySetTestFieldUINT8Attribute(std::move(_value));
+        }
+
+        COMMONAPI_EXPORT virtual bool onRemoteSetTestFieldUINT8Attribute(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _value) {
+            (void)_client;
+            return onRemoteSetTestFieldUINT8Attribute(_value);
+        }
+        /*
+         * description: 
+         * A field of UINT8 array.
+         */
+        COMMONAPI_EXPORT virtual void onRemoteTestFieldUINT8ArrayAttributeChanged() {
+            assert(defaultStub_ !=NULL);
+            defaultStub_->onRemoteTestFieldUINT8ArrayAttributeChanged();
+        }
+
+        COMMONAPI_EXPORT virtual bool onRemoteSetTestFieldUINT8ArrayAttribute(std::vector< uint8_t > _value) {
+            assert(defaultStub_ !=NULL);
+            return defaultStub_->trySetTestFieldUINT8ArrayAttribute(std::move(_value));
+        }
+
+        COMMONAPI_EXPORT virtual bool onRemoteSetTestFieldUINT8ArrayAttribute(const std::shared_ptr<CommonAPI::ClientId> _client, std::vector< uint8_t > _value) {
+            (void)_client;
+            return onRemoteSetTestFieldUINT8ArrayAttribute(_value);
+        }
+        /*
+         * description: 
+         * A field of UINT8 type over reliable endpoint.
+         */
+        COMMONAPI_EXPORT virtual void onRemoteTestFieldUINT8ReliableAttributeChanged() {
+            assert(defaultStub_ !=NULL);
+            defaultStub_->onRemoteTestFieldUINT8ReliableAttributeChanged();
+        }
+
+        COMMONAPI_EXPORT virtual bool onRemoteSetTestFieldUINT8ReliableAttribute(uint8_t _value) {
+            assert(defaultStub_ !=NULL);
+            return defaultStub_->trySetTestFieldUINT8ReliableAttribute(std::move(_value));
+        }
+
+        COMMONAPI_EXPORT virtual bool onRemoteSetTestFieldUINT8ReliableAttribute(const std::shared_ptr<CommonAPI::ClientId> _client, uint8_t _value) {
+            (void)_client;
+            return onRemoteSetTestFieldUINT8ReliableAttribute(_value);
+        }
 
     private:
         ETSStubDefault *defaultStub_;
@@ -542,6 +813,26 @@ protected:
 
 private:
 
+    /*
+     * description: 
+     * A field for notifying version information.
+     */
+    ::v1::someip::testability::ETS::VersionType eTSInterfaceVersionAttributeValue_ {};
+    /*
+     * description: 
+     * A field of UINT8 type.
+     */
+    uint8_t testFieldUINT8AttributeValue_ {};
+    /*
+     * description: 
+     * A field of UINT8 array.
+     */
+    std::vector< uint8_t > testFieldUINT8ArrayAttributeValue_ {};
+    /*
+     * description: 
+     * A field of UINT8 type over reliable endpoint.
+     */
+    uint8_t testFieldUINT8ReliableAttributeValue_ {};
 
     CommonAPI::Version interfaceVersion_;
 };

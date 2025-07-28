@@ -19,6 +19,7 @@ namespace ETS_ {
 ::v1::someip::testability::ETS_::uint8ArrayReturnArrayDeployment_t uint8ArrayReturnArrayDeployment(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), 0, 5, 4);
 
 // Attribute-specific deployments
+CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > TestFieldUINT8ArrayDeployment(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), 0, 5, 4);
 
 // Argument-specific deployment
 CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::IntegerDeployment<uint8_t> > echoStaticUINT8Array_echoStaticUINT8Array_ReqArg1Deployment(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), 5, 5, 0);
