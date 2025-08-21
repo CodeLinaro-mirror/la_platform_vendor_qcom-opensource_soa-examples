@@ -9,12 +9,12 @@
  */
 /*
  * description: 
- * Testability Service to be activated on client side on clientServiceActivate request.
+ * First Test Service for service port validation.
  */
-#ifndef V1_SOMEIP_TESTABILITY_ETS_SECONDARY_SERVICE_SOMEIP_PROXY_HPP_
-#define V1_SOMEIP_TESTABILITY_ETS_SECONDARY_SERVICE_SOMEIP_PROXY_HPP_
+#ifndef V1_SOMEIP_TESTABILITY_ETS_TEST_SERVICE1_SOMEIP_PROXY_HPP_
+#define V1_SOMEIP_TESTABILITY_ETS_TEST_SERVICE1_SOMEIP_PROXY_HPP_
 
-#include <v1/someip/testability/ETSSecondaryServiceProxyBase.hpp>
+#include <v1/someip/testability/ETSTestService1ProxyBase.hpp>
 
 #if !defined (COMMONAPI_INTERNAL_COMPILATION)
 #define COMMONAPI_INTERNAL_COMPILATION
@@ -24,7 +24,6 @@
 #include <CommonAPI/SomeIP/Factory.hpp>
 #include <CommonAPI/SomeIP/Proxy.hpp>
 #include <CommonAPI/SomeIP/Types.hpp>
-#include <CommonAPI/SomeIP/Event.hpp>
 
 #if defined (HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE)
 #undef COMMONAPI_INTERNAL_COMPILATION
@@ -49,30 +48,29 @@ namespace v1 {
 namespace someip {
 namespace testability {
 
-class ETSSecondaryServiceSomeIPProxy
-    : virtual public ETSSecondaryServiceProxyBase,
+class ETSTestService1SomeIPProxy
+    : virtual public ETSTestService1ProxyBase,
       virtual public CommonAPI::SomeIP::Proxy {
 public:
-    ETSSecondaryServiceSomeIPProxy(
+    ETSTestService1SomeIPProxy(
         const CommonAPI::SomeIP::Address &_address,
         const std::shared_ptr<CommonAPI::SomeIP::ProxyConnection> &_connection);
 
-    virtual ~ETSSecondaryServiceSomeIPProxy();
+    virtual ~ETSTestService1SomeIPProxy();
 
-    virtual SecondaryEventUINT8Event& getSecondaryEventUINT8Event();
+    /*
+     * description: 
+     * Sends the uint32 value as reply.
+     */
+    virtual void echoUINT32(uint32_t _inUINT32_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, uint32_t &_outUINT32_ResArg1, const CommonAPI::CallInfo *_info);
 
-    virtual SecondaryMulticastEventUINT8Event& getSecondaryMulticastEventUINT8Event();
-
-    virtual SecondaryEventUINT8ReliableEvent& getSecondaryEventUINT8ReliableEvent();
+    virtual std::future<CommonAPI::CallStatus> echoUINT32Async(const uint32_t &_inUINT32_ReqArg1, EchoUINT32AsyncCallback _callback, const CommonAPI::CallInfo *_info);
 
     virtual void getOwnVersion(uint16_t &_major, uint16_t &_minor) const;
 
     virtual std::future<void> getCompletionFuture();
 
 private:
-    CommonAPI::SomeIP::Event<SecondaryEventUINT8Event, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> secondaryEventUINT8_;
-    CommonAPI::SomeIP::Event<SecondaryMulticastEventUINT8Event, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> secondaryMulticastEventUINT8_;
-    CommonAPI::SomeIP::Event<SecondaryEventUINT8ReliableEvent, CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t> >> secondaryEventUINT8Reliable_;
 
     std::promise<void> completed_;
 };
@@ -81,4 +79,4 @@ private:
 } // namespace someip
 } // namespace v1
 
-#endif // V1_SOMEIP_TESTABILITY_ETS_Secondary_Service_SOMEIP_PROXY_HPP_
+#endif // V1_SOMEIP_TESTABILITY_ETS_Test_Service1_SOMEIP_PROXY_HPP_

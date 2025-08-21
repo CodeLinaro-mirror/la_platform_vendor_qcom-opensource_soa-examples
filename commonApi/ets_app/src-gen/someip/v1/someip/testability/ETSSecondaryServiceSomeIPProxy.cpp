@@ -53,7 +53,8 @@ ETSSecondaryServiceSomeIPProxy::ETSSecondaryServiceSomeIPProxy(
     const std::shared_ptr<CommonAPI::SomeIP::ProxyConnection> &_connection)
         : CommonAPI::SomeIP::Proxy(_address, _connection),
           secondaryEventUINT8_(*this, 0x8, CommonAPI::SomeIP::event_id_t(0x8085), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr))),
-          secondaryMulticastEventUINT8_(*this, 0x9, CommonAPI::SomeIP::event_id_t(0x8086), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr)))
+          secondaryMulticastEventUINT8_(*this, 0x9, CommonAPI::SomeIP::event_id_t(0x8086), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr))),
+          secondaryEventUINT8Reliable_(*this, 0xa, CommonAPI::SomeIP::event_id_t(0x8087), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_RELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr)))
 {
 }
 
@@ -67,6 +68,9 @@ ETSSecondaryServiceSomeIPProxy::SecondaryEventUINT8Event& ETSSecondaryServiceSom
 }
 ETSSecondaryServiceSomeIPProxy::SecondaryMulticastEventUINT8Event& ETSSecondaryServiceSomeIPProxy::getSecondaryMulticastEventUINT8Event() {
     return secondaryMulticastEventUINT8_;
+}
+ETSSecondaryServiceSomeIPProxy::SecondaryEventUINT8ReliableEvent& ETSSecondaryServiceSomeIPProxy::getSecondaryEventUINT8ReliableEvent() {
+    return secondaryEventUINT8Reliable_;
 }
 
 void ETSSecondaryServiceSomeIPProxy::getOwnVersion(uint16_t& ownVersionMajor, uint16_t& ownVersionMinor) const {

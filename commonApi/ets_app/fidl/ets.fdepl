@@ -523,6 +523,114 @@ define org.genivi.commonapi.someip.deployment for interface someip.testability.E
             7
         }
     }
+
+    method activateTestSerivce {
+        SomeIpMethodID = 82
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
+
+    method deactivateTestSerivce {
+        SomeIpMethodID = 83
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
+
+    attribute ETSInterfaceVersion {
+        SomeIpGetterID = 37
+        SomeIpAttributeReliable = false
+        SomeIpNotifierID = 32773
+        SomeIpNotifierMaxRetentionTime = 5
+        SomeIpNotifierDebounceTime = 100
+        SomeIpGetterMaxRetentionTime = 5
+        SomeIpGetterRequestDebounceTime = 100
+        SomeIpNotifierEventGroups = {
+            2, 5
+        }
+    }
+
+    attribute TestFieldUINT8 {
+        SomeIpGetterID = 38
+        SomeIpAttributeReliable = false
+        SomeIpSetterID = 39
+        SomeIpNotifierID = 32774
+        SomeIpNotifierMaxRetentionTime = 5
+        SomeIpNotifierDebounceTime = 100
+        SomeIpGetterMaxRetentionTime = 5
+        SomeIpGetterRequestDebounceTime = 100
+        SomeIpSetterMaxRetentionTime = 5
+        SomeIpSetterRequestDebounceTime = 100
+        SomeIpNotifierEventGroups = {
+            2, 5
+        }
+    }
+
+    attribute TestFieldUINT8Array {
+        SomeIpGetterID = 40
+        SomeIpAttributeReliable = false
+        SomeIpSetterID = 41
+        SomeIpNotifierID = 32775
+        SomeIpNotifierMaxRetentionTime = 5
+        SomeIpNotifierDebounceTime = 100
+        SomeIpGetterMaxRetentionTime = 5
+        SomeIpGetterRequestDebounceTime = 100
+        SomeIpSetterMaxRetentionTime = 5
+        SomeIpSetterRequestDebounceTime = 100
+        SomeIpNotifierEventGroups = {
+            2, 5
+        }
+        SomeIpArrayMaxLength = 5
+        SomeIpArrayMinLength = 0
+    }
+
+    attribute TestFieldUINT8Reliable {
+        SomeIpGetterID = 42
+        SomeIpAttributeReliable = true
+        SomeIpSetterID = 43
+        SomeIpNotifierID = 32776
+        SomeIpNotifierMaxRetentionTime = 5
+        SomeIpNotifierDebounceTime = 100
+        SomeIpGetterMaxRetentionTime = 5
+        SomeIpGetterRequestDebounceTime = 100
+        SomeIpSetterMaxRetentionTime = 5
+        SomeIpSetterRequestDebounceTime = 100
+        SomeIpNotifierEventGroups = {
+            2
+        }
+    }
+
+    method echoUINT8RELIABLE {
+        SomeIpMethodID = 10
+        SomeIpReliable = true
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
+
+    broadcast TestEventUINT8Reliable {
+        SomeIpEventID = 32771
+        SomeIpReliable = true
+        SomeIpBroadcastMaxRetentionTime = 5
+        SomeIpBroadcastDebounceTime = 100
+        SomeIpEventGroups = {
+            2
+        }
+    }
+
+    method clientServiceGetLastValueOfEventTCP {
+        SomeIpMethodID = 59
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
+
+    method triggerEventUINT8Reliable {
+        SomeIpMethodID = 5
+        SomeIpReliable = true
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
 }
 
 define org.genivi.commonapi.someip.deployment for provider as Service {
@@ -554,11 +662,64 @@ define org.genivi.commonapi.someip.deployment for interface someip.testability.E
             9
         }
     }
+
+    broadcast SecondaryEventUINT8Reliable {
+        SomeIpEventID = 32903
+        SomeIpReliable = true
+        SomeIpBroadcastMaxRetentionTime = 5
+        SomeIpBroadcastDebounceTime = 100
+        SomeIpEventGroups = {
+            10
+        }
+    }
 }
 
 define org.genivi.commonapi.someip.deployment for provider as Service {
     instance someip.testability.ETSSecondaryService {
         InstanceId = "someip.testability.ETSSecondaryService"
         SomeIpInstanceID = 244
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for interface someip.testability.ETSTestService1 {
+    SomeIpServiceID = 259
+
+    method echoUINT32 {
+        SomeIpMethodID = 80
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for provider as Service {
+    instance someip.testability.ETSTestService1 {
+        InstanceId = "someip.testability.ETSTestService1Context1"
+        SomeIpInstanceID = 1
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for provider as Service {
+    instance someip.testability.ETSTestService1 {
+        InstanceId = "someip.testability.ETSTestService1Context2"
+        SomeIpInstanceID = 2
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for interface someip.testability.ETSTestService2 {
+    SomeIpServiceID = 260
+
+    method echoUINT32 {
+        SomeIpMethodID = 81
+        SomeIpReliable = false
+        SomeIpMethodMaxRetentionTime = 5
+        SomeIpMethodRequestDebounceTime = 100
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for provider as Service {
+    instance someip.testability.ETSTestService2 {
+        InstanceId = "someip.testability.ETSTestService2Context1"
+        SomeIpInstanceID = 1
     }
 }

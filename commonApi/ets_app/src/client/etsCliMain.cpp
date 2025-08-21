@@ -5,20 +5,20 @@
 
 #include "etsProxyImpl.hpp"
 
-int main() {
+int main(int argc, char *argv[]) {
     int indx = 0;
     uint32_t startTimeout = 0;
     uint32_t stopTimeout = 0;
     uint32_t subscriptionDuration = 0;
     int withoutOffer = 0;
-    int eventVal = 0;
     int service_id  = 0;
     int instance_id = 0;
     int array_length = 0;
     uint32_t start = 0;
     uint32_t duration = 0;
     uint32_t debounce = 0;
-    uint32_t eventval = 0;
+    int eventval = 0;
+    int meventval = 0;
     int iteration = 0;
     std::string remote_unicast_ipaddr;
     int remote_udp_port = 0;
@@ -26,14 +26,23 @@ int main() {
     int local_udp_port = 0;
     std::string multicast_ipaddr;
     int multicast_port = 0;
-    std::cout << __func__ << " Starting ETS Client App" << std::endl;
+    uint32_t fieldval = 0;
+
+    if (argc != 2) {
+        std::cout << "help:" << std::endl;
+        std::cout << "For default client run: someipETSClient ets_default_client" << std::endl;
+        std::cout << "For duplicate client run: someipETSClient ets_duplicate_client" << std::endl;
+        return 0;
+    }
+
+    std::cout << __func__ << " Starting ETS Client App " << argv[1] << std::endl;
     std::shared_ptr<etsProxyImpl> proxyPtr = std::make_shared<etsProxyImpl>();
     if (!proxyPtr) {
         std::cerr << __func__ << "proxyPtr (nullptr)... Exit" << std::endl;
         return 0;
     }
 
-    proxyPtr->createProxy();
+    proxyPtr->createProxy(argv[1]);
 
     while(true) {
         std::cout << "Case 0: invoke_all_test_cases" << std::endl;
@@ -159,6 +168,42 @@ int main() {
         std::cout << "Case 120: invoke_SD_Interface_Version" << std::endl;
         std::cout << "Case 121: invoke_Fire_And_Forget_Wrong_Method_ID" << std::endl;
         std::cout << "Case 122: invoke_echoENUM" << std::endl;
+        std::cout << "Case 123: invoke_activateTestSerivce" << std::endl;
+        std::cout << "Case 124: tester_requestTestService" << std::endl;
+        std::cout << "Case 125: invoke_requestTestServiceMethod" << std::endl;
+        std::cout << "Case 126: invoke_deactivateTestSerivce" << std::endl;
+        std::cout << "Case 127: invoke_Wrong_Return_Code" << std::endl;
+        std::cout << "Case 128: invoke_echoUINT8ArrayMinSize_too_short" << std::endl;
+        std::cout << "Case 129: Verify IN OUT TP data transfer in parallel" << std::endl;
+        std::cout << "Case 130: invoke_TP_Verify_ErrorDuringReception" << std::endl;
+        std::cout << "Case 131: invoke_TP_Verify_ReceptionBufferManagement" << std::endl;
+        std::cout << "Case 132: invoke_TP_Verify_OffsetCalculationDuringReception" << std::endl;
+        std::cout << "Case 133: invoke_TP_Verify_MissingFrameDuringReception" << std::endl;
+        std::cout << "Case 134: invoke_TP_Verify_DuplicateFrameDuringReception" << std::endl;
+        std::cout << "Case 135: invoke_resetInterface" << std::endl;
+        std::cout << "Case 136: invoke_suspendInterface" << std::endl;
+        std::cout << "Case 137: invoke_SD_SuspendInterface" << std::endl;
+        std::cout << "Case 138: tester_subscribe_TestFieldUINT8" << std::endl;
+        std::cout << "Case 139: tester_set_TestFieldUINT8" << std::endl;
+        std::cout << "Case 140: tester_get_TestFieldUINT8" << std::endl;
+        std::cout << "Case 141: tester_unsubscribe_TestFieldUINT8" << std::endl;
+        std::cout << "Case 142: tester_subscribe_TestFieldUINT8Array" << std::endl;
+        std::cout << "Case 143: tester_set_TestFieldUINT8Array" << std::endl;
+        std::cout << "Case 144: tester_get_TestFieldUINT8Array" << std::endl;
+        std::cout << "Case 145: tester_unsubscribe_TestFieldUINT8Array" << std::endl;
+        std::cout << "Case 146: tester_subscribe_TestFieldUINT8Reliable" << std::endl;
+        std::cout << "Case 147: tester_set_TestFieldUINT8Reliable" << std::endl;
+        std::cout << "Case 148: tester_get_TestFieldUINT8Reliable" << std::endl;
+        std::cout << "Case 149: tester_unsubscribe_TestFieldUINT8Reliable" << std::endl;
+        std::cout << "Case 150: tester_subscribe_ETSInterfaceVersion" << std::endl;
+        std::cout << "Case 151: tester_get_ETSInterfaceVersion" << std::endl;
+        std::cout << "Case 152: tester_unsubscribe_ETSInterfaceVersion" << std::endl;
+        std::cout << "Case 153: invoke_echoUINT8RELIABLE" << std::endl;
+        std::cout << "Case 154: tester_subscribe_TestEventUINT8Reliable" << std::endl;
+        std::cout << "Case 155: invoke_triggerEventUINT8Reliable" << std::endl;
+        std::cout << "Case 156: tester_unsubscribe_TestEventUINT8Reliable" << std::endl;
+        std::cout << "Case 157: tester_send_reliable_event" << std::endl;
+        std::cout << "Case 158: invoke_clientServiceGetLastValueOfEventTCP" << std::endl;
         std::cout << "Enter case no:";
         std::cin >> indx;
         switch(indx) {
@@ -169,8 +214,12 @@ int main() {
                 duration = 4;
                 debounce = 2;
                 eventval = 8;
+                meventval = 9;
                 iteration = 100;
-                std::cout << "Select remote ip: 1->RBVM 2->QNX 3->FVM" << std::endl;
+                startTimeout = 2;
+                stopTimeout = 2;
+                subscriptionDuration = 30;
+                std::cout << "Select remote ip: 1->RBVM 2->QNX 3->FVM 4->IVC else Proivde IP" << std::endl;
                 std::cin >> indx;
                 if (1 == indx) {
                     remote_unicast_ipaddr = "192.168.114.1";
@@ -178,11 +227,17 @@ int main() {
                 else if (2 == indx) {
                     remote_unicast_ipaddr = "192.168.114.42";
                 }
-                else {
+                else if (3 == indx) {
                     remote_unicast_ipaddr = "192.168.114.2";
                 }
+                else if (4 == indx) {
+                    remote_unicast_ipaddr = "192.168.114.3";
+                }
+                else {
+                    std::cin >> remote_unicast_ipaddr;
+                }
                 remote_udp_port = 30515;
-                std::cout << "Select local ip: 1->RBVM 2->QNX 3->FVM 4->Linux VM" << std::endl;
+                std::cout << "Select local ip: 1->RBVM 2->QNX 3->FVM 4->Linux VM else Proivde IP" << std::endl;
                 std::cin >> indx;
                 if (1 == indx) {
                     local_unicast_ipaddr = "192.168.114.1";
@@ -193,8 +248,11 @@ int main() {
                 else if(3 == indx) {
                     local_unicast_ipaddr = "192.168.114.2";
                 }
-                else {
+                else if(4 == indx) {
                     local_unicast_ipaddr = "192.168.114.5";
+                }
+                else {
+                    std::cin >> local_unicast_ipaddr;
                 }
                 local_udp_port = 30701;
                 multicast_ipaddr = "237.50.20.1";
@@ -261,7 +319,21 @@ int main() {
                 array_length = 1397;
                 proxyPtr->invoke_triggerEventUINT8ArrayTPNoReqTPPayload(array_length);
                 sleep(2);
+                /* To verify IN OUT TP processing in parallel */
+                proxyPtr->invoke_triggerEventUINT8ArrayTPNoReqTPPayload(array_length);
+                proxyPtr->invoke_echoUINT8ArrayLengthTPNoResponse(array_length);
+                sleep(2);
                 proxyPtr->tester_unsubscribe_TestEventUINT8TP();
+                sleep(2);
+                proxyPtr->invoke_TP_Verify_ErrorDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_TP_Verify_ReceptionBufferManagement(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_TP_Verify_OffsetCalculationDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_TP_Verify_MissingFrameDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_TP_Verify_DuplicateFrameDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
                 proxyPtr->invoke_echoFLOAT64();
                 sleep(2);
@@ -379,6 +451,8 @@ int main() {
                 sleep(2);
                 proxyPtr->invoke_Wrong_SOMEIP_Protocol_Version(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
+                proxyPtr->invoke_Wrong_Return_Code(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
                 proxyPtr->invoke_Length_equals_0_Test(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
                 proxyPtr->invoke_Length_smaller_than_8_Test(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
@@ -456,6 +530,95 @@ int main() {
                 proxyPtr->invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
                 proxyPtr->invoke_SD_Send_triggerEventUINT8Multicast_Eventgroup_6(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_echoUINT8ArrayMinSize_too_short(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                service_id = 259;
+                instance_id = 1;
+                proxyPtr->invoke_activateTestSerivce(service_id, instance_id);
+                sleep(2);
+                service_id = 260;
+                instance_id = 1;
+                proxyPtr->invoke_activateTestSerivce(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 1;
+                proxyPtr->tester_requestTestService(service_id, instance_id);
+                sleep(2);
+                service_id = 260;
+                instance_id = 1;
+                proxyPtr->tester_requestTestService(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 1;
+                proxyPtr->invoke_requestTestServiceMethod(service_id, instance_id);
+                sleep(2);
+                service_id = 260;
+                instance_id = 1;
+                proxyPtr->invoke_requestTestServiceMethod(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 1;
+                proxyPtr->invoke_deactivateTestSerivce(service_id, instance_id);
+                sleep(2);
+                service_id = 260;
+                instance_id = 1;
+                proxyPtr->invoke_deactivateTestSerivce(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 1;
+                proxyPtr->invoke_activateTestSerivce(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 2;
+                proxyPtr->invoke_activateTestSerivce(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 1;
+                proxyPtr->tester_requestTestService(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 2;
+                proxyPtr->tester_requestTestService(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 1;
+                proxyPtr->invoke_requestTestServiceMethod(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 2;
+                proxyPtr->invoke_requestTestServiceMethod(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 1;
+                proxyPtr->invoke_deactivateTestSerivce(service_id, instance_id);
+                sleep(2);
+                service_id = 259;
+                instance_id = 2;
+                proxyPtr->invoke_deactivateTestSerivce(service_id, instance_id);
+                sleep(2);
+                proxyPtr->invoke_clientServiceActivate(startTimeout);
+                sleep(4);
+                proxyPtr->tester_send_offer();
+                sleep(2);
+                proxyPtr->invoke_clientServiceSubscribeEventgroup(startTimeout, subscriptionDuration);
+                sleep(4);
+                proxyPtr->tester_send_unicast_event(eventval);
+                sleep(2);
+                proxyPtr->invoke_clientServiceGetLastValueOfEventUDPUnicast();
+                sleep(2);
+                proxyPtr->tester_send_multicast_event(meventval);
+                sleep(2);
+                proxyPtr->invoke_clientServiceGetLastValueOfEventUDPMulticast();
+                sleep(2);
+                proxyPtr->invoke_clientServiceDeactivate(stopTimeout);
+                sleep(2);
+                proxyPtr->invoke_SD_ResetInterface();
+                sleep(2);
+                proxyPtr->invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back();
+                sleep(2);
+                proxyPtr->invoke_SD_SuspendInterface();
+                sleep(2);
                 break;
             }
             case 1:
@@ -494,8 +657,8 @@ int main() {
             case 6:
             {
                 std::cout << "Enter Unicast Event value:";
-                std::cin >> eventVal;
-                proxyPtr->tester_send_unicast_event(eventVal);
+                std::cin >> eventval;
+                proxyPtr->tester_send_unicast_event(eventval);
                 break;
             }
             case 7:
@@ -506,8 +669,8 @@ int main() {
             case 8:
             {
                 std::cout << "Enter Multicast Event value:";
-                std::cin >> eventVal;
-                proxyPtr->tester_send_multicast_event(eventVal);
+                std::cin >> eventval;
+                proxyPtr->tester_send_multicast_event(eventval);
                 break;
             }
             case 9:
@@ -559,7 +722,7 @@ int main() {
             case 16:
             {
                 std::cout << "Send TP data over method call" << std::endl;
-                std::cout << "Enter TP Array length(range:0-255300):";
+                std::cout << "Enter TP Array length(range:0-4996):";
                 std::cin >> array_length;
                 std::cout << "1. IN-TP OUT-TP" << std::endl;
                 std::cout << "2. Only IN-TP" << std::endl;
@@ -589,7 +752,7 @@ int main() {
             case 18:
             {
                 std::cout << "TP broadcast event" << std::endl;
-                std::cout << "Enter TP Array length(range:0-255300):";
+                std::cout << "Enter TP Array length(range:0-4996):";
                 std::cin >> array_length;
                 std::cout << "1. With TP Payload as Input" << std::endl;
                 std::cout << "2. With TP Payload Size as Input" << std::endl;
@@ -981,7 +1144,6 @@ int main() {
             case 75:
             {
                 std::cout << "invoke_Wrong_SOMEIP_Protocol_Version" << std::endl;
-                std::cout << "invoke_Length_equals_0_Test";
                 std::cout << "Enter remote unicast ipaddr:";
                 std::cin >> remote_unicast_ipaddr;
                 std::cout << "Enter remote udp port:";
@@ -1427,16 +1589,7 @@ int main() {
             }
             case 108:
             {
-                std::cout << "invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back" << std::endl;
-                std::cout << "Enter remote unicast ipaddr:";
-                std::cin >> remote_unicast_ipaddr;
-                std::cout << "Enter multicast port:";
-                std::cin >> multicast_port;
-                std::cout << "Enter local unicast ipaddr:";
-                std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
-                std::cin >> local_udp_port;
-                proxyPtr->invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back();
                 break;
             }
             case 109:
@@ -1526,15 +1679,7 @@ int main() {
             case 115:
             {
                 std::cout << "invoke_SD_ResetInterface" << std::endl;
-                std::cout << "Enter remote unicast ipaddr:";
-                std::cin >> remote_unicast_ipaddr;
-                std::cout << "Enter multicast port:";
-                std::cin >> multicast_port;
-                std::cout << "Enter local unicast ipaddr:";
-                std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
-                std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_ResetInterface(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_SD_ResetInterface();
                 break;
             }
             case 116:
@@ -1617,6 +1762,302 @@ int main() {
             {
                 std::cout << "invoke_echoENUM" << std::endl;
                 proxyPtr->invoke_echoENUM();
+                break;
+            }
+            case 123:
+            {
+                std::cout << "Enter service id:";
+                std::cin >> service_id;
+                std::cout << "Enter instance id:";
+                std::cin >> instance_id;
+                proxyPtr->invoke_activateTestSerivce(service_id, instance_id);
+                break;
+            }
+            case 124:
+            {
+                std::cout << "Enter service id:";
+                std::cin >> service_id;
+                std::cout << "Enter instance id:";
+                std::cin >> instance_id;
+                proxyPtr->tester_requestTestService(service_id, instance_id);
+                break;
+            }
+            case 125:
+            {
+                std::cout << "Enter service id:";
+                std::cin >> service_id;
+                std::cout << "Enter instance id:";
+                std::cin >> instance_id;
+                proxyPtr->invoke_requestTestServiceMethod(service_id, instance_id);
+                break;
+            }
+            case 126:
+            {
+                std::cout << "Enter service id:";
+                std::cin >> service_id;
+                std::cout << "Enter instance id:";
+                std::cin >> instance_id;
+                proxyPtr->invoke_deactivateTestSerivce(service_id, instance_id);
+                break;
+            }
+            case 127:
+            {
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter remote udp port:";
+                std::cin >> remote_udp_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_Wrong_Return_Code(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                break;
+            }
+            case 128:
+            {
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter remote udp port:";
+                std::cin >> remote_udp_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_echoUINT8ArrayMinSize_too_short(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                break;
+            }
+            case 129:
+            {
+                std::cout << "Enter TP Array length(range:0-4996):";
+                std::cin >> array_length;
+                proxyPtr->tester_subscribe_TestEventUINT8TP();
+                sleep(2);
+                proxyPtr->invoke_triggerEventUINT8ArrayTPNoReqTPPayload(array_length);
+                proxyPtr->invoke_echoUINT8ArrayLengthTPNoResponse(array_length);
+                sleep(2);
+                proxyPtr->tester_unsubscribe_TestEventUINT8TP();
+                break;
+            }
+            case 130:
+            {
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter remote udp port:";
+                std::cin >> remote_udp_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_TP_Verify_ErrorDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                break;
+            }
+            case 131:
+            {
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter remote udp port:";
+                std::cin >> remote_udp_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_TP_Verify_ReceptionBufferManagement(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                break;
+            }
+            case 132:
+            {
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter remote udp port:";
+                std::cin >> remote_udp_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_TP_Verify_OffsetCalculationDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                break;
+            }
+            case 133:
+            {
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter remote udp port:";
+                std::cin >> remote_udp_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_TP_Verify_MissingFrameDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                break;
+            }
+            case 134:
+            {
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter remote udp port:";
+                std::cin >> remote_udp_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_TP_Verify_DuplicateFrameDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                break;
+            }
+            case 135:
+            {
+                proxyPtr->invoke_resetInterface();
+                break;
+            }
+            case 136:
+            {
+                std::cout << "Enter Start Timeout value in seconds:";
+                std::cin >> start;
+                std::cout << "Enter trigger event duration in seconds:";
+                std::cin >> duration;
+                proxyPtr->invoke_suspendInterface(start, duration);
+                break;
+            }
+            case 137:
+            {
+                std::cout << "invoke_SD_SuspendInterface" << std::endl;
+                proxyPtr->invoke_SD_SuspendInterface();
+                break;
+            }
+            case 138:
+            {
+                std::cout << "tester_subscribe_TestFieldUINT8" << std::endl;
+                proxyPtr->tester_subscribe_TestFieldUINT8();
+                break;
+            }
+            case 139:
+            {
+                std::cout << "tester_set_TestFieldUINT8" << std::endl;
+                std::cout << "Enter Field value:";
+                std::cin >> fieldval;
+                proxyPtr->tester_set_TestFieldUINT8(fieldval);
+                break;
+            }
+            case 140:
+            {
+                std::cout << "tester_get_TestFieldUINT8" << std::endl;
+                proxyPtr->tester_get_TestFieldUINT8();
+                break;
+            }
+            case 141:
+            {
+                std::cout << "tester_unsubscribe_TestFieldUINT8" << std::endl;
+                proxyPtr->tester_unsubscribe_TestFieldUINT8();
+                break;
+            }
+            case 142:
+            {
+                std::cout << "tester_subscribe_TestFieldUINT8Array" << std::endl;
+                proxyPtr->tester_subscribe_TestFieldUINT8Array();
+                break;
+            }
+            case 143:
+            {
+                std::cout << "tester_set_TestFieldUINT8Array" << std::endl;
+                proxyPtr->tester_set_TestFieldUINT8Array();
+                break;
+            }
+            case 144:
+            {
+                std::cout << "tester_get_TestFieldUINT8Array" << std::endl;
+                proxyPtr->tester_get_TestFieldUINT8Array();
+                break;
+            }
+            case 145:
+            {
+                std::cout << "tester_unsubscribe_TestFieldUINT8Array" << std::endl;
+                proxyPtr->tester_unsubscribe_TestFieldUINT8Array();
+                break;
+            }
+            case 146:
+            {
+                std::cout << "tester_subscribe_TestFieldUINT8Reliable" << std::endl;
+                proxyPtr->tester_subscribe_TestFieldUINT8Reliable();
+                break;
+            }
+            case 147:
+            {
+                std::cout << "tester_set_TestFieldUINT8Reliable" << std::endl;
+                std::cout << "Enter Field value:";
+                std::cin >> fieldval;
+                proxyPtr->tester_set_TestFieldUINT8Reliable(fieldval);
+                break;
+            }
+            case 148:
+            {
+                std::cout << "tester_get_TestFieldUINT8Reliable" << std::endl;
+                proxyPtr->tester_get_TestFieldUINT8Reliable();
+                break;
+            }
+            case 149:
+            {
+                std::cout << "tester_unsubscribe_TestFieldUINT8Reliable" << std::endl;
+                proxyPtr->tester_unsubscribe_TestFieldUINT8Reliable();
+                break;
+            }
+            case 150:
+            {
+                std::cout << "tester_subscribe_ETSInterfaceVersion" << std::endl;
+                proxyPtr->tester_subscribe_ETSInterfaceVersion();
+                break;
+            }
+            case 151:
+            {
+                std::cout << "tester_get_ETSInterfaceVersion" << std::endl;
+                proxyPtr->tester_get_ETSInterfaceVersion();
+                break;
+            }
+            case 152:
+            {
+                std::cout << "tester_unsubscribe_ETSInterfaceVersion" << std::endl;
+                proxyPtr->tester_unsubscribe_ETSInterfaceVersion();
+                break;
+            }
+            case 153:
+            {
+                std::cout << "invoke_echoUINT8RELIABLE" << std::endl;
+                proxyPtr->invoke_echoUINT8RELIABLE();
+                break;
+            }
+            case 154:
+            {
+                std::cout << "tester_subscribe_TestEventUINT8Reliable" << std::endl;
+                proxyPtr->tester_subscribe_TestEventUINT8Reliable();
+                break;
+            }
+            case 155:
+            {
+                std::cout << "invoke_triggerEventUINT8Reliable" << std::endl;
+                std::cout << "Enter Start Timeout value in seconds:";
+                std::cin >> start;
+                std::cout << "Enter trigger event duration in seconds:";
+                std::cin >> duration;
+                std::cout << "Enter debounce time in seconds:";
+                std::cin >> debounce;
+                proxyPtr->invoke_triggerEventUINT8Reliable(start, duration, debounce);
+                break;
+            }
+            case 156:
+            {
+                std::cout << "tester_unsubscribe_TestEventUINT8Reliable" << std::endl;
+                proxyPtr->tester_unsubscribe_TestEventUINT8Reliable();
+                break;
+            }
+            case 157:
+            {
+                std::cout << "Enter Reliable Event value:";
+                std::cin >> eventval;
+                proxyPtr->tester_send_reliable_event(eventval);
+                break;
+            }
+            case 158:
+            {
+                std::cout << "invoke_clientServiceGetLastValueOfEventTCP" << std::endl;
+                proxyPtr->invoke_clientServiceGetLastValueOfEventTCP();
                 break;
             }
             default:

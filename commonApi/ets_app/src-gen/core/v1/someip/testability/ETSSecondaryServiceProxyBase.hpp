@@ -46,6 +46,9 @@ public:
     typedef CommonAPI::Event<
         uint8_t
     > SecondaryMulticastEventUINT8Event;
+    typedef CommonAPI::Event<
+        uint8_t
+    > SecondaryEventUINT8ReliableEvent;
 
 
     /*
@@ -58,6 +61,11 @@ public:
      * A broadcast event of type multicast to support clientServiceSubscribeEventgroup request.
      */
     virtual SecondaryMulticastEventUINT8Event& getSecondaryMulticastEventUINT8Event() = 0;
+    /*
+     * description: 
+     * A Reliable type broadcast event to support clientServiceSubscribeEventgroup request.
+     */
+    virtual SecondaryEventUINT8ReliableEvent& getSecondaryEventUINT8ReliableEvent() = 0;
 
     virtual std::future<void> getCompletionFuture() = 0;
 };

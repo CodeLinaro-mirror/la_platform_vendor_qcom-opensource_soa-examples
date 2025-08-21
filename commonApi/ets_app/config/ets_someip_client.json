@@ -22,6 +22,22 @@
         {
             "name" : "ets_secondary_service",
             "id" : "0x5546"
+        },
+        {
+            "name" : "TestService1Context1Client",
+            "id" : "0x5547"
+        },
+        {
+            "name" : "TestService1Context2Client",
+            "id" : "0x5548"
+        },
+        {
+            "name" : "TestService2Context1Client",
+            "id" : "0x5549"
+        },
+        {
+            "name" : "ets_duplicate_client",
+            "id" : "0x5550"
         }
     ],
     "services":
@@ -30,9 +46,15 @@
             "service": "257",
             "instance": "1",
             "unreliable": "30515",
+            "reliable": "30517",
             "unicast": "192.168.114.2",
             "someip-tp": {
                 "client-to-service": ["112", "77", "113", "79"]
+            },
+            "multicast" :
+            {
+                "address" : "237.50.20.1",
+                "port" : "32345"
             },
             "events" :
             [
@@ -73,20 +95,42 @@
                     "is_field" : "false",
                     "is_reliable" : "false",
                     "update_on_change" : "true"
+                },
+                {
+                    "event" : "32774",
+                    "is_field" : "true",
+                    "is_reliable" : "false"
+                },
+                {
+                    "event" : "32775",
+                    "is_field" : "true",
+                    "is_reliable" : "false"
+                },
+                {
+                    "event" : "32776",
+                    "is_field" : "true",
+                    "is_reliable" : "true"
+                },
+                {
+                    "event" : "32771",
+                    "is_field" : "false",
+                    "is_reliable" : "true"
                 }
             ],
             "eventgroups" :
             [
                 {
                     "eventgroup" : "2",
-                    "events" : [ "32769", "32770", "32772", "32779", "32780" ]
+                    "events" : [ "32769", "32770", "32772", "32779", "32780", "32774", "32775", "32776", "32771" ]
                 },
                 {
                     "eventgroup" : "5",
-                    "events" : [ "32769", "32770", "32772", "32779", "32780" ]
+                    "events" : [ "32769", "32770", "32772", "32779", "32780", "32774", "32775" ]
                 },
                 {
                     "eventgroup" : "6",
+                    "threshold" : "1",
+                    "is_multicast" : "true",
                     "events" : [ "32779" ]
                 },
                 {
@@ -99,10 +143,11 @@
             "service": "258",
             "instance": "244",
             "unreliable": "30516",
+            "reliable": "30518",
             "unicast": "192.168.114.1",
             "multicast" :
             {
-                "address" : "224.225.226.234",
+                "address" : "237.50.20.1",
                 "port" : "32344"
             },
             "events" :
@@ -116,6 +161,11 @@
                     "event" : "32902",
                     "is_field" : "false",
                     "is_reliable" : "false"
+                },
+                {
+                    "event" : "32903",
+                    "is_field" : "false",
+                    "is_reliable" : "true"
                 }
             ],
             "eventgroups" :
@@ -126,10 +176,24 @@
                 },
                 {
                     "eventgroup" : "9",
+                    "threshold" : "1",
                     "is_multicast" : "true",
                     "events" : [ "32902" ]
+                },
+                {
+                    "eventgroup" : "10",
+                    "events" : [ "32903" ]
                 }
             ]
+        }
+    ],
+    "clients":
+    [
+        {
+            "service": "257",
+            "instance": "1",
+            "unreliable": [ "30615" ],
+            "reliable": [ "30617" ]
         }
     ],
     "e2e" :
@@ -155,7 +219,7 @@
             }
         ]
     },
-    "max-payload-size-unreliable" : "255300",
+    "max-payload-size-unreliable" : "5000",
     "routing" : "ets_default_client",
     "network" : "ets_default_client",
     "service-discovery" :

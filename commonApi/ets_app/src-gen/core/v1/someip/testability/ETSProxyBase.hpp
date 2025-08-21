@@ -19,11 +19,14 @@
 #define HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE
 #endif
 
+#include <CommonAPI/Deployment.hpp>
 #include <CommonAPI/InputStream.hpp>
 #include <CommonAPI/OutputStream.hpp>
+#include <CommonAPI/Struct.hpp>
 #include <cstdint>
 #include <vector>
 
+#include <CommonAPI/Attribute.hpp>
 #include <CommonAPI/Event.hpp>
 #include <CommonAPI/Proxy.hpp>
 #include <functional>
@@ -62,6 +65,13 @@ public:
     typedef CommonAPI::Event<
         uint32_t
     > TestEventUINT32UpdateOnChangeEvent;
+    typedef CommonAPI::ObservableReadonlyAttribute<::v1::someip::testability::ETS::VersionType> ETSInterfaceVersionAttribute;
+    typedef CommonAPI::ObservableAttribute<uint8_t> TestFieldUINT8Attribute;
+    typedef CommonAPI::ObservableAttribute<std::vector< uint8_t >> TestFieldUINT8ArrayAttribute;
+    typedef CommonAPI::ObservableAttribute<uint8_t> TestFieldUINT8ReliableAttribute;
+    typedef CommonAPI::Event<
+        uint8_t
+    > TestEventUINT8ReliableEvent;
 
     typedef std::function<void(const CommonAPI::CallStatus&, const uint32_t&)> CheckByteOrderAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const uint8_t&)> ClientServiceGetLastValueOfEventUDPMulticastAsyncCallback;
@@ -86,6 +96,8 @@ public:
     typedef std::function<void(const CommonAPI::CallStatus&, const std::vector< uint8_t >&)> EchoUINT8ArrayLengthTPAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const uint32_t&)> EchoUINT8ArrayLengthInTPAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const std::vector< uint8_t >&)> EchoUINT8ArrayLengthOutTPAsyncCallback;
+    typedef std::function<void(const CommonAPI::CallStatus&, const uint8_t&)> EchoUINT8RELIABLEAsyncCallback;
+    typedef std::function<void(const CommonAPI::CallStatus&, const uint8_t&)> ClientServiceGetLastValueOfEventTCPAsyncCallback;
 
     /*
      * description: 
@@ -372,6 +384,67 @@ public:
      * A broadcast periodic event triggered on triggerEventUINT32UpdateOnChange method request.
      */
     virtual TestEventUINT32UpdateOnChangeEvent& getTestEventUINT32UpdateOnChangeEvent() = 0;
+    /*
+     * description: 
+     * Activates Test Service in the server side.
+     */
+    /**
+     * @invariant Fire And Forget
+     */
+    virtual void activateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus) = 0;
+    /*
+     * description: 
+     * Deactivates Test Service in the server side.
+     */
+    /**
+     * @invariant Fire And Forget
+     */
+    virtual void deactivateTestSerivce(uint32_t _activateTestSerivce_ReqArg1, uint32_t _activateTestSerivce_ReqArg2, CommonAPI::CallStatus &_internalCallStatus) = 0;
+    /*
+     * description: 
+     * A field for notifying version information.
+     */
+    virtual ETSInterfaceVersionAttribute& getETSInterfaceVersionAttribute() = 0;
+    /*
+     * description: 
+     * A field of UINT8 type.
+     */
+    virtual TestFieldUINT8Attribute& getTestFieldUINT8Attribute() = 0;
+    /*
+     * description: 
+     * A field of UINT8 array.
+     */
+    virtual TestFieldUINT8ArrayAttribute& getTestFieldUINT8ArrayAttribute() = 0;
+    /*
+     * description: 
+     * A field of UINT8 type over reliable endpoint.
+     */
+    virtual TestFieldUINT8ReliableAttribute& getTestFieldUINT8ReliableAttribute() = 0;
+    /*
+     * description: 
+     * The method returns the transfered UINT8 value back to the invoker over reliable endpoint.
+     */
+    virtual void echoUINT8RELIABLE(uint8_t _echoUINT8RELIABLE_ReqArg1, CommonAPI::CallStatus &_internalCallStatus, uint8_t &_echoUINT8RELIABLE_ResArg1, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual std::future<CommonAPI::CallStatus> echoUINT8RELIABLEAsync(const uint8_t &_echoUINT8RELIABLE_ReqArg1, EchoUINT8RELIABLEAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    /*
+     * description: 
+     * A broadcast event of type uint8 triggered on triggerEventUINT8Reliable method request over tcp endpoint.
+     */
+    virtual TestEventUINT8ReliableEvent& getTestEventUINT8ReliableEvent() = 0;
+    /*
+     * description: 
+     * Get last value of TestEventUINT8Reliable.
+     */
+    virtual void clientServiceGetLastValueOfEventTCP(CommonAPI::CallStatus &_internalCallStatus, uint8_t &_clientServiceGetLastValueOfEventTCP_ResArg1, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual std::future<CommonAPI::CallStatus> clientServiceGetLastValueOfEventTCPAsync(ClientServiceGetLastValueOfEventTCPAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    /*
+     * description: 
+     * Requests to trigger an broadcast event of type uint8 over reliable endpoint.
+     */
+    /**
+     * @invariant Fire And Forget
+     */
+    virtual void triggerEventUINT8Reliable(uint32_t _triggerEventUINT8Reliable_ReqArg1, uint32_t _triggerEventUINT8Reliable_ReqArg2, uint32_t _triggerEventUINT8Reliable_ReqArg3, CommonAPI::CallStatus &_internalCallStatus) = 0;
 
     virtual std::future<void> getCompletionFuture() = 0;
 };

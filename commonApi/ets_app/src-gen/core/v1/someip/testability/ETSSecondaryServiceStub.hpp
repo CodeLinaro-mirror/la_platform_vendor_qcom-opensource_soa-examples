@@ -62,6 +62,11 @@ class ETSSecondaryServiceStubAdapter
     * Instead, the "fire<broadcastName>Event" methods of the stub should be used.
     */
     virtual void fireSecondaryMulticastEventUINT8Event(const uint8_t &_uINT8Value) = 0;
+    /**
+    * Sends a broadcast event for SecondaryEventUINT8Reliable. Should not be called directly.
+    * Instead, the "fire<broadcastName>Event" methods of the stub should be used.
+    */
+    virtual void fireSecondaryEventUINT8ReliableEvent(const uint8_t &_uINT8ValueReliable) = 0;
 
 
     virtual void deactivateManagedInstances() = 0;
@@ -108,7 +113,7 @@ public:
     virtual ~ETSSecondaryServiceStub() {}
     void lockInterfaceVersionAttribute(bool _lockAccess) { static_cast<void>(_lockAccess); }
     bool hasElement(const uint32_t _id) const {
-        return (_id < 2);
+        return (_id < 3);
     }
     virtual const CommonAPI::Version& getInterfaceVersion(std::shared_ptr<CommonAPI::ClientId> _client) = 0;
 
@@ -131,6 +136,16 @@ public:
         auto stubAdapter = CommonAPI::Stub<ETSSecondaryServiceStubAdapter, ETSSecondaryServiceStubRemoteEvent>::stubAdapter_.lock();
         if (stubAdapter)
             stubAdapter->fireSecondaryMulticastEventUINT8Event(_uINT8Value);
+    }
+    /*
+     * description: 
+     * A Reliable type broadcast event to support clientServiceSubscribeEventgroup request.
+     */
+    /// Sends a broadcast event for SecondaryEventUINT8Reliable.
+    virtual void fireSecondaryEventUINT8ReliableEvent(const uint8_t &_uINT8ValueReliable) {
+        auto stubAdapter = CommonAPI::Stub<ETSSecondaryServiceStubAdapter, ETSSecondaryServiceStubRemoteEvent>::stubAdapter_.lock();
+        if (stubAdapter)
+            stubAdapter->fireSecondaryEventUINT8ReliableEvent(_uINT8ValueReliable);
     }
 
 

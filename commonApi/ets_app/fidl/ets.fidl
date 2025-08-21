@@ -18,6 +18,11 @@ interface ETS {
 		FOUR = 5
 	}
 
+	struct VersionType {
+		UInt8 majorVersion
+		UInt32 minorVersion
+	}
+
 	array uint8ArrayArray of UInt8
 
 	array uint8ArrayReturnArray of UInt8
@@ -855,6 +860,119 @@ interface ETS {
 		}
 	}
 
+	<**
+		@description : Activates Test Service in the server side.
+	**>
+	method activateTestSerivce fireAndForget {
+		in {
+			<**
+				@description : Service Id.
+			**>
+			UInt32 activateTestSerivce_ReqArg1
+			<**
+				@description : Instance Id.
+			**>
+			UInt32 activateTestSerivce_ReqArg2
+		}
+	}
+
+	<**
+		@description : Deactivates Test Service in the server side.
+	**>
+	method deactivateTestSerivce fireAndForget {
+		in {
+			<**
+				@description : Service Id.
+			**>
+			UInt32 activateTestSerivce_ReqArg1
+			<**
+				@description : Instance Id.
+			**>
+			UInt32 activateTestSerivce_ReqArg2
+		}
+	}
+
+	<**
+		@description : A field for notifying version information.
+	**>
+	attribute VersionType ETSInterfaceVersion readonly
+
+	<**
+		@description : A field of UINT8 type.
+	**>
+	attribute UInt8 TestFieldUINT8
+
+	<**
+		@description : A field of UINT8 array.
+	**>
+	attribute UInt8 [ ] TestFieldUINT8Array
+
+	<**
+		@description : A field of UINT8 type over reliable endpoint.
+	**>
+	attribute UInt8 TestFieldUINT8Reliable
+
+	<**
+		@description : The method returns the transfered UINT8 value back to the invoker over reliable endpoint.
+	**>
+	method echoUINT8RELIABLE {
+		in {
+			<**
+				@description : The input uint8 parameter.
+			**>
+			UInt8 echoUINT8RELIABLE_ReqArg1
+		}
+		out {
+			<**
+				@description : The output uint8 parameter.
+			**>
+			UInt8 echoUINT8RELIABLE_ResArg1
+		}
+	}
+
+	<**
+		@description : A broadcast event of type uint8 triggered on triggerEventUINT8Reliable method request over tcp endpoint.
+	**>
+	broadcast TestEventUINT8Reliable {
+		out {
+			<**
+				@description : An uint8 parameter.
+			**>
+			UInt8 uINT8Value
+		}
+	}
+
+	<**
+		@description : Get last value of TestEventUINT8Reliable.
+	**>
+	method clientServiceGetLastValueOfEventTCP {
+		out {
+			<**
+				@description : The unicast event value.
+			**>
+			UInt8 clientServiceGetLastValueOfEventTCP_ResArg1
+		}
+	}
+
+	<**
+		@description : Requests to trigger an broadcast event of type uint8 over reliable endpoint.
+	**>
+	method triggerEventUINT8Reliable fireAndForget {
+		in {
+			<**
+				@description : Wait time before triggering the event.
+			**>
+			UInt32 triggerEventUINT8Reliable_ReqArg1
+			<**
+				@description : Trigger event shall be active for this period.
+			**>
+			UInt32 triggerEventUINT8Reliable_ReqArg2
+			<**
+				@description : Event shall be triggered with ths periodicity.
+			**>
+			UInt32 triggerEventUINT8Reliable_ReqArg3
+		}
+	}
 }
 
 <** 
@@ -887,6 +1005,74 @@ interface ETSSecondaryService {
 				@description : An event of type uint8.
 			**>
 			UInt8 uINT8Value
+		}
+	}
+
+	<**
+		@description : A Reliable type broadcast event to support clientServiceSubscribeEventgroup request.
+	**>
+	broadcast SecondaryEventUINT8Reliable {
+		out {
+			<**
+				@description : An event of type uint8.
+			**>
+			UInt8 uINT8ValueReliable
+		}
+	}
+}
+
+<**
+	@description : First Test Service for service port validation.
+**>
+interface ETSTestService1 {
+	version {
+		major 1
+		minor 0
+	}
+
+	<**
+	    @description : Sends the uint32 value as reply.
+	**>
+	method echoUINT32 {
+		in {
+			<**
+				@description : An uint32 type value.
+			**>
+			UInt32 inUINT32_ReqArg1
+		}
+		out {
+			<**
+				@description : An uint32 type value.
+			**>
+			UInt32 outUINT32_ResArg1
+		}
+	}
+}
+
+<**
+	@description : Second Test Service for service port validation.
+**>
+interface ETSTestService2 {
+	version {
+		major 1
+		minor 0
+	}
+
+	<**
+	    @description : Sends the uint32 value as reply.
+	**>
+	method echoUINT32 {
+		in {
+			<**
+				@description : An uint32 type value.
+			**>
+			UInt32 inUINT32_ReqArg1
+		}
+		out {
+			<**
+				@description : An uint32 type value.
+			**>
+			UInt32 outUINT32_ResArg1
 		}
 	}
 }

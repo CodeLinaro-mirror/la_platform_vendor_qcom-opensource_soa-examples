@@ -15,7 +15,9 @@ int main() {
     std::string instance = "someip.testability.ETS";
     std::string connection = "ets_default_service";
 
-    std::shared_ptr<etsStubImpl> etsService = std::make_shared<etsStubImpl>();
+    std::shared_ptr<etsStubImpl> etsService = etsStubImpl::getEtsServiceInstance();
+    ETS::VersionType version(ETS::getInterfaceVersion().Major, ETS::getInterfaceVersion().Minor);
+    etsService->setETSInterfaceVersionAttribute(version);
     bool successfullyRegistered = runtime->registerService(domain, instance, etsService, connection);
 
     while (!successfullyRegistered) {
