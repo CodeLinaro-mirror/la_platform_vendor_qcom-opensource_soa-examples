@@ -24,9 +24,14 @@ int main(int argc, char *argv[]) {
     int remote_udp_port = 0;
     std::string local_unicast_ipaddr;
     int local_udp_port = 0;
+    int local_tcp_port = 0;
     std::string multicast_ipaddr;
     int multicast_port = 0;
     uint32_t fieldval = 0;
+    std::string alternate_ipaddr;
+    int alternate_udp_port = 0;
+    int sec_local_udp_port = 0;
+    int sec_local_tcp_port = 0;
 
     if (argc != 2) {
         std::cout << "help:" << std::endl;
@@ -36,14 +41,13 @@ int main(int argc, char *argv[]) {
     }
 
     std::cout << __func__ << " Starting ETS Client App " << argv[1] << std::endl;
-    std::shared_ptr<etsProxyImpl> proxyPtr = std::make_shared<etsProxyImpl>();
+    std::shared_ptr<etsProxyImpl> proxyPtr = etsProxyImpl::getInstance();
     if (!proxyPtr) {
         std::cerr << __func__ << "proxyPtr (nullptr)... Exit" << std::endl;
         return 0;
     }
 
     proxyPtr->createProxy(argv[1]);
-
     while(true) {
         std::cout << "Case 0: invoke_all_test_cases" << std::endl;
         std::cout << "Case 1: invoke_checkByteOrder" << std::endl;
@@ -204,6 +208,25 @@ int main(int argc, char *argv[]) {
         std::cout << "Case 156: tester_unsubscribe_TestEventUINT8Reliable" << std::endl;
         std::cout << "Case 157: tester_send_reliable_event" << std::endl;
         std::cout << "Case 158: invoke_clientServiceGetLastValueOfEventTCP" << std::endl;
+        std::cout << "Case 159: invoke_SD_Unicast_SubscribeEventgroup" << std::endl;
+        std::cout << "Case 160: invoke_SD_Options_Array_longer_than_message_allows" << std::endl;
+        std::cout << "Case 161: invoke_SD_Option_shorter_with_unaligned_next_option" << std::endl;
+        std::cout << "Case 162: invoke_SD_Option_Length_shorter_GT_0_as_specified_for_type" << std::endl;
+        std::cout << "Case 163: invoke_SD_Option_Length_ends_past_Options_Array_Var_B" << std::endl;
+        std::cout << "Case 164: invoke_SD_Option_Length_ends_past_Options_Array_Var_A" << std::endl;
+        std::cout << "Case 165: invoke_SD_Multicast_FindService_with_unicast_Flag_to_0" << std::endl;
+        std::cout << "Case 166: invoke_SD_Multicast_FindService_Major_Minor_Version_set_to_all" << std::endl;
+        std::cout << "Case 167: invoke_SD_Length_of_Entry_Array_too_short" << std::endl;
+        std::cout << "Case 168: invoke_SD_Length_of_Entry_Array_too_long" << std::endl;
+        std::cout << "Case 169: invoke_SD_Length_of_Entry_Array_longer_than_message_allows" << std::endl;
+        std::cout << "Case 170: invoke_SD_Initial_Events_after_SubscribeEventgroup" << std::endl;
+        std::cout << "Case 171: invoke_SD_Initial_Events_after_Subscribe_with_alternate_IPs" << std::endl;
+        std::cout << "Case 172: invoke_SD_Indicate_wrong_l4proto_param" << std::endl;
+        std::cout << "Case 173: invoke_SD_Ignore_Options_in_FindService" << std::endl;
+        std::cout << "Case 174: invoke_SD_Entry_references_options_of_same_kind" << std::endl;
+        std::cout << "Case 175: invoke_SD_Entry_references_non_existing_option_type" << std::endl;
+        std::cout << "Case 176: invoke_SD_Entry_references_more_options_than_exist" << std::endl;
+        std::cout << "Case 177: invoke_SD_ClientServiceActivate_send_StopOfferService" << std::endl;
         std::cout << "Enter case no:";
         std::cin >> indx;
         switch(indx) {
@@ -254,9 +277,12 @@ int main(int argc, char *argv[]) {
                 else {
                     std::cin >> local_unicast_ipaddr;
                 }
-                local_udp_port = 30701;
+                local_udp_port = 30615;
+                local_tcp_port = 30617;
                 multicast_ipaddr = "237.50.20.1";
                 multicast_port = 30499;
+                sec_local_udp_port = 30516;
+                sec_local_tcp_port = 30518;
                 proxyPtr->invoke_checkByteOrder();
                 sleep(2);
                 proxyPtr->invoke_echoBitfields();
@@ -519,8 +545,9 @@ int main(int argc, char *argv[]) {
                 sleep(2);
                 proxyPtr->invoke_Eventgroup_EventsAndFieldsUnreliable_5(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
-                proxyPtr->invoke_SD_Check_subscribe_eventgroup_ttl_expired(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
-                sleep(5);
+                proxyPtr->invoke_SD_Check_subscribe_eventgroup_ttl_expired(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port,
+                    (uint16_t)local_tcp_port);
+                sleep(7);
                 proxyPtr->invoke_SD_Deregister_from_Eventgroup(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
                 proxyPtr->invoke_SD_Send_triggerEventUINT8_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
@@ -619,6 +646,39 @@ int main(int argc, char *argv[]) {
                 sleep(2);
                 proxyPtr->invoke_SD_SuspendInterface();
                 sleep(2);
+                proxyPtr->invoke_SD_Unicast_SubscribeEventgroup(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Options_Array_longer_than_message_allows(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Option_shorter_with_unaligned_next_option(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Option_Length_shorter_GT_0_as_specified_for_type(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Option_Length_ends_past_Options_Array_Var_B(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Option_Length_ends_past_Options_Array_Var_A(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Multicast_FindService_with_unicast_Flag_to_0(multicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Multicast_FindService_Major_Minor_Version_set_to_all(multicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Length_of_Entry_Array_too_short(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Length_of_Entry_Array_too_long(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Length_of_Entry_Array_longer_than_message_allows(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Indicate_wrong_l4proto_param(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Ignore_Options_in_FindService(multicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Entry_references_options_of_same_kind(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Entry_references_non_existing_option_type(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Entry_references_more_options_than_exist(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_ClientServiceActivate_send_StopOfferService(multicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)sec_local_udp_port, (uint16_t)sec_local_tcp_port);
                 break;
             }
             case 1:
@@ -1609,15 +1669,7 @@ int main(int argc, char *argv[]) {
             case 110:
             {
                 std::cout << "invoke_SD_Calling_same_ports_before_and_after_suspendInterface" << std::endl;
-                std::cout << "Enter remote unicast ipaddr:";
-                std::cin >> remote_unicast_ipaddr;
-                std::cout << "Enter multicast port:";
-                std::cin >> multicast_port;
-                std::cout << "Enter local unicast ipaddr:";
-                std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
-                std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_Calling_same_ports_before_and_after_suspendInterface(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_SD_Calling_same_ports_before_and_after_suspendInterface();
                 break;
             }
             case 111:
@@ -1625,13 +1677,16 @@ int main(int argc, char *argv[]) {
                 std::cout << "invoke_SD_Check_Reboot_Detection_separate_multicast_and_unicast" << std::endl;
                 std::cout << "Enter remote unicast ipaddr:";
                 std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast SD ipaddr:";
+                std::cin >> multicast_ipaddr;
                 std::cout << "Enter multicast port:";
                 std::cin >> multicast_port;
                 std::cout << "Enter local unicast ipaddr:";
                 std::cin >> local_unicast_ipaddr;
                 std::cout << "Enter local port:";
                 std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_Check_Reboot_Detection_separate_multicast_and_unicast(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_SD_Check_Reboot_Detection_separate_multicast_and_unicast(multicast_ipaddr, remote_unicast_ipaddr, (uint16_t)multicast_port,
+                    local_unicast_ipaddr, (uint16_t)local_udp_port);
                 break;
             }
             case 112:
@@ -1639,13 +1694,18 @@ int main(int argc, char *argv[]) {
                 std::cout << "invoke_SD_Check_Reboot_Detection_Server_Side" << std::endl;
                 std::cout << "Enter remote unicast ipaddr:";
                 std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast SD ipaddr:";
+                std::cin >> multicast_ipaddr;
                 std::cout << "Enter multicast port:";
                 std::cin >> multicast_port;
                 std::cout << "Enter local unicast ipaddr:";
                 std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
+                std::cout << "Enter local udp port(from json:30615):";
                 std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_Check_Reboot_Detection_Server_Side(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                std::cout << "Enter local tcp port(from json:30617):";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Check_Reboot_Detection_Server_Side(multicast_ipaddr, remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr,
+                    (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
                 break;
             }
             case 113:
@@ -1657,9 +1717,12 @@ int main(int argc, char *argv[]) {
                 std::cin >> multicast_port;
                 std::cout << "Enter local unicast ipaddr:";
                 std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
+                std::cout << "Enter local udp port(from json:30615):";
                 std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_Check_subscribe_eventgroup_ttl_expired(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                std::cout << "Enter local tcp port(from json:30617):";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Check_subscribe_eventgroup_ttl_expired(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr,
+                    (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
                 break;
             }
             case 114:
@@ -1671,7 +1734,7 @@ int main(int argc, char *argv[]) {
                 std::cin >> multicast_port;
                 std::cout << "Enter local unicast ipaddr:";
                 std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
+                std::cout << "Enter local udp port:";
                 std::cin >> local_udp_port;
                 proxyPtr->invoke_SD_Deregister_from_Eventgroup(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 break;
@@ -1741,15 +1804,7 @@ int main(int argc, char *argv[]) {
             case 120:
             {
                 std::cout << "invoke_SD_Interface_Version" << std::endl;
-                std::cout << "Enter remote unicast ipaddr:";
-                std::cin >> remote_unicast_ipaddr;
-                std::cout << "Enter multicast port:";
-                std::cin >> multicast_port;
-                std::cout << "Enter local unicast ipaddr:";
-                std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
-                std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_Interface_Version(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_SD_Interface_Version();
                 break;
             }
             case 121:
@@ -2058,6 +2113,309 @@ int main(int argc, char *argv[]) {
             {
                 std::cout << "invoke_clientServiceGetLastValueOfEventTCP" << std::endl;
                 proxyPtr->invoke_clientServiceGetLastValueOfEventTCP();
+                break;
+            }
+            case 159:
+            {
+                std::cout << "invoke_SD_Unicast_SubscribeEventgroup" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Unicast_SubscribeEventgroup(remote_unicast_ipaddr, multicast_port, local_unicast_ipaddr,
+                    local_udp_port, local_tcp_port);
+                break;
+            }
+            case 160:
+            {
+                std::cout << "invoke_SD_Options_Array_longer_than_message_allows" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Options_Array_longer_than_message_allows(remote_unicast_ipaddr, multicast_port,
+                    local_unicast_ipaddr, local_udp_port, local_tcp_port);
+                break;
+            }
+            case 161:
+            {
+                std::cout << "invoke_SD_Option_shorter_with_unaligned_next_option" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Option_shorter_with_unaligned_next_option(remote_unicast_ipaddr, multicast_port,
+                    local_unicast_ipaddr, local_udp_port, local_tcp_port);
+                break;
+            }
+            case 162:
+            {
+                std::cout << "invoke_SD_Option_Length_shorter_GT_0_as_specified_for_type" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Option_Length_shorter_GT_0_as_specified_for_type(remote_unicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 163:
+            {
+                std::cout << "invoke_SD_Option_Length_ends_past_Options_Array_Var_B" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Option_Length_ends_past_Options_Array_Var_B(remote_unicast_ipaddr, multicast_port,
+                    local_unicast_ipaddr, local_udp_port, local_tcp_port);
+                break;
+            }
+            case 164:
+            {
+                std::cout << "invoke_SD_Option_Length_ends_past_Options_Array_Var_A" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Option_Length_ends_past_Options_Array_Var_A(remote_unicast_ipaddr, multicast_port,
+                    local_unicast_ipaddr, local_udp_port, local_tcp_port);
+                break;
+            }
+            case 165:
+            {
+                std::cout << "invoke_SD_Multicast_FindService_with_unicast_Flag_to_0" << std::endl;
+                std::cout << "Enter multicast ipaddr:";
+                std::cin >> multicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Multicast_FindService_with_unicast_Flag_to_0(multicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 166:
+            {
+                std::cout << "invoke_SD_Multicast_FindService_Major_Minor_Version_set_to_all" << std::endl;
+                std::cout << "Enter multicast ipaddr:";
+                std::cin >> multicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Multicast_FindService_Major_Minor_Version_set_to_all(multicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 167:
+            {
+                std::cout << "invoke_SD_Length_of_Entry_Array_too_short" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Length_of_Entry_Array_too_short(remote_unicast_ipaddr, multicast_port,
+                    local_unicast_ipaddr, local_udp_port, local_tcp_port);
+                break;
+            }
+            case 168:
+            {
+                std::cout << "invoke_SD_Length_of_Entry_Array_too_long" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Length_of_Entry_Array_too_long(remote_unicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 169:
+            {
+                std::cout << "invoke_SD_Length_of_Entry_Array_longer_than_message_allows" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Length_of_Entry_Array_longer_than_message_allows(remote_unicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 170:
+            {
+                std::cout << "invoke_SD_Initial_Events_after_SubscribeEventgroup" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Initial_Events_after_SubscribeEventgroup(remote_unicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 171:
+            {
+                std::cout << "invoke_SD_Initial_Events_after_Subscribe_with_alternate_IPs" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                std::cout << "Enter alternate unicast ipaddr:";
+                std::cin >> alternate_ipaddr;
+                std::cout << "Enter alternate udp port:";
+                std::cin >> alternate_udp_port;
+                proxyPtr->invoke_SD_Initial_Events_after_Subscribe_with_alternate_IPs(remote_unicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port, alternate_ipaddr, alternate_udp_port);
+                break;
+            }
+            case 172:
+            {
+                std::cout << "invoke_SD_Indicate_wrong_l4proto_param" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Indicate_wrong_l4proto_param(remote_unicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 173:
+            {
+                std::cout << "invoke_SD_Ignore_Options_in_FindService" << std::endl;
+                std::cout << "Enter multicast ipaddr:";
+                std::cin >> multicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Ignore_Options_in_FindService(multicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 174:
+            {
+                std::cout << "invoke_SD_Entry_references_options_of_same_kind" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Entry_references_options_of_same_kind(remote_unicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 175:
+            {
+                std::cout << "invoke_SD_Entry_references_non_existing_option_type" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Entry_references_non_existing_option_type(remote_unicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 176:
+            {
+                std::cout << "invoke_SD_Entry_references_more_options_than_exist" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Entry_references_more_options_than_exist(remote_unicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 177:
+            {
+                std::cout << "invoke_SD_ClientServiceActivate_send_StopOfferService" << std::endl;
+                std::cout << "Enter multicast ipaddr:";
+                std::cin >> multicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port[30516]:";
+                std::cin >> local_udp_port;
+                std::cout << "Enter local tcp port[30518]:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_ClientServiceActivate_send_StopOfferService(multicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port, local_tcp_port);
                 break;
             }
             default:
