@@ -419,8 +419,6 @@ void etsStubImpl::suspendInterface(const std::shared_ptr<CommonAPI::ClientId> _c
 
             /* Register Service */
             retry_counter = 0;
-            uint8_t TestFieldUINT8 = 0;
-            setTestFieldUINT8Attribute(TestFieldUINT8);
             successfullydeRegistered = CommonAPI::Runtime::get()->registerService(domain, instance, etsService, connection);
             while (!successfullydeRegistered && retry_counter<10) {
                 std::cout << "Register Service failed, trying again in 100 milliseconds..." << std::endl;
