@@ -23,6 +23,7 @@
 #include <iomanip>
 #include <string>
 #include <map>
+#include <sys/time.h>
 
 using namespace ::v1::someip::testability;
 
@@ -31,6 +32,8 @@ class secServiceStubImpl: public ETSSecondaryServiceStubDefault {
 
 class etsProxyImpl {
     private:
+        static std::shared_ptr<etsProxyImpl> singletonObj;
+        static std::mutex singletonObjMtx;
         std::shared_ptr<ETSProxy<>> etsProxy;
         bool isAvailable;
         std::shared_ptr<ETSTestService1Proxy<>> testSvcProxy1;
@@ -57,9 +60,22 @@ class etsProxyImpl {
         uint32_t TestFieldUINT8Arraysubscription;
         uint32_t TestFieldUINT8Reliablesubscription;
         uint32_t uINT8ValuesubscriptionReliable;
+        void send_find_service(std::string remote_address, uint16_t multicast_port,
+            std::string local_address, uint16_t local_port, uint16_t session);
+        void send_subscribe(std::string remote_address, uint16_t multicast_port,
+            std::string local_address, uint16_t local_port, uint16_t session);
+        void recv_notification(std::string local_address, uint16_t local_port);
+        void send_subscribe_dual_endpoint(std::string remote_address, uint16_t multicast_port,
+            std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port,
+            uint32_t ttl, uint16_t session);
+        void create_tcp_client_endpoint(std::string local_address, uint16_t local_port,
+            uint32_t remote_ip, uint16_t remote_port);
+        void send_subscribe_with_dual_option(std::string remote_address, uint16_t multicast_port,
+            std::string local_address, uint16_t local_port, uint16_t session);
     public:
         etsProxyImpl();
         ~etsProxyImpl();
+        static std::shared_ptr<etsProxyImpl> getInstance();
         std::string callstatusToString(CommonAPI::CallStatus status);
         std::string returnCodeToString(vsomeip::return_code_e return_code);
         void createProxy(std::string appname);
@@ -183,10 +199,13 @@ class etsProxyImpl {
         void invoke_SD_Unused_data_after_Options_Array_wrong_length(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_Subscribe_using_wrong_SOMEIP_MessageID(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_Eventgroup_EventsAndFieldsUnreliable_5(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
-        void invoke_SD_Calling_same_ports_before_and_after_suspendInterface(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
-        void invoke_SD_Check_Reboot_Detection_separate_multicast_and_unicast(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
-        void invoke_SD_Check_Reboot_Detection_Server_Side(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
-        void invoke_SD_Check_subscribe_eventgroup_ttl_expired(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Calling_same_ports_before_and_after_suspendInterface();
+        void invoke_SD_Check_Reboot_Detection_separate_multicast_and_unicast(std::string multicast_ipaddr, std::string remote_address, uint16_t multicast_port,
+                 std::string local_address, uint16_t local_port);
+        void invoke_SD_Check_Reboot_Detection_Server_Side(std::string multicast_ipaddr, std::string remote_address, uint16_t multicast_port, std::string local_address,
+                 uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_SD_Check_subscribe_eventgroup_ttl_expired(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_udp_port,
+                 uint16_t local_tcp_port);
         void invoke_SD_Deregister_from_Eventgroup(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_ResetInterface();
         void invoke_SD_SuspendInterface();
@@ -194,7 +213,7 @@ class etsProxyImpl {
         void invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Send_triggerEventUINT8Multicast_Eventgroup_6(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
-        void invoke_SD_Interface_Version(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Interface_Version();
         void invoke_activateTestSerivce(uint32_t service_id, uint32_t instance_id);
         void invoke_deactivateTestSerivce(uint32_t service_id, uint32_t instance_id);
         void invoke_TP_Verify_ErrorDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
@@ -224,6 +243,44 @@ class etsProxyImpl {
         void invoke_triggerEventUINT8Reliable(uint32_t start, uint32_t duration, uint32_t debounce);
         void tester_send_reliable_event(int eventval);
         void invoke_clientServiceGetLastValueOfEventTCP();
+        void invoke_SD_Unicast_SubscribeEventgroup(std::string remote_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_SD_Options_Array_longer_than_message_allows(std::string remote_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_SD_Option_shorter_with_unaligned_next_option(std::string remote_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_SD_Option_Length_shorter_GT_0_as_specified_for_type(std::string remote_address,
+                uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Option_Length_ends_past_Options_Array_Var_B(std::string remote_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_SD_Option_Length_ends_past_Options_Array_Var_A(std::string remote_address,
+                uint16_t multicast_port, std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_SD_Multicast_FindService_with_unicast_Flag_to_0(std::string multicast_ipaddr,
+                uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Multicast_FindService_Major_Minor_Version_set_to_all(std::string multicast_ipaddr,
+                uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Length_of_Entry_Array_too_short(std::string remote_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_SD_Length_of_Entry_Array_too_long(std::string remote_address,
+                uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Length_of_Entry_Array_longer_than_message_allows(std::string remote_address,
+                uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Initial_Events_after_SubscribeEventgroup(std::string remote_address,
+                uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Initial_Events_after_Subscribe_with_alternate_IPs(std::string remote_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_port, std::string alternate_address, uint16_t alternate_port);
+        void invoke_SD_Indicate_wrong_l4proto_param(std::string remote_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_port);
+        void invoke_SD_Ignore_Options_in_FindService(std::string multicast_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_port);
+        void invoke_SD_Entry_references_options_of_same_kind(std::string remote_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_udp_port);
+        void invoke_SD_Entry_references_non_existing_option_type(std::string remote_address,
+                uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Entry_references_more_options_than_exist(std::string remote_address,
+                uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_ClientServiceActivate_send_StopOfferService(std::string multicast_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port);
 };
 
 #endif
