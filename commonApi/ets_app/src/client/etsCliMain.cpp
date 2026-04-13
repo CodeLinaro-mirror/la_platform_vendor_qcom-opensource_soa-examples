@@ -227,6 +227,10 @@ int main(int argc, char *argv[]) {
         std::cout << "Case 175: invoke_SD_Entry_references_non_existing_option_type" << std::endl;
         std::cout << "Case 176: invoke_SD_Entry_references_more_options_than_exist" << std::endl;
         std::cout << "Case 177: invoke_SD_ClientServiceActivate_send_StopOfferService" << std::endl;
+        std::cout << "Case 178: invoke_ClientServiceActivate_Server_reboot_2" << std::endl;
+        std::cout << "Case 179: invoke_SD_Session_ID_is_one_after_wrapping" << std::endl;
+        std::cout << "Case 180: invoke_SD_Unicast_FindService" << std::endl;
+        std::cout << "Case 181: invoke_TP_Verify_SameRequestFromDifferentClient" << std::endl;
         std::cout << "Enter case no:";
         std::cin >> indx;
         switch(indx) {
@@ -347,6 +351,7 @@ int main(int argc, char *argv[]) {
                 sleep(2);
                 /* To verify IN OUT TP processing in parallel */
                 proxyPtr->invoke_triggerEventUINT8ArrayTPNoReqTPPayload(array_length);
+                std::this_thread::sleep_for(std::chrono::milliseconds(6));
                 proxyPtr->invoke_echoUINT8ArrayLengthTPNoResponse(array_length);
                 sleep(2);
                 proxyPtr->tester_unsubscribe_TestEventUINT8TP();
@@ -360,6 +365,8 @@ int main(int argc, char *argv[]) {
                 proxyPtr->invoke_TP_Verify_MissingFrameDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
                 proxyPtr->invoke_TP_Verify_DuplicateFrameDuringReception(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_TP_Verify_SameRequestFromDifferentClient(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
                 proxyPtr->invoke_echoFLOAT64();
                 sleep(2);
@@ -493,7 +500,8 @@ int main(int argc, char *argv[]) {
                 sleep(2);
                 proxyPtr->invoke_Unaligned_SOMEIP_Messages_overUDP(remote_unicast_ipaddr, (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
-                proxyPtr->invoke_SD_Answer_multiple_subscribes_together(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_SD_Answer_multiple_subscribes_together(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr,
+                    (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
                 sleep(2);
                 proxyPtr->invoke_SD_Check_Reaction_to_a_Subscribe_with_ttl_0(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
@@ -509,7 +517,8 @@ int main(int argc, char *argv[]) {
                 sleep(2);
                 proxyPtr->invoke_SD_Empty_Options_Array(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
-                proxyPtr->invoke_SD_Entries_Length_wrong_combined(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_SD_Entries_Length_wrong_combined(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr,
+                    (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
                 sleep(2);
                 proxyPtr->invoke_SD_Options_Array_too_short(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
@@ -550,11 +559,14 @@ int main(int argc, char *argv[]) {
                 sleep(7);
                 proxyPtr->invoke_SD_Deregister_from_Eventgroup(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
-                proxyPtr->invoke_SD_Send_triggerEventUINT8_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_SD_Send_triggerEventUINT8_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port,
+                    (uint16_t)local_tcp_port);
                 sleep(2);
-                proxyPtr->invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port,
+                    (uint16_t)local_tcp_port);
                 sleep(2);
-                proxyPtr->invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                proxyPtr->invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port,
+                    (uint16_t)local_tcp_port);
                 sleep(2);
                 proxyPtr->invoke_SD_Send_triggerEventUINT8Multicast_Eventgroup_6(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
@@ -678,7 +690,13 @@ int main(int argc, char *argv[]) {
                 sleep(2);
                 proxyPtr->invoke_SD_Entry_references_more_options_than_exist(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 sleep(2);
+                proxyPtr->invoke_SD_Session_ID_is_one_after_wrapping(multicast_ipaddr, multicast_port, local_unicast_ipaddr, local_udp_port);
+                sleep(2);
+                proxyPtr->invoke_SD_Unicast_FindService(remote_unicast_ipaddr, multicast_port, local_unicast_ipaddr, local_udp_port);
+                sleep(2);
                 proxyPtr->invoke_SD_ClientServiceActivate_send_StopOfferService(multicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)sec_local_udp_port, (uint16_t)sec_local_tcp_port);
+                sleep(2);
+                proxyPtr->invoke_ClientServiceActivate_Server_reboot_2(remote_unicast_ipaddr, multicast_ipaddr, local_unicast_ipaddr, multicast_port, local_udp_port, local_tcp_port);
                 break;
             }
             case 1:
@@ -1306,9 +1324,12 @@ int main(int argc, char *argv[]) {
                 std::cin >> multicast_port;
                 std::cout << "Enter local unicast ipaddr:";
                 std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
+                std::cout << "Enter local udp port:";
                 std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_Answer_multiple_subscribes_together(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Answer_multiple_subscribes_together(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr,
+                    (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
                 break;
             }
             case 84:
@@ -1418,9 +1439,12 @@ int main(int argc, char *argv[]) {
                 std::cin >> multicast_port;
                 std::cout << "Enter local unicast ipaddr:";
                 std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
+                std::cout << "Enter local udp port:";
                 std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_Entries_Length_wrong_combined(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Entries_Length_wrong_combined(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr,
+                    (uint16_t)local_udp_port, (uint16_t)local_tcp_port);
                 break;
             }
             case 92:
@@ -1754,9 +1778,12 @@ int main(int argc, char *argv[]) {
                 std::cin >> multicast_port;
                 std::cout << "Enter local unicast ipaddr:";
                 std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
+                std::cout << "Enter local udp port:";
                 std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_Send_triggerEventUINT8_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Send_triggerEventUINT8_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port,
+                    (uint16_t)local_tcp_port);
                 break;
             }
             case 117:
@@ -1768,9 +1795,12 @@ int main(int argc, char *argv[]) {
                 std::cin >> multicast_port;
                 std::cout << "Enter local unicast ipaddr:";
                 std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
+                std::cout << "Enter local udp port:";
                 std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port,
+                    (uint16_t)local_tcp_port);
                 break;
             }
             case 118:
@@ -1782,9 +1812,12 @@ int main(int argc, char *argv[]) {
                 std::cin >> multicast_port;
                 std::cout << "Enter local unicast ipaddr:";
                 std::cin >> local_unicast_ipaddr;
-                std::cout << "Enter local port:";
+                std::cout << "Enter local udp port:";
                 std::cin >> local_udp_port;
-                proxyPtr->invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
+                std::cout << "Enter local tcp port:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(remote_unicast_ipaddr, (uint16_t)multicast_port, local_unicast_ipaddr, (uint16_t)local_udp_port,
+                    (uint16_t)local_tcp_port);
                 break;
             }
             case 119:
@@ -1885,9 +1918,12 @@ int main(int argc, char *argv[]) {
             {
                 std::cout << "Enter TP Array length(range:0-4996):";
                 std::cin >> array_length;
+                std::cout << "Enter time gap for syncronization [recommended: 6 (ms)]:";
+                std::cin >> duration;
                 proxyPtr->tester_subscribe_TestEventUINT8TP();
                 sleep(2);
                 proxyPtr->invoke_triggerEventUINT8ArrayTPNoReqTPPayload(array_length);
+                std::this_thread::sleep_for(std::chrono::milliseconds(duration));
                 proxyPtr->invoke_echoUINT8ArrayLengthTPNoResponse(array_length);
                 sleep(2);
                 proxyPtr->tester_unsubscribe_TestEventUINT8TP();
@@ -2416,6 +2452,69 @@ int main(int argc, char *argv[]) {
                 std::cin >> local_tcp_port;
                 proxyPtr->invoke_SD_ClientServiceActivate_send_StopOfferService(multicast_ipaddr,
                     multicast_port, local_unicast_ipaddr, local_udp_port, local_tcp_port);
+                break;
+            }
+            case 178:
+            {
+                std::cout << "invoke_ClientServiceActivate_Server_reboot_2" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast ipaddr:";
+                std::cin >> multicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port[30516]:";
+                std::cin >> local_udp_port;
+                std::cout << "Enter local tcp port[30518]:";
+                std::cin >> local_tcp_port;
+                proxyPtr->invoke_ClientServiceActivate_Server_reboot_2(remote_unicast_ipaddr, multicast_ipaddr,
+                    local_unicast_ipaddr, multicast_port, local_udp_port, local_tcp_port);
+                break;
+            }
+            case 179:
+            {
+                std::cout << "invoke_SD_Session_ID_is_one_after_wrapping" << std::endl;
+                std::cout << "Enter multicast ipaddr:";
+                std::cin >> multicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Session_ID_is_one_after_wrapping(multicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 180:
+            {
+                std::cout << "invoke_SD_Unicast_FindService" << std::endl;
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter multicast port:";
+                std::cin >> multicast_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local udp port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_SD_Unicast_FindService(remote_unicast_ipaddr,
+                    multicast_port, local_unicast_ipaddr, local_udp_port);
+                break;
+            }
+            case 181:
+            {
+                std::cout << "Enter remote unicast ipaddr:";
+                std::cin >> remote_unicast_ipaddr;
+                std::cout << "Enter remote udp port:";
+                std::cin >> remote_udp_port;
+                std::cout << "Enter local unicast ipaddr:";
+                std::cin >> local_unicast_ipaddr;
+                std::cout << "Enter local port:";
+                std::cin >> local_udp_port;
+                proxyPtr->invoke_TP_Verify_SameRequestFromDifferentClient(remote_unicast_ipaddr,
+                    (uint16_t)remote_udp_port, local_unicast_ipaddr, (uint16_t)local_udp_port);
                 break;
             }
             default:

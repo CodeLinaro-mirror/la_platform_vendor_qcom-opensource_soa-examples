@@ -389,6 +389,7 @@ void etsStubImpl::suspendInterface(const std::shared_ptr<CommonAPI::ClientId> _c
     appThreadPool.emplace_back([&]{
         uint32_t start = startTimeout;
         uint32_t duration = durationTimeout;
+        uint8_t TestFieldUINT8 = 0;
         int retry_counter = 0;
         std::string domain = "local";
         std::string instance = "someip.testability.ETS";
@@ -410,6 +411,7 @@ void etsStubImpl::suspendInterface(const std::shared_ptr<CommonAPI::ClientId> _c
             ++retry_counter;
         }
         if (retry_counter<10) {
+            setTestFieldUINT8Attribute(TestFieldUINT8);
             std::cout << "etsStubImpl::" << __func__ << "Successfully DeRegistered ETS Service!" << std::endl;
             while (duration > 0) {
                 std::cout << "etsStubImpl::suspendInterface wait for duration timeout " << duration << std::endl;
