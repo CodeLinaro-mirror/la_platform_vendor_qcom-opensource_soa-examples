@@ -203,6 +203,15 @@
             "unreliable": "30516"
         }
     ],
+    "clients":
+    [
+        {
+            "service": "258",
+            "instance": "244",
+            "unreliable": [ "30616" ],
+            "reliable": [ "30618" ]
+        }
+    ],
     "e2e" :
     {
         "e2e_enabled" : "true",
