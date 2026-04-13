@@ -68,10 +68,17 @@ class etsProxyImpl {
         void send_subscribe_dual_endpoint(std::string remote_address, uint16_t multicast_port,
             std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port,
             uint32_t ttl, uint16_t session);
-        void create_tcp_client_endpoint(std::string local_address, uint16_t local_port,
-            uint32_t remote_ip, uint16_t remote_port);
+        void recv_notification_tcp(std::string local_address, uint16_t local_port);
         void send_subscribe_with_dual_option(std::string remote_address, uint16_t multicast_port,
             std::string local_address, uint16_t local_port, uint16_t session);
+        void send_unicast_offer_service(std::string remote_address, uint16_t multicast_port,
+            std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port,
+            uint32_t ttl, uint16_t session);
+        void process_find_service(std::string multicast_address, uint16_t multicast_port);
+        void process_subscription_request(std::string local_address, uint16_t local_port,
+            uint16_t multicast_port, std::string remote_address, uint16_t session);
+        void send_notification(std::string local_address, uint16_t local_port,
+            std::string remote_address, uint16_t remote_port);
     public:
         etsProxyImpl();
         ~etsProxyImpl();
@@ -173,7 +180,8 @@ class etsProxyImpl {
         void invoke_Sending_two_SOMEIP_Messages_in_a_row(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_UINT8Array_with_Length_0_strips_Payload();
         void invoke_Unaligned_SOMEIP_Messages_overUDP(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
-        void invoke_SD_Answer_multiple_subscribes_together(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Answer_multiple_subscribes_together(std::string remote_address, uint16_t multicast_port, std::string local_address,
+                uint16_t local_udp_port, uint16_t local_tcp_port);
         void invoke_SD_Check_Reaction_to_a_Subscribe_with_ttl_0(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Consider_Entries_Order(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Do_not_specify_a_port(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
@@ -181,7 +189,8 @@ class etsProxyImpl {
         void invoke_SD_Empty_Entries_Array(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Empty_Option(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Empty_Options_Array(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
-        void invoke_SD_Entries_Length_wrong_combined(std::string remote6_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Entries_Length_wrong_combined(std::string remote6_address, uint16_t multicast_port, std::string local_address,
+                uint16_t local_udp_port, uint16_t local_tcp_port);
         void invoke_SD_Options_Array_too_short(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Request_non_existing_EventgroupID(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Request_non_existing_InstanceID(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
@@ -209,9 +218,12 @@ class etsProxyImpl {
         void invoke_SD_Deregister_from_Eventgroup(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_ResetInterface();
         void invoke_SD_SuspendInterface();
-        void invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
-        void invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
-        void invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
+        void invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address,
+                uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address,
+                uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address,
+                uint16_t local_udp_port, uint16_t local_tcp_port);
         void invoke_SD_Send_triggerEventUINT8Multicast_Eventgroup_6(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_Interface_Version();
         void invoke_activateTestSerivce(uint32_t service_id, uint32_t instance_id);
@@ -221,6 +233,7 @@ class etsProxyImpl {
         void invoke_TP_Verify_OffsetCalculationDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_TP_Verify_MissingFrameDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_TP_Verify_DuplicateFrameDuringReception(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
+        void invoke_TP_Verify_SameRequestFromDifferentClient(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port);
         void invoke_ResetInterface_wrong_Fire_and_forget_package_get_No_Error_back();
         void tester_subscribe_TestFieldUINT8();
         void tester_set_TestFieldUINT8(uint32_t value);
@@ -281,6 +294,12 @@ class etsProxyImpl {
                 uint16_t multicast_port, std::string local_address, uint16_t local_port);
         void invoke_SD_ClientServiceActivate_send_StopOfferService(std::string multicast_address, uint16_t multicast_port,
                 std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_ClientServiceActivate_Server_reboot_2(std::string remote_address, std::string multicast_address,
+                std::string local_address, uint16_t multicast_port, uint16_t local_udp_port, uint16_t local_tcp_port);
+        void invoke_SD_Session_ID_is_one_after_wrapping(std::string multicast_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_port);
+        void invoke_SD_Unicast_FindService(std::string remote_address, uint16_t multicast_port,
+                std::string local_address, uint16_t local_port);
 };
 
 #endif
