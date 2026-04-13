@@ -1155,7 +1155,7 @@ void etsProxyImpl::invoke_echoUINT8ArrayMinSize_too_short(std::string remote_add
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -3749,7 +3749,7 @@ void etsProxyImpl::invoke_Wrong_Service_ID(std::string remote_address, uint16_t 
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -3821,7 +3821,7 @@ void etsProxyImpl::invoke_Wrong_SOMEIP_Protocol_Version(std::string remote_addre
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -3954,7 +3954,7 @@ void etsProxyImpl::invoke_Length_equals_0_Test(std::string remote_address, uint1
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -4027,7 +4027,7 @@ void etsProxyImpl::invoke_Length_smaller_than_8_Test(std::string remote_address,
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -4100,7 +4100,7 @@ void etsProxyImpl::invoke_Length_way_too_long(std::string remote_address, uint16
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -4209,7 +4209,7 @@ void etsProxyImpl::invoke_Sending_two_SOMEIP_Messages_in_a_row(std::string remot
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -4398,7 +4398,7 @@ void etsProxyImpl::invoke_Unaligned_SOMEIP_Messages_overUDP(std::string remote_a
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -4420,7 +4420,8 @@ void etsProxyImpl::invoke_Unaligned_SOMEIP_Messages_overUDP(std::string remote_a
     return;
 }
 
-void etsProxyImpl::invoke_SD_Answer_multiple_subscribes_together(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
+void etsProxyImpl::invoke_SD_Answer_multiple_subscribes_together(std::string remote_address, uint16_t multicast_port, std::string local_address,
+        uint16_t local_udp_port, uint16_t local_tcp_port) {
     uint8_t recv_buffer[1400] = {0};
     std::size_t bytes_received = 0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
@@ -4429,7 +4430,7 @@ void etsProxyImpl::invoke_SD_Answer_multiple_subscribes_together(std::string rem
     uint8_t request_data[] = {
         0xff, 0xff,             /* service id */
         0x81, 0x00,             /* method id */
-        0x00, 0x00, 0x00, 0x50, /* length */
+        0x00, 0x00, 0x00, 0x5c, /* length */
         0x00, 0x00,             /* client id */
         0x00, 0x01,             /* session id */
         0x01,                   /* protocol version */
@@ -4440,7 +4441,7 @@ void etsProxyImpl::invoke_SD_Answer_multiple_subscribes_together(std::string rem
         0x00, 0x00, 0x00,       /* reserved */
         0x00, 0x00, 0x00, 0x30, /* entry array length */
         0x06,                   /* type subscribe event group */
-        0x00, 0x00, 0x10,       /* index */
+        0x00, 0x00, 0x20,       /* index */
         0x01, 0x01,             /* service id */
         0x00, 0x01,             /* instance id */
         0x01,                   /* major version */
@@ -4449,7 +4450,7 @@ void etsProxyImpl::invoke_SD_Answer_multiple_subscribes_together(std::string rem
         0x00,                   /* initial data request */
         0x00, 0x02,             /* event group */
         0x06,                   /* type subscribe event group */
-        0x00, 0x00, 0x10,       /* index */
+        0x00, 0x00, 0x20,       /* index */
         0x01, 0x01,             /* service id */
         0x00, 0x01,             /* instance id */
         0x01,                   /* major version */
@@ -4458,7 +4459,7 @@ void etsProxyImpl::invoke_SD_Answer_multiple_subscribes_together(std::string rem
         0x00,                   /* initial data request */
         0x00, 0x05,             /* event group */
         0x06,                   /* type subscribe event group */
-        0x00, 0x00, 0x10,       /* index */
+        0x00, 0x00, 0x20,       /* index */
         0x01, 0x01,             /* service id */
         0x00, 0x01,             /* instance id */
         0x01,                   /* major version */
@@ -4466,14 +4467,21 @@ void etsProxyImpl::invoke_SD_Answer_multiple_subscribes_together(std::string rem
         0x00,                   /* reserved */
         0x00,                   /* initial data request */
         0x00, 0x06,             /* event group */
-        0x00, 0x00, 0x00, 0x0c, /* option array length */
+        0x00, 0x00, 0x00, 0x18, /* option array length */
         0x00, 0x09,             /* option length */
         0x04,                   /* option type */
         0x00,                   /* reserved */
         0x00, 0x00, 0x00, 0x00, /* endpoint address */
         0x00,                   /* reserved */
         0x11,                   /* udp protocol */
-        0x00, 0x00              /* udp port */
+        0x00, 0x00,             /* udp port */
+        0x00, 0x09,             /* option length */
+        0x04,                   /* option type */
+        0x00,                   /* reserved */
+        0x00, 0x00, 0x00, 0x00, /* endpoint address */
+        0x00,                   /* reserved */
+        0x06,                   /* tcp protocol */
+        0x00, 0x00              /* tcp port */
     };
 
     if (isAvailable) {
@@ -4499,15 +4507,21 @@ void etsProxyImpl::invoke_SD_Answer_multiple_subscribes_together(std::string rem
 
         io_ctx.run();
 
+        /* Send data*/
+        /* Update UDP Endpoint */
+        std::memcpy(&request_data[sizeof(request_data)-20], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
+        request_data[sizeof(request_data)-14] = (local_udp_port>>8) & 0xff;
+        request_data[sizeof(request_data)-13] = local_udp_port & 0xff;
+        /* Update TCP Endpoint */
         std::memcpy(&request_data[sizeof(request_data)-8], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
-        request_data[sizeof(request_data)-2] = (local_port>>8) & 0xff;
-        request_data[sizeof(request_data)-1] = local_port & 0xff;
+        request_data[sizeof(request_data)-2] = (local_tcp_port>>8) & 0xff;
+        request_data[sizeof(request_data)-1] = local_tcp_port & 0xff;
         std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
         udp_client_sock.send_to(boost::asio::buffer(request_data, sizeof(request_data)), udp_server_endpoint);
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -4554,7 +4568,7 @@ void etsProxyImpl::invoke_SD_Check_Reaction_to_a_Subscribe_with_ttl_0(std::strin
         0x00, 0x00, 0x00,       /* TTL */
         0x00,                   /* reserved */
         0x00,                   /* initial data request */
-        0x00, 0x02,             /* event group */
+        0x00, 0x05,             /* event group */
         0x00, 0x00, 0x00, 0x0c, /* option array length */
         0x00, 0x09,             /* option length */
         0x04,                   /* option type */
@@ -4718,7 +4732,7 @@ void etsProxyImpl::invoke_SD_Consider_Entries_Order(std::string remote_address, 
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -4737,7 +4751,7 @@ void etsProxyImpl::invoke_SD_Consider_Entries_Order(std::string remote_address, 
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -4827,7 +4841,7 @@ void etsProxyImpl::invoke_SD_Do_not_specify_a_port(std::string remote_address, u
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -4918,7 +4932,7 @@ void etsProxyImpl::invoke_SD_Do_not_specify_IPv4_Adress(std::string remote_addre
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -5088,7 +5102,7 @@ void etsProxyImpl::invoke_SD_Empty_Option(std::string remote_address, uint16_t m
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -5180,7 +5194,7 @@ void etsProxyImpl::invoke_SD_Empty_Options_Array(std::string remote_address, uin
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -5202,7 +5216,8 @@ void etsProxyImpl::invoke_SD_Empty_Options_Array(std::string remote_address, uin
     return;
 }
 
-void etsProxyImpl::invoke_SD_Entries_Length_wrong_combined(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
+void etsProxyImpl::invoke_SD_Entries_Length_wrong_combined(std::string remote_address, uint16_t multicast_port, std::string local_address,
+        uint16_t local_udp_port, uint16_t local_tcp_port) {
     uint8_t recv_buffer[1400] = {0};
     std::size_t bytes_received = 0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
@@ -5211,7 +5226,7 @@ void etsProxyImpl::invoke_SD_Entries_Length_wrong_combined(std::string remote_ad
     uint8_t subscribe_data[] = {
         0xff, 0xff,             /* service id */
         0x81, 0x00,             /* method id */
-        0x00, 0x00, 0x00, 0x40, /* length */
+        0x00, 0x00, 0x00, 0x4c, /* length */
         0x00, 0x00,             /* client id */
         0x00, 0x01,             /* session id */
         0x01,                   /* protocol version */
@@ -5222,7 +5237,7 @@ void etsProxyImpl::invoke_SD_Entries_Length_wrong_combined(std::string remote_ad
         0x00, 0x00, 0x00,       /* reserved */
         0x00, 0x00, 0x00, 0x10, /* shortened entry array length */
         0x06,                   /* type subscribe event group */
-        0x00, 0x00, 0x10,       /* index */
+        0x00, 0x00, 0x20,       /* index */
         0x01, 0x01,             /* service id */
         0x00, 0x01,             /* instance id */
         0x01,                   /* major version */
@@ -5231,7 +5246,7 @@ void etsProxyImpl::invoke_SD_Entries_Length_wrong_combined(std::string remote_ad
         0x00,                   /* initial data request */
         0x00, 0x02,             /* event group */
         0x06,                   /* type subscribe event group */
-        0x00, 0x00, 0x10,       /* index */
+        0x00, 0x00, 0x20,       /* index */
         0x01, 0x01,             /* service id */
         0x00, 0x01,             /* instance id */
         0x01,                   /* major version */
@@ -5239,14 +5254,21 @@ void etsProxyImpl::invoke_SD_Entries_Length_wrong_combined(std::string remote_ad
         0x00,                   /* reserved */
         0x00,                   /* initial data request */
         0x00, 0x05,             /* event group */
-        0x00, 0x00, 0x00, 0x0c, /* option array length */
+        0x00, 0x00, 0x00, 0x18, /* option array length */
         0x00, 0x09,             /* option array length */
         0x04,                   /* option type */
         0x00,                   /* reserved */
         0x00, 0x00, 0x00, 0x00, /* endpoint address */
         0x00,                   /* reserved */
         0x11,                   /* udp protocol */
-        0x00, 0x00              /* udp port */
+        0x00, 0x00,             /* udp port */
+        0x00, 0x09,             /* option length */
+        0x04,                   /* option type */
+        0x00,                   /* reserved */
+        0x00, 0x00, 0x00, 0x00, /* endpoint address */
+        0x00,                   /* reserved */
+        0x06,                   /* tcp protocol */
+        0x00, 0x00              /* tcp port */
     };
 
     if (isAvailable) {
@@ -5273,15 +5295,20 @@ void etsProxyImpl::invoke_SD_Entries_Length_wrong_combined(std::string remote_ad
         io_ctx.run();
 
         /* send subscribe */
+        /* Update UDP Endpoint */
+        std::memcpy(&subscribe_data[sizeof(subscribe_data)-20], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
+        subscribe_data[sizeof(subscribe_data)-14] = (local_udp_port>>8) & 0xff;
+        subscribe_data[sizeof(subscribe_data)-13] = local_udp_port & 0xff;
+        /* Update TCP Endpoint */
         std::memcpy(&subscribe_data[sizeof(subscribe_data)-8], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
-        subscribe_data[sizeof(subscribe_data)-2] = (local_port>>8) & 0xff;
-        subscribe_data[sizeof(subscribe_data)-1] = local_port & 0xff;
+        subscribe_data[sizeof(subscribe_data)-2] = (local_tcp_port>>8) & 0xff;
+        subscribe_data[sizeof(subscribe_data)-1] = local_tcp_port & 0xff;
         std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
         udp_client_sock.send_to(boost::asio::buffer(subscribe_data, sizeof(subscribe_data)), udp_server_endpoint);
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -5373,7 +5400,7 @@ void etsProxyImpl::invoke_SD_Options_Array_too_short(std::string remote_address,
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -5465,7 +5492,7 @@ void etsProxyImpl::invoke_SD_Request_non_existing_EventgroupID(std::string remot
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -5557,7 +5584,7 @@ void etsProxyImpl::invoke_SD_Request_non_existing_InstanceID(std::string remote_
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -5649,7 +5676,7 @@ void etsProxyImpl::invoke_SD_Request_non_existing_Major_Version(std::string remo
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -5741,7 +5768,7 @@ void etsProxyImpl::invoke_SD_Request_non_existing_ServiceID(std::string remote_a
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -5833,7 +5860,7 @@ void etsProxyImpl::invoke_SD_Reserved_Field_Endpoint_Option_set(std::string remo
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -6002,7 +6029,7 @@ void etsProxyImpl::invoke_SD_Specify_an_unexisting_IPv4_Address(std::string remo
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -6029,13 +6056,46 @@ void etsProxyImpl::invoke_SD_Subscribe_after_StopSubscribe(std::string remote_ad
     std::size_t bytes_received = 0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
+    /* subscribe event group */
+    uint8_t subscribe_data[] = {
+        0xff, 0xff,             /* service id */
+        0x81, 0x00,             /* method id */
+        0x00, 0x00, 0x00, 0x30, /* length */
+        0x00, 0x00,             /* client id */
+        0x00, 0x01,             /* session id */
+        0x01,                   /* protocol version */
+        0x01,                   /* interface version */
+        0x02,                   /* message type */
+        0x00,                   /* return code */
+        0xc0,                   /* flag */
+        0x00, 0x00, 0x00,       /* reserved */
+        0x00, 0x00, 0x00, 0x10, /* entry array length */
+        0x06,                   /* type subscribe event group */
+        0x00, 0x00, 0x10,       /* index */
+        0x01, 0x01,             /* service id */
+        0x00, 0x01,             /* instance id */
+        0x01,                   /* major version */
+        0x00, 0x00, 0x03,       /* TTL */
+        0x00,                   /* reserved */
+        0x00,                   /* initial data request */
+        0x00, 0x05,             /* event group */
+        0x00, 0x00, 0x00, 0x0c, /* option array length */
+        0x00, 0x09,             /* option length */
+        0x04,                   /* option type */
+        0x00,                   /* reserved */
+        0x00, 0x00, 0x00, 0x00, /* endpoint address */
+        0x00,                   /* reserved */
+        0x11,                   /* udp protocol */
+        0x00, 0x00              /* udp port */
+    };
+
     /* stop subscribe(TTL=0) and subscribe event group */
     uint8_t stop_subscribe_subscribe_data[] = {
         0xff, 0xff,             /* service id */
         0x81, 0x00,             /* method id */
         0x00, 0x00, 0x00, 0x40, /* length */
         0x00, 0x00,             /* client id */
-        0x00, 0x01,             /* session id */
+        0x00, 0x02,             /* session id */
         0x01,                   /* protocol version */
         0x01,                   /* interface version */
         0x02,                   /* message type */
@@ -6094,6 +6154,26 @@ void etsProxyImpl::invoke_SD_Subscribe_after_StopSubscribe(std::string remote_ad
 
         io_ctx.run();
 
+        /* send subscribe */
+        std::memcpy(&subscribe_data[sizeof(subscribe_data)-8], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
+        subscribe_data[sizeof(subscribe_data)-2] = (local_port>>8) & 0xff;
+        subscribe_data[sizeof(subscribe_data)-1] = local_port & 0xff;
+        std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+        udp_client_sock.send_to(boost::asio::buffer(subscribe_data, sizeof(subscribe_data)), udp_server_endpoint);
+
+        bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
+        std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
+            std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
+            if ((idx+1)%4 == 0) {
+                std::cout << '\n';
+            }
+        }
+        std::cout << "etsProxyImpl::" << __func__ << " Return Code:"
+             << returnCodeToString(static_cast<vsomeip::return_code_e>(recv_buffer[15])) << std::endl;
+
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+
         /* send stop subscribe and subscribe */
         std::memcpy(&stop_subscribe_subscribe_data[sizeof(stop_subscribe_subscribe_data)-8], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
         stop_subscribe_subscribe_data[sizeof(stop_subscribe_subscribe_data)-2] = (local_port>>8) & 0xff;
@@ -6103,7 +6183,7 @@ void etsProxyImpl::invoke_SD_Subscribe_after_StopSubscribe(std::string remote_ad
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -6196,7 +6276,7 @@ void etsProxyImpl::invoke_SD_SubscribeEventgroup_with_unallowed_option_ip(std::s
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -6287,7 +6367,7 @@ void etsProxyImpl::invoke_SD_SubscribeEventgroup_with_unallowed_option_ip_2(std:
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -6379,7 +6459,7 @@ void etsProxyImpl::invoke_SD_Unknown_Option_type(std::string remote_address, uin
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -6481,7 +6561,7 @@ void etsProxyImpl::invoke_SD_Unreferenced_option(std::string remote_address, uin
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -6574,7 +6654,7 @@ void etsProxyImpl::invoke_SD_Unused_data_after_Options_Array(std::string remote_
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -6667,7 +6747,7 @@ void etsProxyImpl::invoke_SD_Unused_data_after_Options_Array_wrong_length(std::s
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -6694,8 +6774,8 @@ void etsProxyImpl::invoke_Subscribe_using_wrong_SOMEIP_MessageID(std::string rem
 
     /* subscribe event group */
     uint8_t subscribe_data[] = {
-        0xff, 0xff,             /* service id (sd service id) */
-        0xff, 0xff,             /* method id (sd wrong method id) */
+        0x12, 0x34,             /* service id (sd wrong service id) */
+        0x56, 0x78,             /* method id (sd wrong method id) */
         0x00, 0x00, 0x00, 0x30, /* length */
         0x00, 0x00,             /* client id */
         0x00, 0x01,             /* session id */
@@ -6837,7 +6917,7 @@ void etsProxyImpl::invoke_Eventgroup_EventsAndFieldsUnreliable_5(std::string rem
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -7069,7 +7149,7 @@ void etsProxyImpl::invoke_SD_Check_subscribe_eventgroup_ttl_expired(std::string 
     uint32_t ttl = 3;
     CommonAPI::CallStatus callStatus=CommonAPI::CallStatus::UNKNOWN;
     std::vector<std::thread> recv_threads;
-    uint32_t triggerEventUINT8_ReqArg1=1;
+    uint32_t triggerEventUINT8_ReqArg1=0;
     uint32_t triggerEventUINT8_ReqArg2=5;
     uint32_t triggerEventUINT8_ReqArg3=1;
 
@@ -7081,6 +7161,8 @@ void etsProxyImpl::invoke_SD_Check_subscribe_eventgroup_ttl_expired(std::string 
     std::cout << "Subscribe EventGroup: 2, Session Id: 1, TTL: 3" << std::endl;
     send_subscribe_dual_endpoint(remote_address, multicast_port, local_address, local_udp_port, local_tcp_port,
                                     ttl, (uint16_t)session);
+
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 
     if (etsProxy && isAvailable) {
         etsProxy->triggerEventUINT8(triggerEventUINT8_ReqArg1, triggerEventUINT8_ReqArg2, triggerEventUINT8_ReqArg3, callStatus);
@@ -7173,7 +7255,8 @@ void etsProxyImpl::invoke_SD_SuspendInterface() {
     return;
 }
 
-void etsProxyImpl::invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
+void etsProxyImpl::invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address,
+        uint16_t local_udp_port, uint16_t local_tcp_port) {
     uint8_t recv_buffer[1400] = {0};
     std::size_t bytes_received = 0;
     uint32_t triggerEventUINT8_ReqArg1=0;
@@ -7186,7 +7269,7 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string rem
     uint8_t subscribe_data[] = {
         0xff, 0xff,             /* service id */
         0x81, 0x00,             /* method id */
-        0x00, 0x00, 0x00, 0x30, /* length */
+        0x00, 0x00, 0x00, 0x3c, /* length */
         0x00, 0x00,             /* client id */
         0x00, 0x01,             /* session id */
         0x01,                   /* protocol version */
@@ -7197,7 +7280,7 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string rem
         0x00, 0x00, 0x00,       /* reserved */
         0x00, 0x00, 0x00, 0x10, /* entry array length */
         0x06,                   /* type subscribe event group */
-        0x00, 0x00, 0x10,       /* index */
+        0x00, 0x00, 0x20,       /* index */
         0x01, 0x01,             /* service id */
         0x00, 0x01,             /* instance id */
         0x01,                   /* major version */
@@ -7205,14 +7288,21 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string rem
         0x00,                   /* reserved */
         0x00,                   /* initial data request */
         0x00, 0x02,             /* event group */
-        0x00, 0x00, 0x00, 0x0c, /* option array length */
+        0x00, 0x00, 0x00, 0x18, /* option array length */
         0x00, 0x09,             /* option length */
         0x04,                   /* option type */
         0x00,                   /* reserved */
         0x00, 0x00, 0x00, 0x00, /* endpoint address */
         0x00,                   /* reserved */
         0x11,                   /* udp protocol */
-        0x00, 0x00              /* udp port */
+        0x00, 0x00,             /* udp port */
+        0x00, 0x09,             /* option length */
+        0x04,                   /* option type */
+        0x00,                   /* reserved */
+        0x00, 0x00, 0x00, 0x00, /* endpoint address */
+        0x00,                   /* reserved */
+        0x06,                   /* tcp protocol */
+        0x00, 0x00              /* tcp port */
     };
 
     if (isAvailable) {
@@ -7239,15 +7329,20 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string rem
         io_ctx.run();
 
         /* send subscribe */
+        /* Update UDP Endpoint */
+        std::memcpy(&subscribe_data[sizeof(subscribe_data)-20], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
+        subscribe_data[sizeof(subscribe_data)-14] = (local_udp_port>>8) & 0xff;
+        subscribe_data[sizeof(subscribe_data)-13] = local_udp_port & 0xff;
+        /* Update TCP Endpoint */
         std::memcpy(&subscribe_data[sizeof(subscribe_data)-8], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
-        subscribe_data[sizeof(subscribe_data)-2] = (local_port>>8) & 0xff;
-        subscribe_data[sizeof(subscribe_data)-1] = local_port & 0xff;
+        subscribe_data[sizeof(subscribe_data)-2] = (local_tcp_port>>8) & 0xff;
+        subscribe_data[sizeof(subscribe_data)-1] = local_tcp_port & 0xff;
         std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
         udp_client_sock.send_to(boost::asio::buffer(subscribe_data, sizeof(subscribe_data)), udp_server_endpoint);
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -7282,7 +7377,8 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8_Eventgroup_2(std::string rem
     return;
 }
 
-void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
+void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address,
+        uint16_t local_udp_port, uint16_t local_tcp_port) {
     uint8_t recv_buffer[1400] = {0};
     std::size_t bytes_received = 0;
     uint32_t triggerEventUINT8Array_ReqArg1=0;
@@ -7295,7 +7391,7 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::strin
     uint8_t subscribe_data[] = {
         0xff, 0xff,             /* service id */
         0x81, 0x00,             /* method id */
-        0x00, 0x00, 0x00, 0x30, /* length */
+        0x00, 0x00, 0x00, 0x3c, /* length */
         0x00, 0x00,             /* client id */
         0x00, 0x01,             /* session id */
         0x01,                   /* protocol version */
@@ -7306,7 +7402,7 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::strin
         0x00, 0x00, 0x00,       /* reserved */
         0x00, 0x00, 0x00, 0x10, /* entry array length */
         0x06,                   /* type subscribe event group */
-        0x00, 0x00, 0x10,       /* index */
+        0x00, 0x00, 0x20,       /* index */
         0x01, 0x01,             /* service id */
         0x00, 0x01,             /* instance id */
         0x01,                   /* major version */
@@ -7314,14 +7410,21 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::strin
         0x00,                   /* reserved */
         0x00,                   /* initial data request */
         0x00, 0x02,             /* event group */
-        0x00, 0x00, 0x00, 0x0c, /* option array length */
+        0x00, 0x00, 0x00, 0x18, /* option array length */
         0x00, 0x09,             /* option length */
         0x04,                   /* option type */
         0x00,                   /* reserved */
         0x00, 0x00, 0x00, 0x00, /* endpoint address */
         0x00,                   /* reserved */
         0x11,                   /* udp protocol */
-        0x00, 0x00              /* udp port */
+        0x00, 0x00,             /* udp port */
+        0x00, 0x09,             /* option length */
+        0x04,                   /* option type */
+        0x00,                   /* reserved */
+        0x00, 0x00, 0x00, 0x00, /* endpoint address */
+        0x00,                   /* reserved */
+        0x06,                   /* tcp protocol */
+        0x00, 0x00              /* tcp port */
     };
 
     if (isAvailable) {
@@ -7348,15 +7451,20 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::strin
         io_ctx.run();
 
         /* send subscribe */
+        /* Update UDP Endpoint */
+        std::memcpy(&subscribe_data[sizeof(subscribe_data)-20], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
+        subscribe_data[sizeof(subscribe_data)-14] = (local_udp_port>>8) & 0xff;
+        subscribe_data[sizeof(subscribe_data)-13] = local_udp_port & 0xff;
+        /* Update TCP Endpoint */
         std::memcpy(&subscribe_data[sizeof(subscribe_data)-8], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
-        subscribe_data[sizeof(subscribe_data)-2] = (local_port>>8) & 0xff;
-        subscribe_data[sizeof(subscribe_data)-1] = local_port & 0xff;
+        subscribe_data[sizeof(subscribe_data)-2] = (local_tcp_port>>8) & 0xff;
+        subscribe_data[sizeof(subscribe_data)-1] = local_tcp_port & 0xff;
         std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
         udp_client_sock.send_to(boost::asio::buffer(subscribe_data, sizeof(subscribe_data)), udp_server_endpoint);
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -7391,7 +7499,8 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Array_Eventgroup_2(std::strin
     return;
 }
 
-void etsProxyImpl::invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address, uint16_t local_port) {
+void etsProxyImpl::invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string remote_address, uint16_t multicast_port, std::string local_address,
+        uint16_t local_udp_port, uint16_t local_tcp_port) {
     uint8_t recv_buffer[1400] = {0};
     std::size_t bytes_received = 0;
     uint32_t triggerEventUINT8E2E_ReqArg1=0;
@@ -7404,7 +7513,7 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string 
     uint8_t subscribe_data[] = {
         0xff, 0xff,             /* service id */
         0x81, 0x00,             /* method id */
-        0x00, 0x00, 0x00, 0x30, /* length */
+        0x00, 0x00, 0x00, 0x3c, /* length */
         0x00, 0x00,             /* client id */
         0x00, 0x01,             /* session id */
         0x01,                   /* protocol version */
@@ -7415,7 +7524,7 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string 
         0x00, 0x00, 0x00,       /* reserved */
         0x00, 0x00, 0x00, 0x10, /* entry array length */
         0x06,                   /* type subscribe event group */
-        0x00, 0x00, 0x10,       /* index */
+        0x00, 0x00, 0x20,       /* index */
         0x01, 0x01,             /* service id */
         0x00, 0x01,             /* instance id */
         0x01,                   /* major version */
@@ -7423,14 +7532,21 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string 
         0x00,                   /* reserved */
         0x00,                   /* initial data request */
         0x00, 0x02,             /* event group */
-        0x00, 0x00, 0x00, 0x0c, /* option array length */
+        0x00, 0x00, 0x00, 0x18, /* option array length */
         0x00, 0x09,             /* option length */
         0x04,                   /* option type */
         0x00,                   /* reserved */
         0x00, 0x00, 0x00, 0x00, /* endpoint address */
         0x00,                   /* reserved */
         0x11,                   /* udp protocol */
-        0x00, 0x00              /* udp port */
+        0x00, 0x00,             /* udp port */
+        0x00, 0x09,             /* option length */
+        0x04,                   /* option type */
+        0x00,                   /* reserved */
+        0x00, 0x00, 0x00, 0x00, /* endpoint address */
+        0x00,                   /* reserved */
+        0x06,                   /* tcp protocol */
+        0x00, 0x00              /* tcp port */
     };
 
     if (isAvailable) {
@@ -7457,15 +7573,20 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8E2E_Eventgroup_2(std::string 
         io_ctx.run();
 
         /* send subscribe */
+        /* Update UDP Endpoint */
+        std::memcpy(&subscribe_data[sizeof(subscribe_data)-20], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
+        subscribe_data[sizeof(subscribe_data)-14] = (local_udp_port>>8) & 0xff;
+        subscribe_data[sizeof(subscribe_data)-13] = local_udp_port & 0xff;
+        /* Update TCP Endpoint */
         std::memcpy(&subscribe_data[sizeof(subscribe_data)-8], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
-        subscribe_data[sizeof(subscribe_data)-2] = (local_port>>8) & 0xff;
-        subscribe_data[sizeof(subscribe_data)-1] = local_port & 0xff;
+        subscribe_data[sizeof(subscribe_data)-2] = (local_tcp_port>>8) & 0xff;
+        subscribe_data[sizeof(subscribe_data)-1] = local_tcp_port & 0xff;
         std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
         udp_client_sock.send_to(boost::asio::buffer(subscribe_data, sizeof(subscribe_data)), udp_server_endpoint);
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -7574,7 +7695,7 @@ void etsProxyImpl::invoke_SD_Send_triggerEventUINT8Multicast_Eventgroup_6(std::s
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -8347,7 +8468,7 @@ void etsProxyImpl::invoke_TP_Verify_DuplicateFrameDuringReception(std::string re
 
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -8355,6 +8476,160 @@ void etsProxyImpl::invoke_TP_Verify_DuplicateFrameDuringReception(std::string re
         }
         std::cout << "etsProxyImpl::" << __func__ << " Return Code:"
              << returnCodeToString(static_cast<vsomeip::return_code_e>(recv_buffer[15])) << std::endl;
+
+        io_ctx.stop();
+
+        udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+        udp_client_sock.close(err_code);
+    }
+    else {
+        std::cout << "ETS Service Not Available" << std::endl;
+    }
+
+    return;
+}
+
+void etsProxyImpl::invoke_TP_Verify_SameRequestFromDifferentClient(std::string remote_address, uint16_t remote_port, std::string local_address, uint16_t local_port) {
+    uint8_t recv_buffer[1400] = {0};
+    std::size_t bytes_received = 0;
+    uint8_t send_buffer_segment1[1412] = {0};
+    int segment1_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment2[1412] = {0};
+    int segment2_payload_length = 1392+4+16;
+    uint8_t send_buffer_segment3[1240] = {0};
+    int segment3_payload_length = 1220+4+16;
+    int offset = 0;
+    int number_of_client = 2;
+    std::cout << "etsProxyImpl::" << __func__ << " remote_addresss:" << remote_address
+        << " remote port:" << (uint32_t)remote_port << " local_address:" << local_address
+        << " local_port:" << (uint32_t)local_port << std::endl;
+
+    /* someip header data */
+    const uint8_t segment1_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment2_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x05, 0x7c,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    const uint8_t segment3_header_data[] = {
+        0x01, 0x01,   	        /* service id */
+        0x00, 0x71,   	        /* method id */
+        0x00, 0x00, 0x04, 0xd0,	/* length */
+        0x55, 0x45,		        /* client id */
+        0x00, 0x01,             /* session id */
+        0x01, 			        /* protocol version */
+        0x01, 			        /* interface version */
+        0x20, 			        /* request type */
+        0x00			        /* return code */
+    };
+    /* TP header (offset(28bit) + reserved(3bit) + more segment(1bit)) */
+    const uint8_t tp_hader_data_segment1[] = {0x00, 0x00, 0x00, 0x01};
+    const uint8_t tp_hader_data_segment2[] = {0x00, 0x00, 0x05, 0x71};
+    const uint8_t tp_hader_data_segment3[] = {0x00, 0x00, 0x0a, 0xe0};
+    const uint8_t array_payload_length[] = {0x00, 0x00, 0x0f, 0xa0}; /* 0xfa0 -> 4000 (array payload length) */
+
+    /* prepare first segment */
+    memset(send_buffer_segment1, 0, 1412);
+    memcpy(&send_buffer_segment1[0], &segment1_header_data[0], sizeof(segment1_header_data));
+    offset = sizeof(segment1_header_data);
+    memcpy(&send_buffer_segment1[offset], &tp_hader_data_segment1[0], sizeof(tp_hader_data_segment1));
+    offset += sizeof(tp_hader_data_segment1);
+    memcpy(&send_buffer_segment1[offset], &array_payload_length[0], sizeof(array_payload_length));
+    offset += sizeof(array_payload_length);
+    for (int idx=offset; idx<segment1_payload_length; idx++) {
+        send_buffer_segment1[idx]=0xab;
+    }
+    /* prepare second segment */
+    offset = 0;
+    memset(send_buffer_segment2, 0, 1412);
+    memcpy(&send_buffer_segment2[0], &segment2_header_data[0], sizeof(segment2_header_data));
+    offset = sizeof(segment2_header_data);
+    memcpy(&send_buffer_segment2[offset], &tp_hader_data_segment2[0], sizeof(tp_hader_data_segment2));
+    offset += sizeof(tp_hader_data_segment2);
+    for (int idx=offset; idx<segment2_payload_length; idx++) {
+        send_buffer_segment2[idx]=0xab;
+    }
+    /* prepare third segment */
+    offset = 0;
+    memset(send_buffer_segment3, 0, 1240);
+    memcpy(&send_buffer_segment3[0], &segment3_header_data[0], sizeof(segment3_header_data));
+    offset = sizeof(segment3_header_data);
+    memcpy(&send_buffer_segment3[offset], &tp_hader_data_segment3[0], sizeof(tp_hader_data_segment3));
+    offset += sizeof(tp_hader_data_segment3);
+    for (int idx=offset; idx<segment3_payload_length; idx++) {
+        send_buffer_segment3[idx]=0xab;
+    }
+
+    if (isAvailable) {
+        boost::asio::io_service io_ctx;
+        boost::system::error_code err_code;
+        boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
+        boost::asio::ip::udp::socket::endpoint_type udp_server_endpoint(boost::asio::ip::address::from_string(remote_address), remote_port);
+        boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+        boost::asio::ip::udp::socket udp_client_sock(io_ctx);
+
+        udp_client_sock.open(udp_client_endpoint.protocol(), err_code);
+        if (err_code) {
+            std::cout << "etsProxyImpl::" << __func__ << " Failed to open socket:" << err_code.message() << std::endl;
+            return;
+        }
+        udp_client_sock.set_option(boost::asio::socket_base::reuse_address(true));
+        udp_client_sock.set_option(boost::asio::socket_base::linger(true, 0));
+        int optval = 1;
+        setsockopt(udp_client_sock.native_handle(), SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+        udp_client_sock.bind(udp_client_endpoint, err_code);
+        if (err_code) {
+            std::cout << "etsProxyImpl::" << __func__ << " Failed to bind local address:" << err_code.message() << std::endl;
+            return;
+        }
+
+        io_ctx.run();
+
+        std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+        /* Send first segment from first client */
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment1, sizeof(send_buffer_segment1)), udp_server_endpoint);
+        /* Send first segment from seconde client */
+        send_buffer_segment1[9] = 0x46;
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment1, sizeof(send_buffer_segment1)), udp_server_endpoint);
+        /* Send second segment from first client */
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment2, sizeof(send_buffer_segment2)), udp_server_endpoint);
+        /* Send second segment from seocnde client */
+        send_buffer_segment2[9] = 0x46;
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment2, sizeof(send_buffer_segment2)), udp_server_endpoint);
+        /* Send third segment from first client */
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment3, sizeof(send_buffer_segment3)), udp_server_endpoint);
+        /* Send third segment from second client */
+        send_buffer_segment3[9] = 0x46;
+        udp_client_sock.send_to(boost::asio::buffer(send_buffer_segment3, sizeof(send_buffer_segment3)), udp_server_endpoint);
+
+        for (int itr=0; itr<number_of_client; itr++) {
+            bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
+            std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
+            for (std::size_t idx=0; idx<bytes_received; idx++) {
+                std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
+                if ((idx+1)%4 == 0) {
+                    std::cout << '\n';
+                }
+            }
+            std::cout << "etsProxyImpl::" << __func__ << " Return Code:"
+                << returnCodeToString(static_cast<vsomeip::return_code_e>(recv_buffer[15])) << std::endl;
+        }
 
         io_ctx.stop();
 
@@ -8903,7 +9178,7 @@ void etsProxyImpl::send_find_service(std::string remote_address, uint16_t multic
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -8996,7 +9271,7 @@ void etsProxyImpl::send_subscribe(std::string remote_address, uint16_t multicast
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9101,7 +9376,7 @@ void etsProxyImpl::send_subscribe_with_dual_option(std::string remote_address, u
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9211,7 +9486,7 @@ void etsProxyImpl::send_subscribe_dual_endpoint(std::string remote_address, uint
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9263,7 +9538,7 @@ void etsProxyImpl::recv_notification(std::string local_address, uint16_t local_p
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_data_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[data header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9280,56 +9555,59 @@ void etsProxyImpl::recv_notification(std::string local_address, uint16_t local_p
     return;
 }
 
-void etsProxyImpl::create_tcp_client_endpoint(std::string local_address, uint16_t local_port,
-        uint32_t remote_ip, uint16_t remote_port) {
+void etsProxyImpl::recv_notification_tcp(std::string local_address, uint16_t local_port) {
     uint8_t recv_buffer[1400] = {0};
     std::size_t bytes_received = 0;
     std::cout << "etsProxyImpl::" << __func__ << std::endl;
 
     boost::asio::io_service io_ctx;
     boost::system::error_code err_code;
-    boost::asio::ip::address_v4 remote_ip_address = boost::asio::ip::make_address_v4(remote_ip);
-    std::cout << "etsProxyImpl::" << __func__ << "Remote Endpoint:" << remote_ip_address.to_string() << ":" << (uint32_t)remote_port << std::endl;
 
     /* Socket for Receiving Data Notification */
-    boost::asio::ip::tcp::socket tcp_client_data_sock(io_ctx);
-    boost::asio::ip::tcp::socket::endpoint_type tcp_client_ucast_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
-    tcp_client_data_sock.open(tcp_client_ucast_endpoint.protocol(), err_code);
+    boost::asio::ip::tcp::socket::endpoint_type tcp_server_ucast_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
+    boost::asio::ip::tcp::acceptor tcp_data_sock_acceptor(io_ctx);
+
+    tcp_data_sock_acceptor.open(tcp_server_ucast_endpoint.protocol(), err_code);
     if (err_code) {
         std::cout << "etsProxyImpl::" << __func__ << " Failed to open data socket:" << err_code.message() << std::endl;
         return;
     }
-    tcp_client_data_sock.set_option(boost::asio::socket_base::reuse_address(true));
-    tcp_client_data_sock.set_option(boost::asio::socket_base::linger(true, 0));
+
+    tcp_data_sock_acceptor.set_option(boost::asio::socket_base::reuse_address(true));
+    tcp_data_sock_acceptor.set_option(boost::asio::socket_base::linger(true, 0));
     int optval = 1;
-    if (setsockopt(tcp_client_data_sock.native_handle(), SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval)) < 0) {
+    if (setsockopt(tcp_data_sock_acceptor.native_handle(), SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval)) < 0) {
         std::cerr << "etsProxyImpl::" << __func__ << " setsockopt SO_REUSEPORT failed:" << strerror(errno) << std::endl;
     }
 
-    tcp_client_data_sock.bind(tcp_client_ucast_endpoint, err_code);
+    tcp_data_sock_acceptor.bind(tcp_server_ucast_endpoint, err_code);
     if (err_code) {
         std::cout << "etsProxyImpl::" << __func__ << " Failed to bind local address:" << err_code.message() << std::endl;
         return;
     }
 
+    tcp_data_sock_acceptor.listen();
+
     io_ctx.run();
 
-    /* Connect to remote TCP Endpoint */
-    boost::asio::ip::tcp::socket::endpoint_type remote_endpoint(remote_ip_address, remote_port);
-    tcp_client_data_sock.connect(remote_endpoint, err_code);
+    std::cout << "etsProxyImpl::" << __func__ << " TCP Socket Listening on:" << local_port << std::endl;
+    boost::asio::ip::tcp::socket tcp_client_sock(io_ctx);
+    tcp_data_sock_acceptor.accept(tcp_client_sock, err_code);
     if (err_code) {
-        std::cout << "etsProxyImpl::" << __func__ << " Failed to connect socket:" << err_code.message() << std::endl;
+        std::cout << "etsProxyImpl::" << __func__ << " Failed to accept data socket:" << err_code.message() << std::endl;
         return;
     }
 
+    std::cout << "etsProxyImpl::" << __func__ << " Client connected from " << tcp_client_sock.remote_endpoint() << std::endl;
+
     memset(recv_buffer, 0, 1400);
-    bytes_received = tcp_client_data_sock.receive(boost::asio::buffer(recv_buffer, 1400), 0, err_code);
+    bytes_received = tcp_client_sock.receive(boost::asio::buffer(recv_buffer, 1400), 0, err_code);
     if (err_code) {
         std::cout << "etsProxyImpl::" << __func__ << "Receive data failed:" << err_code.message() << std::endl;
         return;
     }
     std::cout << "etsProxyImpl::" << __func__ << " Received response[data header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9340,8 +9618,9 @@ void etsProxyImpl::create_tcp_client_endpoint(std::string local_address, uint16_
 
     io_ctx.stop();
 
-    tcp_client_data_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
-    tcp_client_data_sock.close(err_code);
+    std::cout << "etsProxyImpl::" << __func__ << " Close TCP Socket" << std::endl;
+
+    tcp_data_sock_acceptor.close(err_code);
 
     return;
 }
@@ -9445,7 +9724,7 @@ void etsProxyImpl::invoke_SD_Options_Array_longer_than_message_allows(std::strin
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9543,7 +9822,7 @@ void etsProxyImpl::invoke_SD_Option_shorter_with_unaligned_next_option(std::stri
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9633,7 +9912,7 @@ void etsProxyImpl::invoke_SD_Option_Length_shorter_GT_0_as_specified_for_type(st
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9735,7 +10014,7 @@ void etsProxyImpl::invoke_SD_Option_Length_ends_past_Options_Array_Var_B(std::st
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9837,7 +10116,7 @@ void etsProxyImpl::invoke_SD_Option_Length_ends_past_Options_Array_Var_A(std::st
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9915,7 +10194,7 @@ void etsProxyImpl::invoke_SD_Multicast_FindService_with_unicast_Flag_to_0(std::s
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -9999,7 +10278,7 @@ void etsProxyImpl::invoke_SD_Multicast_FindService_Major_Minor_Version_set_to_al
         memset(recv_buffer, 0, 1400);
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -10025,7 +10304,7 @@ void etsProxyImpl::invoke_SD_Multicast_FindService_Major_Minor_Version_set_to_al
         memset(recv_buffer, 0, 1400);
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -10138,7 +10417,7 @@ void etsProxyImpl::invoke_SD_Length_of_Entry_Array_too_short(std::string remote_
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -10392,7 +10671,7 @@ void etsProxyImpl::invoke_SD_Initial_Events_after_SubscribeEventgroup(std::strin
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -10484,7 +10763,7 @@ void etsProxyImpl::invoke_SD_Initial_Events_after_Subscribe_with_alternate_IPs(s
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -10574,7 +10853,7 @@ void etsProxyImpl::invoke_SD_Indicate_wrong_l4proto_param(std::string remote_add
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -10666,7 +10945,7 @@ void etsProxyImpl::invoke_SD_Ignore_Options_in_FindService(std::string multicast
         memset(recv_buffer, 0, 1400);
         bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-        for (int idx=0; idx<bytes_received; idx++) {
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
             if ((idx+1)%4 == 0) {
                 std::cout << '\n';
@@ -10770,7 +11049,7 @@ void etsProxyImpl::invoke_SD_Entry_references_options_of_same_kind(std::string r
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -10860,7 +11139,7 @@ void etsProxyImpl::invoke_SD_Entry_references_non_existing_option_type(std::stri
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -10950,7 +11229,7 @@ void etsProxyImpl::invoke_SD_Entry_references_more_options_than_exist(std::strin
     memset(recv_buffer, 0, 1400);
     bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
     std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
-    for (int idx=0; idx<bytes_received; idx++) {
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
         std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
         if ((idx+1)%4 == 0) {
             std::cout << '\n';
@@ -11057,7 +11336,7 @@ void etsProxyImpl::invoke_SD_ClientServiceActivate_send_StopOfferService(std::st
         bytes_received = udp_client_data_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
         if ((uint8_t)0x00 == recv_buffer[24]) {
             std::cout << "etsProxyImpl::" << __func__ << " Received response[data header]:" << std::endl;
-            for (int idx=0; idx<bytes_received; idx++) {
+            for (std::size_t idx=0; idx<bytes_received; idx++) {
                 std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
                 if ((idx+1)%4 == 0) {
                     std::cout << '\n';
@@ -11083,6 +11362,396 @@ void etsProxyImpl::invoke_SD_ClientServiceActivate_send_StopOfferService(std::st
 
     udp_client_data_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
     udp_client_data_sock.close(err_code);
+
+    return;
+}
+
+void etsProxyImpl::invoke_ClientServiceActivate_Server_reboot_2(std::string remote_address, std::string multicast_address,
+        std::string local_address, uint16_t multicast_port, uint16_t local_udp_port, uint16_t local_tcp_port) {
+    uint32_t startTimeout = 1;
+    uint32_t subscriptionDuration = 4;
+    uint32_t ttl = 6;
+    uint16_t session = 5;
+    uint16_t local_secondary_udp_port = local_udp_port+5;
+    std::vector<std::thread> recv_threads;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    invoke_clientServiceActivate(startTimeout);
+    process_find_service(multicast_address, multicast_port);
+    recv_threads.emplace_back([&]{
+        recv_notification_tcp(local_address, local_tcp_port);
+    });
+    send_unicast_offer_service(remote_address, multicast_port, local_address, local_udp_port, local_tcp_port, ttl, session);
+    recv_threads.emplace_back([&]{
+        process_subscription_request(local_address, local_udp_port, multicast_port, remote_address, session);
+    });
+    startTimeout = 2;
+    invoke_clientServiceSubscribeEventgroup(startTimeout, subscriptionDuration);
+    std::this_thread::sleep_for(std::chrono::seconds(ttl+2));
+    /* Simulate Reboot */
+    session = 1;
+    ttl = 6;
+    /* Offer with Different UDP port */
+    recv_threads.emplace_back([&]{
+        recv_notification_tcp(local_address, local_tcp_port);
+    });
+    send_unicast_offer_service(remote_address, multicast_port, local_address, local_secondary_udp_port, local_tcp_port, ttl, session);
+    recv_threads.emplace_back([&]{
+        process_subscription_request(local_address, local_secondary_udp_port, multicast_port, remote_address, session);
+    });
+    startTimeout = 2;
+    invoke_clientServiceSubscribeEventgroup(startTimeout, subscriptionDuration);
+
+    std::this_thread::sleep_for(std::chrono::seconds(ttl+2));
+
+    for (auto& t : recv_threads) {
+        if (t.joinable()) {
+            t.join();
+        }
+    }
+
+    return;
+}
+
+void etsProxyImpl::send_unicast_offer_service(std::string remote_address, uint16_t multicast_port,
+        std::string local_address, uint16_t local_udp_port, uint16_t local_tcp_port, uint32_t ttl,
+        uint16_t session) {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    /* subscribe event group */
+    uint8_t offer_service_data[] = {
+        0xff, 0xff,             /* service id */
+        0x81, 0x00,             /* method id */
+        0x00, 0x00, 0x00, 0x3c, /* length */
+        0x00, 0x00,             /* client id */
+        0x00, 0x00,             /* session id */
+        0x01,                   /* protocol version */
+        0x01,                   /* interface version */
+        0x02,                   /* message type */
+        0x00,                   /* return code */
+        0xc0,                   /* flag */
+        0x00, 0x00, 0x00,       /* reserved */
+        0x00, 0x00, 0x00, 0x10, /* entry array length */
+        0x01,                   /* type OFFER SERVICE */
+        0x00, 0x00, 0x20,       /* index */
+        0x01, 0x02,             /* service id */
+        0x00, 0xf4,             /* instance id */
+        0x01,                   /* major version */
+        0x00, 0x00, 0x00,       /* TTL */
+        0x00, 0x00, 0x00, 0x00, /* minor version */
+        0x00, 0x00, 0x00, 0x18, /* option array length */
+        0x00, 0x09,             /* option length */
+        0x04,                   /* option type */
+        0x00,                   /* reserved */
+        0x00, 0x00, 0x00, 0x00, /* endpoint address */
+        0x00,                   /* reserved */
+        0x11,                   /* udp protocol */
+        0x00, 0x00,             /* udp port */
+        0x00, 0x09,             /* option length */
+        0x04,                   /* option type */
+        0x00,                   /* reserved */
+        0x00, 0x00, 0x00, 0x00, /* endpoint address */
+        0x00,                   /* reserved */
+        0x06,                   /* tcp protocol */
+        0x00, 0x00              /* tcp port */
+    };
+
+    boost::asio::io_service io_ctx;
+    boost::system::error_code err_code;
+    boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), multicast_port);
+    boost::asio::ip::udp::socket::endpoint_type udp_server_endpoint(boost::asio::ip::address::from_string(remote_address), multicast_port);
+    boost::asio::ip::udp::socket udp_client_sock(io_ctx);
+    boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+
+    udp_client_sock.open(udp_client_endpoint.protocol(), err_code);
+    if (err_code) {
+        std::cout << "etsProxyImpl::" << __func__ << " Failed to open socket:" << err_code.message() << std::endl;
+        return;
+    }
+    udp_client_sock.set_option(boost::asio::socket_base::reuse_address(true));
+    udp_client_sock.set_option(boost::asio::socket_base::linger(true, 0));
+    int optval = 1;
+    setsockopt(udp_client_sock.native_handle(), SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+    udp_client_sock.bind(udp_client_endpoint, err_code);
+    if (err_code) {
+        std::cout << "etsProxyImpl::" << __func__ << " Failed to bind local address:" << err_code.message() << std::endl;
+        return;
+    }
+
+    io_ctx.run();
+
+    /* send offer service */
+    /* Update Session */
+    offer_service_data[10] = (uint8_t)((session >> 8) & 0xff);
+    offer_service_data[11] = (uint8_t)(session & 0xff);
+    /* Update TTL */
+    offer_service_data[35] = ttl & 0xff;
+    /* Update UDP Endpoint */
+    std::memcpy(&offer_service_data[sizeof(offer_service_data)-20], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
+    offer_service_data[sizeof(offer_service_data)-14] = (local_udp_port>>8) & 0xff;
+    offer_service_data[sizeof(offer_service_data)-13] = local_udp_port & 0xff;
+    /* Update TCP Endpoint */
+    std::memcpy(&offer_service_data[sizeof(offer_service_data)-8], &udp_client_endpoint.address().to_v4().to_bytes()[0], 4);
+    offer_service_data[sizeof(offer_service_data)-2] = (local_tcp_port>>8) & 0xff;
+    offer_service_data[sizeof(offer_service_data)-1] = local_tcp_port & 0xff;
+    std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+    udp_client_sock.send_to(boost::asio::buffer(offer_service_data, sizeof(offer_service_data)), udp_server_endpoint);
+
+    io_ctx.stop();
+
+    udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+    udp_client_sock.close(err_code);
+
+    return;
+}
+
+void etsProxyImpl::process_find_service(std::string multicast_address, uint16_t multicast_port) {
+    uint8_t recv_buffer[1400] = {0};
+    std::size_t bytes_received = 0;
+    struct ip_mreq mreq;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    boost::asio::io_service io_ctx;
+    boost::system::error_code err_code;
+    boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+
+    /* Socket for Receiving Find Service */
+    boost::asio::ip::udp::socket udp_client_data_sock(io_ctx);
+    boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint_any(boost::asio::ip::address_v4::any(), multicast_port);
+    udp_client_data_sock.open(udp_client_endpoint_any.protocol(), err_code);
+    if (err_code) {
+        std::cout << "etsProxyImpl::" << __func__ << " Failed to open data socket:" << err_code.message() << std::endl;
+        return;
+    }
+    udp_client_data_sock.set_option(boost::asio::socket_base::reuse_address(true));
+    udp_client_data_sock.set_option(boost::asio::socket_base::linger(true, 0));
+    int optval = 1;
+    if (setsockopt(udp_client_data_sock.native_handle(), SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval)) < 0) {
+        std::cerr << "etsProxyImpl::" << __func__ << " setsockopt SO_REUSEPORT failed:" << strerror(errno) << std::endl;
+    }
+
+    udp_client_data_sock.bind(udp_client_endpoint_any, err_code);
+    if (err_code) {
+        std::cout << "etsProxyImpl::" << __func__ << " Failed to bind local address:" << err_code.message() << std::endl;
+        return;
+    }
+
+    mreq.imr_multiaddr.s_addr = inet_addr(multicast_address.c_str());
+    mreq.imr_interface.s_addr = htonl(INADDR_ANY);
+
+    if (setsockopt(udp_client_data_sock.native_handle(), IPPROTO_IP, IP_ADD_MEMBERSHIP, (char *)&mreq, sizeof(mreq)) < 0) {
+        std::cout << "etsProxyImpl::" << __func__ << " setsockopt IP_ADD_MEMBERSHIP error" << std::endl;
+        udp_client_data_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+        udp_client_data_sock.close(err_code);
+        return;
+    }
+
+    io_ctx.run();
+
+    while (true) {
+        memset(recv_buffer, 0, 1400);
+        bytes_received = udp_client_data_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
+        if ((44 == bytes_received) && (0x00 == recv_buffer[24])) {
+            std::cout << "etsProxyImpl::" << __func__ << " Received FIND SERVICE" << std::endl;
+            break;
+        }
+    }
+    std::cout << "etsProxyImpl::" << __func__ << " Received response[data header]:" << std::endl;
+    for (std::size_t idx=0; idx<bytes_received; idx++) {
+        std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
+        if ((idx+1)%4 == 0) {
+            std::cout << '\n';
+        }
+    }
+    std::cout << "etsProxyImpl::" << __func__ << " Return Code:"
+        << returnCodeToString(static_cast<vsomeip::return_code_e>(recv_buffer[15])) << std::endl;
+
+    if ((44 == bytes_received) && (0x00 == recv_buffer[24])) {
+        std::cout << "etsProxyImpl::" << __func__ << " Received FIND SERVICE" << std::endl;
+    }
+
+    io_ctx.stop();
+
+    udp_client_data_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+    udp_client_data_sock.close(err_code);
+
+    return;
+}
+
+void etsProxyImpl::process_subscription_request(std::string local_address, uint16_t local_port,
+        uint16_t multicast_port, std::string remote_address, uint16_t session) {
+    uint8_t recv_buffer[1400] = {0};
+    std::size_t bytes_received = 0;
+    uint16_t remote_udp_port = 0;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    /* subscribe event group ack */
+    uint8_t subscribe_ack_data[] = {
+        0xff, 0xff,             /* service id */
+        0x81, 0x00,             /* method id */
+        0x00, 0x00, 0x00, 0x24, /* length */
+        0x00, 0x00,             /* client id */
+        0x00, 0x00,             /* session id */
+        0x01,                   /* protocol version */
+        0x01,                   /* interface version */
+        0x02,                   /* message type */
+        0x00,                   /* return code */
+        0xc0,                   /* flag */
+        0x00, 0x00, 0x00,       /* reserved */
+        0x00, 0x00, 0x00, 0x10, /* entry array length */
+        0x07,                   /* type subscribe event group ack */
+        0x00, 0x00, 0x00,       /* index */
+        0x01, 0x02,             /* service id */
+        0x00, 0xf4,             /* instance id */
+        0x01,                   /* major version */
+        0x00, 0x00, 0x01,       /* TTL */
+        0x00,                   /* reserved */
+        0x00,                   /* initial data request */
+        0x00, 0x00,             /* event group */
+        0x00, 0x00, 0x00, 0x00  /* option array length */
+    };
+
+    boost::asio::io_service io_ctx;
+    boost::system::error_code err_code;
+    boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), multicast_port);
+    boost::asio::ip::udp::socket udp_client_sock(io_ctx);
+    boost::asio::ip::udp::socket::endpoint_type remote_endpoint;
+
+    udp_client_sock.open(udp_client_endpoint.protocol(), err_code);
+    if (err_code) {
+        std::cout << "etsProxyImpl::" << __func__ << " Failed to open socket:" << err_code.message() << std::endl;
+        return;
+    }
+    udp_client_sock.set_option(boost::asio::socket_base::reuse_address(true));
+    udp_client_sock.set_option(boost::asio::socket_base::linger(true, 0));
+    int optval = 1;
+    setsockopt(udp_client_sock.native_handle(), SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+    udp_client_sock.bind(udp_client_endpoint, err_code);
+    if (err_code) {
+        std::cout << "etsProxyImpl::" << __func__ << " Failed to bind local address:" << err_code.message() << std::endl;
+        return;
+    }
+
+    io_ctx.run();
+
+    for(uint32_t itr=0; itr<3; itr++) {
+        /* receive subscription request */
+        memset(recv_buffer, 0, 1400);
+        bytes_received = udp_client_sock.receive_from(boost::asio::buffer(recv_buffer, 1400), remote_endpoint);
+        std::cout << "etsProxyImpl::" << __func__ << " Received response[header]:" << std::endl;
+        for (std::size_t idx=0; idx<bytes_received; idx++) {
+            std::cout << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)recv_buffer[idx] << " ";
+            if ((idx+1)%4 == 0) {
+                std::cout << '\n';
+            }
+        }
+        std::cout << "etsProxyImpl::" << __func__ << " Return Code:"
+                << returnCodeToString(static_cast<vsomeip::return_code_e>(recv_buffer[15])) << std::endl;
+
+        if ((56 == bytes_received) && (0x06 == recv_buffer[24]) && (recv_buffer[35] > 0)) {
+            std::cout << "etsProxyImpl::" << __func__ << " SUBSCRIBE EVENTGROUP" << std::endl;
+            /* send subscribe ack */
+            ++session;
+            subscribe_ack_data[10] = (uint8_t)((session >> 8) & 0xff);
+            subscribe_ack_data[11] = (uint8_t)(session & 0xff);
+            subscribe_ack_data[38] = recv_buffer[38];
+            subscribe_ack_data[39] = recv_buffer[39];
+            std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+            udp_client_sock.send_to(boost::asio::buffer(subscribe_ack_data, sizeof(subscribe_ack_data)), remote_endpoint);
+
+            if ((0x08 == recv_buffer[39]) && (0x11 == recv_buffer[53])) {
+                remote_udp_port = recv_buffer[54];
+                remote_udp_port = (remote_udp_port << 8) | recv_buffer[55];
+                std::cout << "Remote UDP Port:" << (uint32_t)remote_udp_port;
+                send_notification(local_address, local_port, remote_address, remote_udp_port);
+            }
+        }
+    }
+
+    io_ctx.stop();
+
+    udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+    udp_client_sock.close(err_code);
+
+    return;
+}
+
+void etsProxyImpl::send_notification(std::string local_address, uint16_t local_port,
+        std::string remote_address, uint16_t remote_port) {
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    /* subscribe event group ack */
+    uint8_t notification_data[] = {
+        0x01, 0x02,             /* service id */
+        0x80, 0x85,             /* method id */
+        0x00, 0x00, 0x00, 0x09, /* length */
+        0x00, 0x00,             /* client id */
+        0x00, 0x00,             /* session id */
+        0x01,                   /* protocol version */
+        0x01,                   /* interface version */
+        0x02,                   /* message type */
+        0x00,                   /* return code */
+        0x05                    /* data */
+    };
+
+    boost::asio::io_service io_ctx;
+    boost::system::error_code err_code;
+    boost::asio::ip::udp::socket::endpoint_type udp_client_endpoint(boost::asio::ip::address::from_string(local_address), local_port);
+    boost::asio::ip::udp::socket::endpoint_type udp_server_endpoint(boost::asio::ip::address::from_string(remote_address), remote_port);
+    boost::asio::ip::udp::socket udp_client_sock(io_ctx);
+
+    udp_client_sock.open(udp_client_endpoint.protocol(), err_code);
+    if (err_code) {
+        std::cout << "etsProxyImpl::" << __func__ << " Failed to open socket:" << err_code.message() << std::endl;
+        return;
+    }
+    udp_client_sock.set_option(boost::asio::socket_base::reuse_address(true));
+    udp_client_sock.set_option(boost::asio::socket_base::linger(true, 0));
+    int optval = 1;
+    setsockopt(udp_client_sock.native_handle(), SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+    udp_client_sock.bind(udp_client_endpoint, err_code);
+    if (err_code) {
+        std::cout << "etsProxyImpl::" << __func__ << " Failed to bind local address:" << err_code.message() << std::endl;
+        return;
+    }
+
+    io_ctx.run();
+
+    /* send notification data */
+    std::cout << "etsProxyImpl::" << __func__ << " Sending data..." << std::endl;
+    udp_client_sock.send_to(boost::asio::buffer(notification_data, sizeof(notification_data)), udp_server_endpoint);
+
+    io_ctx.stop();
+
+    udp_client_sock.shutdown(boost::asio::socket_base::shutdown_both, err_code);
+    udp_client_sock.close(err_code);
+
+    return;
+}
+
+void etsProxyImpl::invoke_SD_Session_ID_is_one_after_wrapping(std::string multicast_address, uint16_t multicast_port,
+        std::string local_address, uint16_t local_port) {
+    uint32_t itr;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    for (itr=1; itr<=UINT16_MAX; itr++) {
+        send_find_service(multicast_address, multicast_port, local_address, local_port, (uint16_t)itr);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+
+    return;
+}
+
+void etsProxyImpl::invoke_SD_Unicast_FindService(std::string remote_address, uint16_t multicast_port,
+        std::string local_address, uint16_t local_port) {
+    uint32_t itr;
+    uint32_t max_retry = 10;
+    std::cout << "etsProxyImpl::" << __func__ << std::endl;
+
+    for (itr=1; itr<=max_retry; itr++) {
+        send_find_service(remote_address, multicast_port, local_address, local_port, (uint16_t)itr);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
 
     return;
 }
